@@ -14,7 +14,7 @@ export default function Login() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#603BB0]">
             <div className="w-full max-w-sm p-6 bg-white rounded-3xl shadow">
                 <div className="flex items-center justify-center">
-                <Image src="/images/cs-loginSoyMomoImage.svg" width={100} height={100} className="mt-[-12vh]"/>
+                <Image src="/images/cs-loginSoyMomoImage.svg" width={100} height={100} className="mt-[-12vh]" alt="login"/>
                 </div>
 
 
@@ -24,9 +24,9 @@ export default function Login() {
 
                 <LoginForm/>
                 <Link href="/">
-                    <h3 className="mt-5 text-xs text-center text-[#603BB0]" href>Olvidé mi contraseña</h3>
+                    <h3 className="mt-5 text-xs text-center text-[#603BB0]">Olvidé mi contraseña</h3>
                 </Link>
-                <Image src="/images/cs-loginSoyMomoLogo.svg" width={100} height={100} className="absolute top-0 right-0 w-50 h-50 mt-4 mr-10"/>
+                <Image src="/images/cs-loginSoyMomoLogo.svg" width={100} height={100} className="absolute top-0 right-0 w-50 h-50 mt-4 mr-10" alt="image"/>
             </div>
         </div>
     )
