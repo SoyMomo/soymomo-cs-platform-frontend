@@ -23,9 +23,9 @@ export default function Login() {
 
                 <LoginForm/>
                 <Link href="/">
-                    <h3 className="mt-5 text-xs text-center text-[#603BB0]">Olvidé mi contraseña</h3>
+                    <h3 className="mt-5 text-xs text-center text-[#603BB0] hover:underline">¿Olvidaste tu contraseña?</h3>
                 </Link>
-                <Image src="/images/cs-loginSoyMomoLogo.svg" width={100} height={100} className="absolute top-0 right-0 w-50 h-50 mt-4 mr-10" alt="SoyMomo logo"/>
+                <Image src="/images/cs-loginSoyMomoLogo.svg" width={100} height={100} className="absolute top-0 right-0 w-50 h-50 mt-4 mr-10" alt="logo"/>
             </div>
         </div>
     )
