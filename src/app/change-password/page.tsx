@@ -1,14 +1,10 @@
 'use client'
-import LoginForm from "@/components/LoginForm"
+import ChangePasswordForm from "@/components/ChangePasswordForm";
 import Image from "next/image";
-import Link from "next/link";
 
 
-export default function Login() {
+export default function ChangePassword() {
 
-    async function handleSubmit() {
-        console.log('submit')
-    }
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#603BB0]">
             <div className="w-full max-w-sm p-6 bg-white rounded-3xl shadow">
@@ -17,14 +13,9 @@ export default function Login() {
                 </div>
 
 
-                <h1 className="text-2xl font-bold text-center text-[#603BB0]">Log in</h1>
+                <h1 className="text-2xl font-bold text-center text-[#603BB0]">Change Password</h1>
                 
-
-
-                <LoginForm/>
-                <Link href="/">
-                    <h3 className="mt-5 text-xs text-center text-[#603BB0]">Olvidé mi contraseña</h3>
-                </Link>
+                <ChangePasswordForm/>
                 <Image src="/images/cs-loginSoyMomoLogo.svg" width={100} height={100} className="absolute top-0 right-0 w-50 h-50 mt-4 mr-10" alt="SoyMomo logo"/>
             </div>
         </div>
