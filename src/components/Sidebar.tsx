@@ -15,49 +15,49 @@ export default function Sidebar() {
 
                     <Link href="/dashboard">
                         <div className="flex flex-row items-center justify-center lg:justify-start my-10 lg:my-4 hover:bg-white hover:text-[#603BB0] text-white hover:rounded-xl p-2">
-                            <Image src="/images/cs-personIcon.svg" width={25} height={25} alt='SoyMomo Logo' />
+                            <Image src="/images/cs-personIconWhite.svg" width={25} height={25} alt='SoyMomo Logo' />
                             <p className="text-sm ml-4 hidden lg:flex">Postulantes</p>
                         </div>
                     </Link>
 
                     <Link href="/dashboard">
                         <div className="flex flex-row items-center justify-center lg:justify-start my-4 hover:bg-white hover:text-[#603BB0] text-white hover:rounded-xl p-2">
-                            <Image src="/images/cs-dashboardIcon.svg" width={25} height={25} alt='SoyMomo Logo' />
+                            <Image src="/images/cs-dashboardIconWhite.svg" width={25} height={25} alt='SoyMomo Logo' />
                             <p className="text-sm ml-4 hidden lg:flex">Uso Apps</p>
                         </div>
                     </Link>
 
                     <Link href="/dashboard">
                         <div className="flex flex-row items-center justify-center lg:justify-start my-4 hover:bg-white hover:text-[#603BB0] text-white hover:rounded-xl p-2">
-                            <Image src="/images/cs-watchIcon.svg" width={25} height={25} alt='SoyMomo Logo' />
+                            <Image src="/images/cs-watchIconWhite.svg" width={25} height={25} alt='SoyMomo Logo' />
                             <p className="text-sm ml-4 hidden lg:flex">Relojes</p>
                         </div>
                     </Link>
 
                     <Link href="/dashboard">
                         <div className="flex flex-row items-center justify-center lg:justify-start my-4 hover:bg-white hover:text-[#603BB0] text-white hover:rounded-xl p-2">
-                            <Image src="/images/cs-tabletIcon.svg" width={25} height={25} alt='SoyMomo Logo' />
+                            <Image src="/images/cs-tabletIconWhite.svg" width={25} height={25} alt='SoyMomo Logo' />
                             <p className="text-sm ml-4 hidden lg:flex">Tablets</p>
                         </div>
                     </Link>
 
                     <Link href="/dashboard">
                         <div className="flex flex-row items-center justify-center lg:justify-start my-4 hover:bg-white hover:text-[#603BB0] text-white hover:rounded-xl p-2">
-                            <Image src="/images/cs-simIcon.svg" width={25} height={25} alt='SoyMomo Logo' />
+                            <Image src="/images/cs-simIconWhite.svg" width={25} height={25} alt='SoyMomo Logo' />
                             <p className="text-sm ml-4 hidden lg:flex">SoyMomo SIM</p>
                         </div>
                     </Link>
 
                     <Link href="/dashboard">
                         <div className="flex flex-row items-center justify-center lg:justify-start my-4 hover:bg-white hover:text-[#603BB0] text-white hover:rounded-xl p-2">
-                            <Image src="/images/cs-dispatchIcon.svg" width={25} height={25} alt='SoyMomo Logo' />
+                            <Image src="/images/cs-dispatchIconWhite.svg" width={25} height={25} alt='SoyMomo Logo' />
                             <p className="text-sm ml-4 hidden lg:flex">Despachos</p>
                         </div>
                     </Link>
 
                     <Link href="/dashboard">
                         <div className="flex flex-row items-center justify-center lg:justify-start my-4 hover:bg-white hover:text-[#603BB0] text-white hover:rounded-xl p-2">
-                            <Image src="/images/cs-logoutIcon.svg" width={25} height={25} alt='SoyMomo Logo' />
+                            <Image src="/images/cs-logoutIconWhite.svg" width={25} height={25} alt='SoyMomo Logo' />
                             <p className="text-sm ml-4 hidden lg:flex">Cerrar sesión</p>
                         </div>
                     </Link>
