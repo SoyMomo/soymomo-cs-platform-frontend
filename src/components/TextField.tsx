@@ -2,18 +2,28 @@
 
 import { useState } from "react";
 
-export default function TextField({ label }: { label: string} ) {
-    const [value, setValue] = useState('')
+interface TextFieldProps {
+    label: string
+    type: string
+    setValue: (value: string) => void
+    value: string
+}
+
+export default function TextField(Props: TextFieldProps) {
+    // const [value, setValue] = useState('')
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        Props.setValue(e.target.value)
+    }
 
     return (
-        <div className="flex flex-col">
-            <label className="text-sm font-bold text-gray-700 tracking-wide">{label}</label>
-            <input 
-                className="text-base py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                type="text"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-            />
-        </div>
+        <input
+            className="mt-6 w-full px-4 py-3 rounded-xl border-[#603BB0] border-2 focus:outline-none 
+            pla focus:border-[#603BB0] text-[#603BB0] placeholder-[#D8CEEE]"
+            type={Props.type}
+            placeholder={Props.label}
+            value={Props.value}
+            // onChange={(e) => {Props.setValue(e.target.value)}}
+            onChange={handleChange}
+        />
     )
 }
