@@ -1,5 +1,5 @@
 'use client'
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -33,6 +33,8 @@ const items: MenuProps['items'] = [
 }));
 
 const AppLayout: React.FC = ({children}: PropsWithChildren) => {
+    
+    const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Layout hasSider>
@@ -44,9 +46,18 @@ const AppLayout: React.FC = ({children}: PropsWithChildren) => {
           console.log(broken);
         }}
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
+            console.log(collapsed, type);
+            setCollapsed(collapsed);
         }}
-        style={{ background: '#603BB0', height: '100vh'}}
+        style={{ 
+            background: '#603BB0',           
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0
+        }}
       >
         <div style={{marginTop: '2vh', marginBottom: '2vh', marginRight: 'auto'}}>
             <div style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}>
@@ -55,7 +66,7 @@ const AppLayout: React.FC = ({children}: PropsWithChildren) => {
             <Menu mode="inline" defaultSelectedKeys={['1']} items={items} style={{background: '#603BB0', width: 'auto'}} />
         </div>
       </Sider>
-      <Layout className="site-layout">
+      <Layout className="site-layout" style={{ marginLeft: collapsed ? 0 : 200 }}>
         <Content style={{ width: 'auto', height: '100vh', background: '#603BB0' }}>
           <div style={{ background: '#FFF', borderRadius: '30px', height: '96vh', margin: '2vh', padding: 14 }}>
                 <div style={{ height: '100%', overflow: 'auto', scrollbarColor: 'dark' }}>

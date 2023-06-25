@@ -110,7 +110,7 @@ export default function AppDir() {
                 <Col>
                 <VictoryChart
                 theme={VictoryTheme.material}
-                domainPadding={{ x: 15 }}
+                domainPadding={{ x: 10 }}
                 >
                     <VictoryBar
                     data={chartData}
