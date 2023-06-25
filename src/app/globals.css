@@ -25,3 +25,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.custom-menu .ant-menu-item {
+  width: 100% !important;
+}

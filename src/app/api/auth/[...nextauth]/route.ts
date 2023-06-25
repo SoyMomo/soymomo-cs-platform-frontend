@@ -18,7 +18,6 @@ const authOptions: NextAuthOptions = {
             headers: { "Content-Type": "application/json" }
           })
           const user = await res.json()
-          console.log(user);
     
           if (res.ok && user) {
             return user
@@ -37,11 +36,11 @@ const authOptions: NextAuthOptions = {
             token.refreshToken = user.RefreshToken
             token.tokenType = user.TokenType
         }
-        console.log({ msg: "JWT Callback Result", token, user, account, profile });
+        //console.log({ msg: "JWT Callback Result", token, user, account, profile });
         return token
       },
       async session({ session, user, token }): Promise<Session>{
-        console.log({ msg: "Session Callback Result", session, user, token });
+        //console.log({ msg: "Session Callback Result", session, user, token });
         session.accessToken = token.accessToken
         return session
       }
