@@ -115,7 +115,7 @@ export default function AppDir() {
           <Col xs={24} sm={24} md={24} lg={16} xl={16}>
 
             {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
-            <Space direction="vertical" size={24} className='flex'>
+            <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
               {/* Nombre, numero, imei: card principal */}
               <DemoBox value={240}>
@@ -136,7 +136,7 @@ export default function AppDir() {
 
                 {/* Ultima conexion con SoyMomoSIM */}
                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                  <Space direction="vertical" size={24} className='flex'>
+                  <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
                     {/* Ultima conexion */}
                     <DemoBox value={200}>
@@ -172,7 +172,7 @@ export default function AppDir() {
           <Col xs={24} sm={12} md={12} lg={8} xl={8}>
 
           {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
-          <Space direction="vertical" size={24} className='flex'>
+          <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
             {/* Ultima actualizacion */}
             <DemoBox value={120}>
@@ -192,7 +192,7 @@ export default function AppDir() {
                   <Title level={3}>Dashboard</Title>
             </DemoBox>
             {/* Ajustes reloj */}
-
+            
           </Space>
 
           </Col>
