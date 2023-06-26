@@ -29,7 +29,7 @@ export default function LoginForm() {
     
         const response = await res.json();
 
-        console.log(response);
+        //console.log(response);
     
         if (!res.ok) {
             setError(response.message || 'Something went wrong.');
