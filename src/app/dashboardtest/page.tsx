@@ -5,7 +5,12 @@ import { Button, Row, Space, Typography, Table, Col } from 'antd'
 import type { ColumnsType } from 'antd/es/table';
 import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 
+
 const { Title } = Typography
+
+const DemoBox: React.FC<{ children: React.ReactNode; value: number }> = (props) => (
+  <p style={{border: 'black', backgroundColor: 'black', height: props.value}}>{props.children}</p>
+);
 
 interface DataType {
     key: React.Key;
@@ -106,6 +111,93 @@ export default function AppDir() {
   return (
     <>
         <div style={{padding: 20}}>
+        <Row gutter={[24, 32]}>
+          <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+
+            {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
+            <Space direction="vertical" size={24} className='flex'>
+
+              {/* Nombre, numero, imei: card principal */}
+              <DemoBox value={240}>
+                    <Title level={3}>Dashboard</Title>
+              </DemoBox>
+              {/* Nombre, numero, imei: card principal */}
+
+              {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+              <Row gutter={24}>
+
+                {/* Datos principales */}
+                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <DemoBox value={424}>
+                    <Title level={3}>Dashboard</Title>
+                  </DemoBox>
+                </Col>
+                {/* Datos principales */}
+
+                {/* Ultima conexion con SoyMomoSIM */}
+                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                  <Space direction="vertical" size={24} className='flex'>
+
+                    {/* Ultima conexion */}
+                    <DemoBox value={200}>
+                      <Title level={3}>Dashboard</Title>
+                    </DemoBox>
+                    {/* Ultima conexion */}
+
+                    {/* SoyMomoSIM */}
+                    <DemoBox value={200}>
+                      <Title level={3}>Dashboard</Title>
+                    </DemoBox>
+                    {/* SoyMomoSIM */}
+
+                  </Space>
+                </Col>
+                {/* Ultima conexion con SoyMomoSIM */}
+
+              </Row>
+              {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+
+              {/* Historial de bateria */}
+
+              <DemoBox value={256}>
+                    <Title level={3}>Dashboard</Title>
+              </DemoBox>
+
+              {/* Historial de bateria */}
+
+            </Space>
+
+          </Col>
+
+          <Col xs={24} sm={12} md={12} lg={8} xl={8}>
+
+          {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
+          <Space direction="vertical" size={24} className='flex'>
+
+            {/* Ultima actualizacion */}
+            <DemoBox value={120}>
+                <Title level={3}>Dashboard</Title>
+            </DemoBox>
+            {/* Ultima actualizacion */}
+
+            {/* Comandos */}
+            <DemoBox value={400}>
+                  <Title level={3}>Dashboard</Title>
+            </DemoBox>
+            {/* Comandos */}
+
+
+            {/* Ajustes reloj */}
+            <DemoBox value={400}>
+                  <Title level={3}>Dashboard</Title>
+            </DemoBox>
+            {/* Ajustes reloj */}
+
+          </Space>
+
+          </Col>
+        </Row>
+
         <Row gutter={[24, 32]}>
                 <Col>
                 <VictoryChart
