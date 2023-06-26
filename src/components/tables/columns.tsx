@@ -110,3 +110,115 @@ export const friendsColumns: ColumnsType<DataType> = [
         align: 'center',
     }
 ]
+
+export const userColumns: ColumnsType<DataType> = [
+    {
+        title: '#',
+        dataIndex: 'id',
+        key: 'id',
+        width: 100,
+        align: 'center',
+    },
+    {
+        title: 'Nombre',
+        dataIndex: 'name',
+        key: 'name',
+        width: 150,
+        align: 'center',
+    },
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+        width: 150,
+        align: 'center',
+    },
+    {
+        title: 'Facebook',
+        dataIndex: 'facebook',
+        key: 'facebook',
+        width: 100,
+        align: 'center',
+    },
+    {
+        title: 'Autorizado',
+        dataIndex: 'authorized',
+        key: 'authorized',
+        width: 100,
+        align: 'center',
+    },
+    {
+        title: 'Sistema operativo',
+        dataIndex: 'os',
+        key: 'os',
+        width: 150,
+        align: 'center',
+    },
+    {
+        title: 'Versión',
+        dataIndex: 'version',
+        key: 'version',
+        width: 100,
+        align: 'center',
+    },
+    {
+        title: 'País',
+        dataIndex: 'country',
+        key: 'country',
+        width: 100,
+        align: 'center',
+    },
+    {
+        title: 'Acción',
+        key: 'action',
+        width: 100,
+        render: () => <button style={{backgroundColor: '#32B8C0', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Editar</button>,
+        align: 'center'
+    },
+    {
+        title: 'Admin',
+        key: 'admin',
+        width: 100,
+        render: () => <button style={{backgroundColor: '#F93C7D', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Desvincular</button>,
+        align: 'center',
+    }
+];
+
+export const contactColumns: ColumnsType<DataType> = [
+    {
+        title: 'Posición',
+        dataIndex: 'position',
+        key: 'position',
+        width: 100,
+        align: 'center',
+    },
+    {
+        title: 'Nombre',
+        dataIndex: 'name',
+        key: 'name',
+        width: 150,
+        align: 'center',
+    },
+    {
+        title: 'Teléfono',
+        dataIndex: 'phone',
+        key: 'phone',
+        width: 150,
+        align: 'center',
+    },
+    {
+        title: 'SOS',
+        dataIndex: 'sos',
+        key: 'sos',
+        width: 100,
+        align: 'center',
+    },
+    {
+        title: 'Últ. actualización',
+        dataIndex: 'lastUpdate',
+        key: 'lastUpdate',
+        width: 150,
+        align: 'center',
+    },
+];
+
