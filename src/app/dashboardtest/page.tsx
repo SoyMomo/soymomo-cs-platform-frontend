@@ -167,7 +167,7 @@ export default function AppDir() {
                 {/* Nombre, numero, imei: card principal */}
 
                 {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-                <Row gutter={24}>
+                <Row gutter={[24, 32]}>
 
                   {/* Datos principales */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
