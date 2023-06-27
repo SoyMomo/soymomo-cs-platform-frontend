@@ -9,7 +9,7 @@ import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 import TableComponent from '../../components/tables/table'
 
 const DemoBox: React.FC<{ children: React.ReactNode; value: number }> = (props) => (
-  <p style={{border: 'black', backgroundColor: 'black', height: props.value}}>{props.children}</p>
+  <p style={{borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value}}>{props.children}</p>
 );
 
 const { Title } = Typography
@@ -153,202 +153,205 @@ export default function AppDir() {
   return (
     <>
       <div style={{ padding: 20 }}>
-        <Row gutter={[24, 32]}>
-          <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+        <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+          <Row gutter={[24, 32]}>
+            <Col xs={24} sm={24} md={24} lg={16} xl={16}>
 
-            {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
+              {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
+              <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+
+                {/* Nombre, numero, imei: card principal */}
+                <DemoBox value={240}>
+                      <Title level={3}>Dashboard</Title>
+                </DemoBox>
+                {/* Nombre, numero, imei: card principal */}
+
+                {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+                <Row gutter={24}>
+
+                  {/* Datos principales */}
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <DemoBox value={424}>
+                      <Title level={3}>Dashboard</Title>
+                    </DemoBox>
+                  </Col>
+                  {/* Datos principales */}
+
+                  {/* Ultima conexion con SoyMomoSIM */}
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+
+                      {/* Ultima conexion */}
+                      <DemoBox value={200}>
+                        <Title level={3}>Dashboard</Title>
+                      </DemoBox>
+                      {/* Ultima conexion */}
+
+                      {/* SoyMomoSIM */}
+                      <DemoBox value={200}>
+                        <Title level={3}>Dashboard</Title>
+                      </DemoBox>
+                      {/* SoyMomoSIM */}
+
+                    </Space>
+                  </Col>
+                  {/* Ultima conexion con SoyMomoSIM */}
+
+                </Row>
+                {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+
+                {/* Historial de bateria */}
+
+                <DemoBox value={256}>
+                      <Title level={3}>Dashboard</Title>
+                </DemoBox>
+
+                {/* Historial de bateria */}
+
+              </Space>
+
+            </Col>
+
+            <Col xs={24} sm={12} md={12} lg={8} xl={8}>
+
+            {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
             <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
-              {/* Nombre, numero, imei: card principal */}
-              <DemoBox value={240}>
+              {/* Ultima actualizacion */}
+              <DemoBox value={120}>
+                  <Title level={3}>Dashboard</Title>
+              </DemoBox>
+              {/* Ultima actualizacion */}
+
+              {/* Comandos */}
+              <DemoBox value={400}>
                     <Title level={3}>Dashboard</Title>
               </DemoBox>
-              {/* Nombre, numero, imei: card principal */}
+              {/* Comandos */}
 
-              {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-              <Row gutter={24}>
 
-                {/* Datos principales */}
-                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                  <DemoBox value={424}>
-                    <Title level={3}>Dashboard</Title>
-                  </DemoBox>
-                </Col>
-                {/* Datos principales */}
-
-                {/* Ultima conexion con SoyMomoSIM */}
-                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                  <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
-                    {/* Ultima conexion */}
-                    <DemoBox value={200}>
-                      <Title level={3}>Dashboard</Title>
-                    </DemoBox>
-                    {/* Ultima conexion */}
-
-                    {/* SoyMomoSIM */}
-                    <DemoBox value={200}>
-                      <Title level={3}>Dashboard</Title>
-                    </DemoBox>
-                    {/* SoyMomoSIM */}
-
-                  </Space>
-                </Col>
-                {/* Ultima conexion con SoyMomoSIM */}
-
-              </Row>
-              {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-
-              {/* Historial de bateria */}
-
-              <DemoBox value={256}>
+              {/* Ajustes reloj */}
+              <DemoBox value={400}>
                     <Title level={3}>Dashboard</Title>
               </DemoBox>
-
-              {/* Historial de bateria */}
-
+              {/* Ajustes reloj */}
+              
             </Space>
 
-          </Col>
+            </Col>
 
-          <Col xs={24} sm={12} md={12} lg={8} xl={8}>
-
-          {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
-          <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
-            {/* Ultima actualizacion */}
-            <DemoBox value={120}>
-                <Title level={3}>Dashboard</Title>
-            </DemoBox>
-            {/* Ultima actualizacion */}
-
-            {/* Comandos */}
-            <DemoBox value={400}>
-                  <Title level={3}>Dashboard</Title>
-            </DemoBox>
-            {/* Comandos */}
-
-
-            {/* Ajustes reloj */}
-            <DemoBox value={400}>
-                  <Title level={3}>Dashboard</Title>
-            </DemoBox>
-            {/* Ajustes reloj */}
-            
-          </Space>
-
-          </Col>
-
-          {/* <Col>
-            <VictoryChart
-              theme={VictoryTheme.material}
-              domainPadding={{ x: 10 }}
-            >
-              <VictoryBar
-                data={chartData}
-                // data accessor for x values
-                x="quarter"
-                // data accessor for y values
-                y="earnings"
-                animate={{
-                  duration: 2000,
-                  onLoad: { duration: 1000 }
-                }}
-                barRatio={0.3}
-                style={{
-                  data: {
-                    fill: ({ datum }) => datum.x === 3 ? "#000000" : "#c43a31",
-                    stroke: ({ index }) => "#c43a31",
-                    fillOpacity: 0.7,
-                    strokeWidth: 3
-                  },
-                  labels: {
-                    fontSize: 15,
-                    fill: ({ datum }: any) => "#c43a31"
-                  }
-                }}
-              />
-            </VictoryChart>
-          </Col> */}
-        </Row>
-        
-        <Row gutter={[24, 32]}>
-          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-            <TableComponent
-              columns={friendMessageColumns}
-              data={friendMessageData}
-              leftIcon="/images/tableIcons/cs-friendMessagesIcon.svg"
-              leftIconHeight={29}
-              leftIconWidth={24}
-              refreshLink="/api/refresh"
-              title='Mensajes de amigos'
-              subtitle='Externos'
-            />
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-            <TableComponent
-              columns={friendMessageColumns}
-              data={userMessageData}
-              leftIcon="/images/tableIcons/cs-userMessagesIcon.svg"
-              leftIconHeight={29}
-              leftIconWidth={24}
-              refreshLink="/api/refresh"
-              title='Mensajes de usuarios'
-              subtitle='Familiares'
-            />
-          </Col>
-        </Row>
-        <Row gutter={[24, 32]}>
-          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-            <TableComponent
-              columns={wifiColumns}
-              data={wifiData}
-              leftIcon="/images/tableIcons/cs-wifiIcon.svg"
-              leftIconHeight={0}
-              leftIconWidth={32}
-              refreshLink="/api/refresh"
-              title='Historial de conexión'
-              subtitle='Internet'
-            />
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-            <TableComponent
-              columns={friendsColumns}
-              data={friendData}
-              leftIcon="/images/tableIcons/cs-friendsHeart.svg"
-              leftIconHeight={27}
-              leftIconWidth={31}
-              refreshLink="/api/refresh"
-              title='Amigos'
-              subtitle='Aprobación'
-            />
-          </Col>
+            {/* <Col>
+              <VictoryChart
+                theme={VictoryTheme.material}
+                domainPadding={{ x: 10 }}
+              >
+                <VictoryBar
+                  data={chartData}
+                  // data accessor for x values
+                  x="quarter"
+                  // data accessor for y values
+                  y="earnings"
+                  animate={{
+                    duration: 2000,
+                    onLoad: { duration: 1000 }
+                  }}
+                  barRatio={0.3}
+                  style={{
+                    data: {
+                      fill: ({ datum }) => datum.x === 3 ? "#000000" : "#c43a31",
+                      stroke: ({ index }) => "#c43a31",
+                      fillOpacity: 0.7,
+                      strokeWidth: 3
+                    },
+                    labels: {
+                      fontSize: 15,
+                      fill: ({ datum }: any) => "#c43a31"
+                    }
+                  }}
+                />
+              </VictoryChart>
+            </Col> */}
           </Row>
-        <Row gutter={[24, 32]}>
-          <TableComponent
-            columns={userColumns}
-            data={users}
-            leftIcon="/images/tableIcons/cs-usersIcon.svg"
-            leftIconHeight={29}
-            leftIconWidth={38}
-            refreshLink="/api/refresh"
-            title='Usuarios'
-            subtitle='Familiares'
-          />
-        </Row>
-        <Row gutter={[24, 32]}>
-          <TableComponent
-            columns={contactColumns}
-            data={contacts}
-            leftIcon="/images/tableIcons/cs-contactIcon.svg"
-            leftIconHeight={29}
-            leftIconWidth={38}
-            refreshLink="/api/refresh"
-            title='Contactos'
-            subtitle='Reloj'
-          />
-        </Row>
 
+          <Space direction="vertical" size={12} style={{ display: 'flex' }}>
+            <Row gutter={[24, 32]}>
+              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                <TableComponent
+                  columns={friendMessageColumns}
+                  data={friendMessageData}
+                  leftIcon="/images/tableIcons/cs-friendMessagesIcon.svg"
+                  leftIconHeight={29}
+                  leftIconWidth={24}
+                  refreshLink="/api/refresh"
+                  title='Mensajes de amigos'
+                  subtitle='Externos'
+                />
+              </Col>
+              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                <TableComponent
+                  columns={friendMessageColumns}
+                  data={userMessageData}
+                  leftIcon="/images/tableIcons/cs-userMessagesIcon.svg"
+                  leftIconHeight={29}
+                  leftIconWidth={24}
+                  refreshLink="/api/refresh"
+                  title='Mensajes de usuarios'
+                  subtitle='Familiares'
+                />
+              </Col>
+            </Row>
+            <Row gutter={[24, 32]}>
+              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                <TableComponent
+                  columns={wifiColumns}
+                  data={wifiData}
+                  leftIcon="/images/tableIcons/cs-wifiIcon.svg"
+                  leftIconHeight={0}
+                  leftIconWidth={32}
+                  refreshLink="/api/refresh"
+                  title='Historial de conexión'
+                  subtitle='Internet'
+                />
+              </Col>
+              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                <TableComponent
+                  columns={friendsColumns}
+                  data={friendData}
+                  leftIcon="/images/tableIcons/cs-friendsHeart.svg"
+                  leftIconHeight={27}
+                  leftIconWidth={31}
+                  refreshLink="/api/refresh"
+                  title='Amigos'
+                  subtitle='Aprobación'
+                />
+              </Col>
+              </Row>
+            <Row>
+              <TableComponent
+                columns={userColumns}
+                data={users}
+                leftIcon="/images/tableIcons/cs-usersIcon.svg"
+                leftIconHeight={29}
+                leftIconWidth={38}
+                refreshLink="/api/refresh"
+                title='Usuarios'
+                subtitle='Familiares'
+              />
+            </Row>
+            <Row>
+              <TableComponent
+                columns={contactColumns}
+                data={contacts}
+                leftIcon="/images/tableIcons/cs-contactIcon.svg"
+                leftIconHeight={29}
+                leftIconWidth={38}
+                refreshLink="/api/refresh"
+                title='Contactos'
+                subtitle='Reloj'
+              />
+            </Row>
+          </Space>
+        </Space>
       </div>
     </>
   )
