@@ -5,6 +5,10 @@ export interface DataType {
     [key: string]: any;
 }
 
+const handleEdit = (key: React.Key) => {
+    console.log(key);
+}
+
 export const wifiColumns: ColumnsType<DataType> = [
     {
         title: '#',
@@ -172,7 +176,7 @@ export const userColumns: ColumnsType<DataType> = [
         title: 'Acción',
         key: 'action',
         width: 100,
-        render: () => <button style={{backgroundColor: '#32B8C0', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Editar</button>,
+        render: (row) => <button onClick={() => handleEdit(row)} style={{backgroundColor: '#32B8C0', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Editar</button>,
         align: 'center'
     },
     {
