@@ -162,7 +162,6 @@ export default function AppDir() {
 
                 {/* Nombre, numero, imei: card principal */}
                 <DemoBox value={240}>
-                      <Title level={3}>Dashboard</Title>
                 </DemoBox>
                 {/* Nombre, numero, imei: card principal */}
 
@@ -172,7 +171,6 @@ export default function AppDir() {
                   {/* Datos principales */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <DemoBox value={424}>
-                      <Title level={3}>Dashboard</Title>
                     </DemoBox>
                   </Col>
                   {/* Datos principales */}
@@ -183,13 +181,13 @@ export default function AppDir() {
 
                       {/* Ultima conexion */}
                       <DemoBox value={200}>
-                        <Title level={3}>Dashboard</Title>
+
                       </DemoBox>
                       {/* Ultima conexion */}
 
                       {/* SoyMomoSIM */}
                       <DemoBox value={200}>
-                        <Title level={3}>Dashboard</Title>
+
                       </DemoBox>
                       {/* SoyMomoSIM */}
 
@@ -203,7 +201,6 @@ export default function AppDir() {
                 {/* Historial de bateria */}
 
                 <DemoBox value={256}>
-                      <Title level={3}>Dashboard</Title>
                 </DemoBox>
 
                 {/* Historial de bateria */}
@@ -219,20 +216,20 @@ export default function AppDir() {
 
               {/* Ultima actualizacion */}
               <DemoBox value={120}>
-                  <Title level={3}>Dashboard</Title>
+                  
               </DemoBox>
               {/* Ultima actualizacion */}
 
               {/* Comandos */}
               <DemoBox value={400}>
-                    <Title level={3}>Dashboard</Title>
+                    
               </DemoBox>
               {/* Comandos */}
 
 
               {/* Ajustes reloj */}
               <DemoBox value={400}>
-                    <Title level={3}>Dashboard</Title>
+                    
               </DemoBox>
               {/* Ajustes reloj */}
               
