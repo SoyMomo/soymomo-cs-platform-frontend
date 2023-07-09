@@ -1,5 +1,6 @@
 import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Row, Space, Col, Input } from 'antd'
 import { wifiColumns, friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/columns';
@@ -41,10 +42,15 @@ export default function WearerDashboard() {
   let query = useQuery();
   const [wearer, setWearer] = useState({});
   const [watchSettings, setWatchSettings] = useState({});
+  const navigate = useNavigate();
 
     useEffect(() => {
         const deviceId = query.get('deviceId');
         const imei = query.get('imei');
+        if (!deviceId && !imei) {
+          navigate('/not-found');
+          return;
+        }
         let params = {};
         if (deviceId) {
           params = { deviceId };
