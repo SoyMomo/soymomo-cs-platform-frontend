@@ -1,14 +1,15 @@
 import MainLayout from '../layouts/layout';
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Row, Space, Col, Input } from 'antd'
 import { wifiColumns, friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/columns';
 //import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
+import ComandsComponent from '../components/Comands';
 
 const DemoBox = (props) => (
-  <p style={{borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value}}>{props.children}</p>
+  <p style={{ borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value }}>{props.children}</p>
 );
 
 const { Search } = Input;
@@ -118,7 +119,7 @@ const chartData = [
 
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function WearerDashboard() {
-  
+
   const [wifiData, setWifiData] = useState([]);
   const [friendMessageData, setFriendMessageData] = useState([]);
   const [friendData, setFriendData] = useState([]);
@@ -168,9 +169,9 @@ export default function WearerDashboard() {
         
     }, [query])
 
-    useEffect(() => {
-        console.log(wearer)
-    }, [wearer])
+  useEffect(() => {
+    console.log(wearer)
+  }, [wearer])
 
     // useEffect(() => {
     //     console.log(contacts)
@@ -206,95 +207,101 @@ export default function WearerDashboard() {
 
   return (
     <MainLayout
-        children={
-            <>
-            <div style={{ padding: 20 }}>
-              <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
-              <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-                <Row gutter={[24, 32]}>
-                  <Col xs={24} sm={24} md={24} lg={16} xl={16}>
-      
-                    {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
-                    <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-      
-                      {/* Nombre, numero, imei: card principal */}
-                      <DemoBox value={240}>
-                      </DemoBox>
-                      {/* Nombre, numero, imei: card principal */}
-      
-                      {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-                      <Row gutter={[24, 32]}>
-      
-                        {/* Datos principales */}
-                        <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                          <DemoBox value={424}>
+      children={
+        <>
+          <div style={{ padding: 20 }}>
+            <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+            <h1>{wearer.firstName}</h1>
+            <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+              <Row gutter={[24, 32]}>
+                <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+
+                  {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
+                  <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+
+                    {/* Nombre, numero, imei: card principal */}
+                    <DemoBox value={240}>
+                    </DemoBox>
+                    {/* Nombre, numero, imei: card principal */}
+
+                    {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+                    <Row gutter={[24, 32]}>
+
+                      {/* Datos principales */}
+                      <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                        <DemoBox value={424}>
+                        </DemoBox>
+                      </Col>
+                      {/* Datos principales */}
+
+                      {/* Ultima conexion con SoyMomoSIM */}
+                      <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                        <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+
+                          {/* Ultima conexion */}
+                          <DemoBox value={200}>
+
                           </DemoBox>
-                        </Col>
-                        {/* Datos principales */}
-      
-                        {/* Ultima conexion con SoyMomoSIM */}
-                        <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                          <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-      
-                            {/* Ultima conexion */}
-                            <DemoBox value={200}>
-      
-                            </DemoBox>
-                            {/* Ultima conexion */}
-      
-                            {/* SoyMomoSIM */}
-                            <DemoBox value={200}>
-      
-                            </DemoBox>
-                            {/* SoyMomoSIM */}
-      
-                          </Space>
-                        </Col>
-                        {/* Ultima conexion con SoyMomoSIM */}
-      
-                      </Row>
-                      {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-      
-                      {/* Historial de bateria */}
-      
-                      <DemoBox value={256}>
-                      </DemoBox>
-      
-                      {/* Historial de bateria */}
-      
-                    </Space>
-      
-                  </Col>
-      
-                  <Col xs={24} sm={12} md={12} lg={8} xl={8}>
-      
+                          {/* Ultima conexion */}
+
+                          {/* SoyMomoSIM */}
+                          <DemoBox value={200}>
+
+                          </DemoBox>
+                          {/* SoyMomoSIM */}
+
+                        </Space>
+                      </Col>
+                      {/* Ultima conexion con SoyMomoSIM */}
+
+                    </Row>
+                    {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+
+                    {/* Historial de bateria */}
+
+                    <DemoBox value={256}>
+                    </DemoBox>
+
+                    {/* Historial de bateria */}
+
+                  </Space>
+
+                </Col>
+
+                <Col xs={24} sm={12} md={12} lg={8} xl={8}>
+
                   {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
                   <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-      
+
                     {/* Ultima actualizacion */}
                     <DemoBox value={120}>
-                        
+
                     </DemoBox>
                     {/* Ultima actualizacion */}
-      
+
                     {/* Comandos */}
-                    <DemoBox value={400}>
-                          
-                    </DemoBox>
+                    <ComandsComponent
+                      leftIcon='/images/cs-comands.svg'
+                      title='Comandos'
+                      subtitle='Modificar'
+                      leftIconWidth={24}
+                      leftIconHeight={24}
+
+                    />
                     {/* Comandos */}
-      
-      
+
+
                     {/* Ajustes reloj */}
                     <DemoBox value={400}>
-                          
+
                     </DemoBox>
                     {/* Ajustes reloj */}
-                    
+
                   </Space>
-      
-                  </Col>
-      
-                  {/* <Col>
+
+                </Col>
+
+                {/* <Col>
                     <VictoryChart
                       theme={VictoryTheme.material}
                       domainPadding={{ x: 10 }}
@@ -325,90 +332,90 @@ export default function WearerDashboard() {
                       />
                     </VictoryChart>
                   </Col> */}
-                </Row>
-      
-                <Space direction="vertical" size={12} style={{ display: 'flex' }}>
-                  <Row gutter={[24, 32]}>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                      <TableComponent
-                        columns={friendMessageColumns}
-                        data={friendMessageData}
-                        leftIcon="/images/tableIcons/cs-friendMessagesIcon.svg"
-                        leftIconHeight={29}
-                        leftIconWidth={24}
-                        refreshLink="/api/refresh"
-                        title='Mensajes de amigos'
-                        subtitle='Externos'
-                      />
-                    </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                      <TableComponent
-                        columns={friendMessageColumns}
-                        data={userMessageData}
-                        leftIcon="/images/tableIcons/cs-userMessagesIcon.svg"
-                        leftIconHeight={29}
-                        leftIconWidth={24}
-                        refreshLink="/api/refresh"
-                        title='Mensajes de usuarios'
-                        subtitle='Familiares'
-                      />
-                    </Col>
-                  </Row>
-                  <Row gutter={[24, 32]}>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                      <TableComponent
-                        columns={wifiColumns}
-                        data={wifiData}
-                        leftIcon="/images/tableIcons/cs-wifiIcon.svg"
-                        leftIconHeight={0}
-                        leftIconWidth={32}
-                        refreshLink="/api/refresh"
-                        title='Historial de conexión'
-                        subtitle='Internet'
-                      />
-                    </Col>
-                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                      <TableComponent
-                        columns={friendsColumns}
-                        data={friendData}
-                        leftIcon="/images/tableIcons/cs-friendsHeart.svg"
-                        leftIconHeight={27}
-                        leftIconWidth={31}
-                        refreshLink="/api/refresh"
-                        title='Amigos'
-                        subtitle='Aprobación'
-                      />
-                    </Col>
-                    </Row>
-                  <Row>
+              </Row>
+
+              <Space direction="vertical" size={12} style={{ display: 'flex' }}>
+                <Row gutter={[24, 32]}>
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <TableComponent
-                      columns={userColumns}
-                      data={users}
-                      leftIcon="/images/tableIcons/cs-usersIcon.svg"
+                      columns={friendMessageColumns}
+                      data={friendMessageData}
+                      leftIcon="/images/tableIcons/cs-friendMessagesIcon.svg"
                       leftIconHeight={29}
-                      leftIconWidth={38}
+                      leftIconWidth={24}
                       refreshLink="/api/refresh"
-                      title='Usuarios'
+                      title='Mensajes de amigos'
+                      subtitle='Externos'
+                    />
+                  </Col>
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <TableComponent
+                      columns={friendMessageColumns}
+                      data={userMessageData}
+                      leftIcon="/images/tableIcons/cs-userMessagesIcon.svg"
+                      leftIconHeight={29}
+                      leftIconWidth={24}
+                      refreshLink="/api/refresh"
+                      title='Mensajes de usuarios'
                       subtitle='Familiares'
                     />
-                  </Row>
-                  <Row>
+                  </Col>
+                </Row>
+                <Row gutter={[24, 32]}>
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <TableComponent
-                      columns={contactColumns}
-                      data={contacts}
-                      leftIcon="/images/tableIcons/cs-contactIcon.svg"
-                      leftIconHeight={29}
-                      leftIconWidth={38}
+                      columns={wifiColumns}
+                      data={wifiData}
+                      leftIcon="/images/tableIcons/cs-wifiIcon.svg"
+                      leftIconHeight={0}
+                      leftIconWidth={32}
                       refreshLink="/api/refresh"
-                      title='Contactos'
-                      subtitle='Reloj'
+                      title='Historial de conexión'
+                      subtitle='Internet'
                     />
-                  </Row>
-                </Space>
+                  </Col>
+                  <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                    <TableComponent
+                      columns={friendsColumns}
+                      data={friendData}
+                      leftIcon="/images/tableIcons/cs-friendsHeart.svg"
+                      leftIconHeight={27}
+                      leftIconWidth={31}
+                      refreshLink="/api/refresh"
+                      title='Amigos'
+                      subtitle='Aprobación'
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <TableComponent
+                    columns={userColumns}
+                    data={users}
+                    leftIcon="/images/tableIcons/cs-usersIcon.svg"
+                    leftIconHeight={29}
+                    leftIconWidth={38}
+                    refreshLink="/api/refresh"
+                    title='Usuarios'
+                    subtitle='Familiares'
+                  />
+                </Row>
+                <Row>
+                  <TableComponent
+                    columns={contactColumns}
+                    data={contacts}
+                    leftIcon="/images/tableIcons/cs-contactIcon.svg"
+                    leftIconHeight={29}
+                    leftIconWidth={38}
+                    refreshLink="/api/refresh"
+                    title='Contactos'
+                    subtitle='Reloj'
+                  />
+                </Row>
               </Space>
-            </div>
-          </>
-        }
+            </Space>
+          </div>
+        </>
+      }
     />
   )
 }
