@@ -125,7 +125,7 @@ const chartData = [
   { quarter: 10, earnings: 19000 }
 ];
 
-export async function searchWearer() {
+async function searchWearer() {
   const backendUrl = process.env.BACKEND_URL;
   console.log(backendUrl)
   return {
