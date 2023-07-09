@@ -55,7 +55,11 @@ export default function WearerDashboard() {
 
         const getContacts = async (params) => {
             const response = await axios.get('http://localhost/wearer/getContacts', { params });
-            setContacts(response.data.data)
+            const finalResponse = response.data.data.map((contact) => {
+              contact.sos = contact.sos ? "Si" : "No"
+              return contact
+            })
+            setContacts(finalResponse)
         }
 
         const getWatchUsers = async (params) => {
@@ -128,7 +132,7 @@ export default function WearerDashboard() {
           const user = row.user
           return {
             message: chatUser.text,
-            sender: `${user.firstName} ${user.lastName}`,
+            sender: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
             date: chatUser.createdAt,
             from: chatUser.sender,
           }
@@ -157,7 +161,7 @@ export default function WearerDashboard() {
           const sender = row.sender
           return {
             message: chatWearer.text,
-            sender: `${sender.firstName} ${sender.lastName}`,
+            sender: `${sender.firstName ?? ""} ${sender.lastName ?? ""}`,
             date: chatWearer.createdAt,
             from: "watch",
           }
@@ -178,7 +182,7 @@ export default function WearerDashboard() {
         <>
           <div style={{ padding: 20 }}>
             <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
-            <h1>{wearer.firstName}</h1>
+            <h1>{wearer.lastKnownLocation?.longitude}</h1>
             <Space direction="vertical" size={24} style={{ display: 'flex' }}>
               <Row gutter={[24, 32]}>
                 <Col xs={24} sm={24} md={24} lg={16} xl={16}>
