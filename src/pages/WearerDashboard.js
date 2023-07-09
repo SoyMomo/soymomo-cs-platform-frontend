@@ -7,6 +7,7 @@ import { wifiColumns, friendMessageColumns, friendsColumns, userColumns, contact
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
+import WearerInfo from '../components/WearerInfo';
 
 const DemoBox = (props) => (
   <p style={{ borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value }}>{props.children}</p>
@@ -221,8 +222,14 @@ export default function WearerDashboard() {
 
                       {/* Datos principales */}
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                        <DemoBox value={424}>
-                        </DemoBox>
+                        <WearerInfo 
+                          title="Datos principales"
+                          subtitle="Reloj" 
+                          leftIcon="/images/cs-wearerInfo.svg" 
+                          leftIconWidth={24}
+                          leftIconHeight={29}
+                          refreshLink="/api/refresh"
+                          wearer={wearer}/>
                       </Col>
                       {/* Datos principales */}
 
