@@ -1,8 +1,8 @@
 export const aplicationColumns = [
     {
         title: 'Nombre Aplicación',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'appName',
+        key: 'appName',
         width: 150,
         align: 'center',
     },
@@ -52,26 +52,26 @@ export const userColumns = [
         align: 'center',
     },
     {
-        title: 'Sistema Operativo',
-        dataIndex: 'os',
-        key: 'os',
+        title: 'ToS',
+        dataIndex: 'tos',
+        key: 'tos',
         width: 150,
         align: 'center',
     },
     {
-        title: 'Version',
-        dataIndex: 'version',
-        key: 'version',
+        title: 'Borrar cuenta',
+        dataIndex: 'deletion',
+        key: 'deletion',
         width: 100,
         align: 'center',
     },
-    {
-        title: 'Pais',
-        dataIndex: 'country',
-        key: 'country',
-        width: 100,
-        align: 'center',
-    }
+    // {
+    //     title: 'Pais',
+    //     dataIndex: 'country',
+    //     key: 'country',
+    //     width: 100,
+    //     align: 'center',
+    // }
 ];
 
 

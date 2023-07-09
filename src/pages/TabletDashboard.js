@@ -1,7 +1,6 @@
 import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import { Row, Space, Col, Input } from 'antd'
+import { Row, Space, Col, Input, DatePicker } from 'antd'
 import { aplicationColumns, userColumns } from '../components/tables/tabletColumns';
 //import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 import TableComponent from '../components/tables/table'
@@ -10,77 +9,12 @@ import ComandsComponent from '../components/Comands';
 import DugHistoryCard from '../components/DugHistoryCard';
 import PersonalInfoTablet from '../components/personalInfoTablet';
 import { useNavigate } from 'react-router-dom';
+import { getTablet, getInstalledApps, getTabletUsers, getDugHistory } from '../services/tabletService.js';
+
+const { RangePicker } = DatePicker;
 
 
 const { Search } = Input;
-
-async function getAplicationsData() {
-    const aplicationsData = [];
-    for (let i = 0; i < 100; i++) {
-        aplicationsData.push({
-            key: i,
-            name: `Netflix ${i}`,
-            installed: `Si`,
-            allowed: `No permitido.`,
-        });
-    }
-    return aplicationsData;
-}
-
-async function getUsersData() {
-    const usersData = [];
-    for (let i = 0; i < 100; i++) {
-        usersData.push({
-            key: i,
-            name: `Usuario ${i}`,
-            email: `francisco.ordenes@gmail.com`,
-            bd: `Si`,
-            os: `Android`,
-            version: `10`,
-            country: `Chile`
-        });
-    }
-    return usersData;
-}
-
-async function getDugHistory() {
-    const dugHistory = [];
-    for (let i = 0; i < 100; i++) {
-        dugHistory.push({
-            image: "/images/aaa.png",
-            date: "2020-10-10",
-            category: "Porn",
-            app: "Youtube",
-            time: "10:00",
-        });
-    }
-    return dugHistory;
-}
-
-async function getPersonalInfo() {
-    const personalInfo = {
-        name: "Francisco",
-        email: "francisco@ordenes.gmail",
-        pin: "1111",
-        model: "Samsung Galaxy S10",
-        software: "Android 10",
-        country: "Chile",
-        internet: "Activado",
-        blocked: "Desactivado",
-        detection: "Activado",
-        cyberbulling: "Activado",
-        bd: "7 de febrero de 2020",
-        lastModification: "31 de octubre de 2020",
-        lastStats: "31 de octubre de 2020",
-        birthday: "31 de febrero de 2025",
-        hardware: "Samsung Galaxy S10",
-        brandHardware: "Samsung",
-        battery: "Buena"
-    }
-    return personalInfo;
-}
-
-
 
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function TabletDashboard() {
@@ -89,9 +23,11 @@ export default function TabletDashboard() {
     const [usersData, setUsersData] = useState([]);
     const [dugHistory, setDugHistory] = useState([]);
     const [personalInfo, setPersonalInfo] = useState([]);
+    const [dugFromDate, setDugFromDate] = useState(null);
+    const [dugToDate, setDugToDate] = useState(null);
 
     let query = useQuery();
-    const [wearer, setWearer] = useState({});
+    const [tablet, setTablet] = useState({});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -99,45 +35,38 @@ export default function TabletDashboard() {
         if (!hid) {
             navigate('/404');
             return
-        }
-        const getWearer = async () => {
-            const deviceId = query.get('deviceId');
-            const imei = query.get('imei');
-            let params = {};
-            if (deviceId) {
-                params = { deviceId };
-            } else if (imei) {
-                params = { imei };
-            }
-            const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
-            setWearer(response.data.data[0]);
-        }
-        getWearer().catch(console.error);
+        } else {
+            getTablet(hid).then((tablet) => {
+                if (!tablet) navigate('/404');
+                setTablet(tablet);
+            }).catch(() => {
+            });
+        }        
     }, [query, navigate])
 
     useEffect(() => {
-        console.log(wearer)
-    }, [wearer])
+        if (tablet) {
+            setPersonalInfo(tablet);
 
+            getTabletUsers(tablet.hid).then((users) => {
+                setUsersData(users);
+            }).catch(console.error);
 
+            getInstalledApps(tablet.objectId).then((apps) => {
+                setAplicationsData(apps);
+            }).catch(console.error);
+        }
+    }, [tablet])
 
     useEffect(() => {
-        getAplicationsData().then((data) => {
-            setAplicationsData(data);
-        });
-        getUsersData().then((data) => {
-            setUsersData(data);
-        });
-        getDugHistory().then((data) => {
-            setDugHistory(data);
-        });
-        getPersonalInfo().then((data) => {
-            setPersonalInfo(data);
-        });
-
-
-
-    }, []);
+        if (tablet) {
+            if (dugFromDate !== null && dugToDate !== null) {
+                getDugHistory(dugFromDate, dugToDate, tablet.hid).then((dugHistory) => {
+                    setDugHistory(dugHistory);
+                }).catch(console.error);
+            }
+        }
+    }, [dugFromDate, dugToDate, tablet])
 
     async function onSearch(value) {
         navigate(`/tablet/dashboard?hid=${value}`);
@@ -150,7 +79,6 @@ export default function TabletDashboard() {
                 <>
                     <div style={{ padding: 20 }}>
                         <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
-                        <h1>{wearer.firstName}</h1>
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
                             <Row gutter={[24, 32]}>
                                 <Col xs={24} sm={24} md={24} lg={16} xl={16}>
@@ -273,6 +201,7 @@ export default function TabletDashboard() {
                                             dugHistory.map((item, index) => {
                                                 return (
                                                     <DugHistoryCard
+                                                        key={index}
                                                         image={item.image}
                                                         date={item.date}
                                                         category={item.category}
@@ -283,6 +212,11 @@ export default function TabletDashboard() {
                                             })
                                         }
                                     </div>
+                                    <RangePicker onChange={(dates, dateString)=> {
+                                            setDugFromDate(dateString[0])
+                                            setDugToDate(dateString[1])
+                                        }
+                                    } />
                                 </div>
 
                             </Space>

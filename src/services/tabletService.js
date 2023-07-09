@@ -1,0 +1,67 @@
+import axios from 'axios';
+
+export const getTablet = async (hid) => {
+    const params = { hid };
+    const response = await axios.get('http://localhost/tablet/getTabletByHidOrRecoveryEmail', { params });
+    const tab = response.data.data;
+    return tab;
+}
+
+export const getInstalledApps = async (objectId) => {
+    const params = { objectId };
+    if (!objectId) return;
+    const response = await axios.get('http://localhost/tablet/getTabletInstalledApps', { params });
+
+    const apps = response.data.data.map(app => {
+        return {
+            key: app.objectId,
+            appName: app.appName,
+            installed: app.installed ? 'Si' : 'No',
+            allowed: app.allowed ? 'Permitido' : 'No permitido'
+        }
+    });
+    return apps;
+}
+
+export const getTabletUsers = async (hid) => {
+    const params = { hid };
+    if (!hid) return;
+    const response = await axios.get('http://localhost/tablet/tabletUser/getTabletUserByHidOrRecoveryEmail', { params });
+    const data = response.data.data;
+    const users = data.map(e => {
+        const user = e.user;
+        return {
+            key: user.objectId,
+            name: user.firstName + ' ' + user.lastName,
+            email: user.email,
+            bd: user.createdAt !== null ? 'Si' : 'No',
+            tos: user.acceptedNewTOS ? 'Si' : 'No',
+            deletion: user.hasRequestedDeletion ? 'Si' : 'No'
+        }
+    });
+    return users
+}
+
+export const getDugHistory = async (dugFromDate, dugToDate, hid) => {
+    let from = dugFromDate ? new Date(dugFromDate) : null;
+    let to = dugToDate ? new Date(dugToDate) : null;
+    from = from ? from.toISOString() : null;
+    to = to ? to.toISOString() : null;
+    const params = { hid, from, to };
+    const result = await axios.get('http://localhost/tablet/smartDetection/getDugHistory', { params })
+    const data = result.data.data;
+    const dugHistory = data.map((e, index) => {
+        const date = new Date(e.createdAt);
+        const time = date.getHours() + ':' + date.getMinutes();
+        const dateStr = date.toLocaleDateString();
+        return {
+            id: index,
+            image: e.screenshot.url,
+            date: dateStr,
+            category: e.classType,
+            app: e.appName,
+            time: time
+        }
+    });
+    return dugHistory
+}  
