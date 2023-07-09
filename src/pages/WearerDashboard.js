@@ -1,5 +1,6 @@
 import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Row, Space, Col, Input } from 'antd'
 import { wifiColumns, friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/wearerColumns';
@@ -7,102 +8,14 @@ import { wifiColumns, friendMessageColumns, friendsColumns, userColumns, contact
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
+import WearerInfo from '../components/WearerInfo';
+import WearerSettings from '../components/WearerSettings';
 
 const DemoBox = (props) => (
   <p style={{ borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value }}>{props.children}</p>
 );
 
 const { Search } = Input;
-
-async function getWifiData() {
-  const wifiData = [];
-  for (let i = 0; i < 100; i++) {
-    wifiData.push({
-      key: i,
-      name: `Edward ${i}`,
-      date: `2021-01-01`,
-      counter: `francisco.ordenesv@gmail.com`,
-      error: `Si`,
-      status: `${i}`
-    });
-  }
-  return wifiData;
-}
-
-async function getFriendMessageData() {
-  const friendMessageData = [];
-  for (let i = 0; i < 100; i++) {
-    friendMessageData.push({
-      key: i,
-      message: `Hola Francisco ${i}`,
-      sender: `Francisco Órdenes`,
-      date: `2021-01-01`,
-      from: `app`
-    });
-  }
-  return friendMessageData;
-}
-
-async function getFriendData() {
-  const friendData = [];
-  for (let i = 0; i < 100; i++) {
-    friendData.push({
-      key: i,
-      name: `Francisco Órdenes ${i}`,
-      approval1: `Aprovado`,
-      approval2: `No aprobado`,
-      deviceID: "283949201203923"
-    });
-  }
-  return friendData;
-}
-
-async function getUserMessageData() {
-  const userMessageData = [];
-  for (let i = 0; i < 100; i++) {
-    userMessageData.push({
-      key: i,
-      message: `Holaoaoaaa Francisco ${i} AWDWAHDBAWD  AWDJHBAWDAW AWHBDAWFVGEAFVEF AGWVDGAWXGA GAVWG VG AWV GWVDAVWDGAWD`,
-      sender: `Francisco Órdenes`,
-      date: `2021-01-01`,
-      from: `app`
-    });
-  }
-  return userMessageData;
-}
-
-async function getUsers() {
-  const users = [];
-  for (let i = 0; i < 10; i++) {
-    users.push({
-      key: i,
-
-      name: `Francisco Órdenes ${i}`,
-      email: `francisco.ordenesv@gmail.com`,
-      facebook: `Si`,
-      authorized: `Si`,
-      os: `IOS`,
-      version: `Antigua`,
-      country: `Chile`,
-    })
-  }
-  return users;
-}
-
-async function getContacts() {
-  const contacts = [];
-  for (let i = 0; i < 10; i++) {
-    contacts.push({
-      key: i,
-      position: `${i}`,
-      name: `Francisco Órdenes ${i}`,
-      phone: `app`,
-      sos: `+56959826861`,
-      lastUpdate: `14:05 2021-01-01`,
-    })
-  }
-  return contacts;
-}
 
 const chartData = [
   { quarter: 1, earnings: 13000 },
@@ -120,7 +33,7 @@ const chartData = [
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function WearerDashboard() {
 
-  const [wifiData, setWifiData] = useState([]);
+  //const [wifiData, setWifiData] = useState([]);
   const [friendMessageData, setFriendMessageData] = useState([]);
   const [friendData, setFriendData] = useState([]);
   const [userMessageData, setUserMessageData] = useState([]);
@@ -128,9 +41,62 @@ export default function WearerDashboard() {
   const [contacts, setContacts] = useState([]);
   let query = useQuery();
   const [wearer, setWearer] = useState({});
+  const [watchSettings, setWatchSettings] = useState({});
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const getWearer = async () => {
+    useEffect(() => {
+        const deviceId = query.get('deviceId');
+        const imei = query.get('imei');
+        if (!deviceId && !imei) {
+          navigate('/not-found');
+          return;
+        }
+        let params = {};
+        if (deviceId) {
+          params = { deviceId };
+        } else if (imei) {
+          params = { imei };
+        }
+        const getWearer = async (params) => {
+            const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
+            setWearer(response.data.data[0]);
+            setWatchSettings(response.data.includes[0].settings);
+        }
+
+        const getContacts = async (params) => {
+            const response = await axios.get('http://localhost/wearer/getContacts', { params });
+            let finalResponse;
+            if (response.data.data) {
+              finalResponse = response.data.data.map((contact) => {
+                contact.sos = contact.sos ? "Si" : "No"
+                return contact
+              })
+            }
+            setContacts(finalResponse ?? [])
+        }
+
+        const getWatchUsers = async (params) => {
+            const response = await axios.get('http://localhost/wearer/watchUser/getWatchUserByEmailOrDeviceIdOrImei', { params });
+            let fetchedUsers = response.data.data.users
+            const fetchedWatchUsers = response.data.data.results
+            fetchedUsers.map((user) => {
+              const currentWu = fetchedWatchUsers.find((watchUser) => watchUser.user.objectId === user.objectId)
+              user.id = user.objectId
+              user.name = user.firstName + " " + user.lastName
+              user.facebook = user.fb ? "Si" : "No"
+              user.authorized = currentWu.active ? "Si" : "No"
+              return user
+            })
+            setUsers(fetchedUsers)
+        }
+
+        getWearer(params).catch(console.error);
+        getContacts(params).catch(console.error);
+        getWatchUsers(params).catch(console.error);
+        
+    }, [query])
+
+    useEffect(() => {
       const deviceId = query.get('deviceId');
       const imei = query.get('imei');
       let params = {};
@@ -139,38 +105,83 @@ export default function WearerDashboard() {
       } else if (imei) {
         params = { imei };
       }
-      const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
-      setWearer(response.data.data[0]);
-    }
-    getWearer().catch(console.error);
-  }, [query])
+      const getFriends = async (params) => {
+          const response = await axios.get('http://localhost/wearer/getWearerFriends', { params });
+          let fetchedFriends = response.data.data
+          for (let i = 0; i < fetchedFriends.length; i++) {
+            const wearer1 = (await axios.get('http://localhost/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+            const wearer2 = (await axios.get('http://localhost/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+            if (wearer1.deviceId === deviceId || wearer1.imei === imei) {
+              fetchedFriends[i].name = wearer2.firstName + " " + wearer2.lastName
+              fetchedFriends[i].deviceId = wearer2.deviceId
+            } else {
+              fetchedFriends[i].name = wearer1.firstName + " " + wearer1.lastName
+              fetchedFriends[i].deviceId = wearer1.deviceId
+            }
+            fetchedFriends[i].id = i
+            fetchedFriends[i].approval1 = fetchedFriends[i].isWatch1Approved ? "Aprobado" : "No aprobado"
+            fetchedFriends[i].approval2 = fetchedFriends[i].isWatch2Approved ? "Aprobado" : "No aprobado"
+          }
+          setFriendData(fetchedFriends)
+      }
+      getFriends(params).catch(console.error);
+    }, [query, wearer])
 
-  useEffect(() => {
-    console.log(wearer)
-  }, [wearer])
+    useEffect(() => {
+      const deviceId = query.get('deviceId');
+      const imei = query.get('imei');
+      let params = {};
+      if (deviceId) {
+        params = { deviceId };
+      } else if (imei) {
+        params = { imei };
+      }
+      const getChatUser = async (params) => {
+        const response = await axios.get('http://localhost/wearer/chatUser', { params });
+        const messages = response.data.data
+        .filter(row => row.chatUser.type === "text")  // Filter first
+        .map(row => {                                // Then map
+          const chatUser = row.chatUser
+          const user = row.user
+          return {
+            message: chatUser.text,
+            sender: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
+            date: chatUser.createdAt,
+            from: chatUser.sender,
+          }
+        });
+        setUserMessageData(messages)
+      }
+      getChatUser(params).catch(console.error);
+    }, [query, wearer])
 
-
-
-  useEffect(() => {
-    getWifiData().then((data) => {
-      setWifiData(data);
-    });
-    getFriendMessageData().then((data) => {
-      setFriendMessageData(data);
-    });
-    getFriendData().then((data) => {
-      setFriendData(data);
-    });
-    getUserMessageData().then((data) => {
-      setUserMessageData(data);
-    });
-    getUsers().then((data) => {
-      setUsers(data);
-    });
-    getContacts().then((data) => {
-      setContacts(data);
-    });
-  }, []);
+    useEffect(() => {
+      const deviceId = query.get('deviceId');
+      const imei = query.get('imei');
+      let params = {};
+      if (deviceId) {
+        params = { deviceId };
+      } else if (imei) {
+        params = { imei };
+      }
+      const getChatWearer= async (params) => {
+        const response = await axios.get('http://localhost/wearer/chatWearer', { params });
+        const messages = response.data.data
+        .filter(row => row.chatWearer.type === "text")  // Filter first
+        .map(row => {                                // Then map
+          const chatWearer = row.chatWearer
+          const sender = row.sender
+          return {
+            message: chatWearer.text,
+            sender: `${sender.firstName ?? ""} ${sender.lastName ?? ""}`,
+            date: chatWearer.createdAt,
+            from: "watch",
+          }
+        });
+        setFriendMessageData(messages)
+      }
+      getChatWearer(params).catch(console.error);
+    }, [query, wearer])
 
   async function onSearch(value) {
     console.log(value);
@@ -183,7 +194,7 @@ export default function WearerDashboard() {
         <>
           <div style={{ padding: 20 }}>
             <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
-            <h1>{wearer.firstName}</h1>
+            <h1>{wearer.lastKnownLocation?.longitude}</h1>
             <Space direction="vertical" size={24} style={{ display: 'flex' }}>
               <Row gutter={[24, 32]}>
                 <Col xs={24} sm={24} md={24} lg={16} xl={16}>
@@ -201,8 +212,14 @@ export default function WearerDashboard() {
 
                       {/* Datos principales */}
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                        <DemoBox value={424}>
-                        </DemoBox>
+                        <WearerInfo 
+                          title="Datos principales"
+                          subtitle="Reloj" 
+                          leftIcon="/images/cs-wearerInfo.svg" 
+                          leftIconWidth={24}
+                          leftIconHeight={29}
+                          refreshLink="/api/refresh"
+                          wearer={wearer}/>
                       </Col>
                       {/* Datos principales */}
 
@@ -210,16 +227,25 @@ export default function WearerDashboard() {
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
-                          {/* Ultima conexion */}
-                          <DemoBox value={200}>
+                        <WearerSettings
+                          title="Ajustes reloj"
+                          subtitle="Configuración" 
+                          leftIcon="/images/cs-wearerSettings.svg" 
+                          leftIconWidth={24}
+                          leftIconHeight={29}
+                          refreshLink="/api/refresh"
+                          watchSettings={watchSettings}/>
 
-                          </DemoBox>
+                          {/* Ultima conexion */}
+                          {/* <DemoBox value={200}>
+
+                          </DemoBox> */}
                           {/* Ultima conexion */}
 
                           {/* SoyMomoSIM */}
-                          <DemoBox value={200}>
+                          {/* <DemoBox value={200}>
 
-                          </DemoBox>
+                          </DemoBox> */}
                           {/* SoyMomoSIM */}
 
                         </Space>
@@ -258,15 +284,21 @@ export default function WearerDashboard() {
                       subtitle='Modificar'
                       leftIconWidth={24}
                       leftIconHeight={24}
-
+                      imei={wearer.imei}
+                      deviceId={wearer.deviceId}
                     />
                     {/* Comandos */}
 
 
                     {/* Ajustes reloj */}
-                    <DemoBox value={400}>
-
-                    </DemoBox>
+                    {/* <WearerSettings
+                          title="Ajustes reloj"
+                          subtitle="Configuración" 
+                          leftIcon="/images/cs-wearerSettings.svg" 
+                          leftIconWidth={24}
+                          leftIconHeight={29}
+                          refreshLink="/api/refresh"
+                          watchSettings={watchSettings}/> */}
                     {/* Ajustes reloj */}
 
                   </Space>
@@ -333,7 +365,19 @@ export default function WearerDashboard() {
                     />
                   </Col>
                 </Row>
-                <Row gutter={[24, 32]}>
+                <Row>
+                <TableComponent
+                      columns={friendsColumns}
+                      data={friendData}
+                      leftIcon="/images/tableIcons/cs-friendsHeart.svg"
+                      leftIconHeight={27}
+                      leftIconWidth={31}
+                      refreshLink="/api/refresh"
+                      title='Amigos'
+                      subtitle='Aprobación'
+                    />
+                </Row>
+                {/* <Row gutter={[24, 32]}>
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <TableComponent
                       columns={wifiColumns}
@@ -358,7 +402,7 @@ export default function WearerDashboard() {
                       subtitle='Aprobación'
                     />
                   </Col>
-                </Row>
+                </Row> */}
                 <Row>
                   <TableComponent
                     columns={userColumns}
