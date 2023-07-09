@@ -14,63 +14,6 @@ const DemoBox = (props) => (
 
 const { Search } = Input;
 
-async function getWifiData() {
-  const wifiData = [];
-  for (let i = 0; i < 100; i++) {
-    wifiData.push({
-      key: i,
-      name: `Edward ${i}`,
-      date: `2021-01-01`,
-      counter: `francisco.ordenesv@gmail.com`,
-      error: `Si`,
-      status: `${i}`
-    });
-  }
-  return wifiData;
-}
-
-async function getFriendMessageData() {
-  const friendMessageData = [];
-  for (let i = 0; i < 100; i++) {
-    friendMessageData.push({
-      key: i,
-      message: `Hola Francisco ${i}`,
-      sender: `Francisco Órdenes`,
-      date: `2021-01-01`,
-      from: `app`
-    });
-  }
-  return friendMessageData;
-}
-
-// async function getFriendData() {
-//   const friendData = [];
-//   for (let i = 0; i < 100; i++) {
-//     friendData.push({
-//       key: i,
-//       name: `Francisco Órdenes ${i}`,
-//       approval1: `Aprovado`,
-//       approval2: `No aprobado`,
-//       deviceID: "283949201203923"
-//     });
-//   }
-//   return friendData;
-// }
-
-async function getUserMessageData() {
-  const userMessageData = [];
-  for (let i = 0; i < 100; i++) {
-    userMessageData.push({
-      key: i,
-      message: `Holaoaoaaa Francisco ${i} AWDWAHDBAWD  AWDJHBAWDAW AWHBDAWFVGEAFVEF AGWVDGAWXGA GAVWG VG AWV GWVDAVWDGAWD`,
-      sender: `Francisco Órdenes`,
-      date: `2021-01-01`,
-      from: `app`
-    });
-  }
-  return userMessageData;
-}
-
 const chartData = [
   { quarter: 1, earnings: 13000 },
   { quarter: 2, earnings: 16500 },
@@ -87,7 +30,7 @@ const chartData = [
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function WearerDashboard() {
 
-  const [wifiData, setWifiData] = useState([]);
+  //const [wifiData, setWifiData] = useState([]);
   const [friendMessageData, setFriendMessageData] = useState([]);
   const [friendData, setFriendData] = useState([]);
   const [userMessageData, setUserMessageData] = useState([]);
@@ -167,30 +110,62 @@ export default function WearerDashboard() {
       getFriends(params).catch(console.error);
     }, [query, wearer])
 
-  useEffect(() => {
-    console.log(wearer)
-  }, [wearer])
+    useEffect(() => {
+      const deviceId = query.get('deviceId');
+      const imei = query.get('imei');
+      let params = {};
+      if (deviceId) {
+        params = { deviceId };
+      } else if (imei) {
+        params = { imei };
+      }
+      const getChatUser = async (params) => {
+        const response = await axios.get('http://localhost/wearer/chatUser', { params });
+        const messages = response.data.data
+        .filter(row => row.chatUser.type === "text")  // Filter first
+        .map(row => {                                // Then map
+          const chatUser = row.chatUser
+          const user = row.user
+          return {
+            message: chatUser.text,
+            sender: `${user.firstName} ${user.lastName}`,
+            date: chatUser.createdAt,
+            from: chatUser.sender,
+          }
+        });
+        setUserMessageData(messages)
+      }
+      getChatUser(params).catch(console.error);
+    }, [query, wearer])
 
-    // useEffect(() => {
-    //     console.log(contacts)
-    //     if (contacts.length > 0) {
-    //       console.log(contacts[0].sos)
-    //     }
-    // }, [contacts])
-
-
-
-  useEffect(() => {
-    getWifiData().then((data) => {
-      setWifiData(data);
-    });
-    getFriendMessageData().then((data) => {
-      setFriendMessageData(data);
-    });
-    getUserMessageData().then((data) => {
-      setUserMessageData(data);
-    });
-  }, []);
+    useEffect(() => {
+      const deviceId = query.get('deviceId');
+      const imei = query.get('imei');
+      let params = {};
+      if (deviceId) {
+        params = { deviceId };
+      } else if (imei) {
+        params = { imei };
+      }
+      const getChatWearer= async (params) => {
+        const response = await axios.get('http://localhost/wearer/chatWearer', { params });
+        console.log(response.data.data)
+        const messages = response.data.data
+        .filter(row => row.chatWearer.type === "text")  // Filter first
+        .map(row => {                                // Then map
+          const chatWearer = row.chatWearer
+          const sender = row.sender
+          return {
+            message: chatWearer.text,
+            sender: `${sender.firstName} ${sender.lastName}`,
+            date: chatWearer.createdAt,
+            from: "watch",
+          }
+        });
+        setFriendMessageData(messages)
+      }
+      getChatWearer(params).catch(console.error);
+    }, [query, wearer])
 
   async function onSearch(value) {
     console.log(value);
@@ -353,7 +328,19 @@ export default function WearerDashboard() {
                     />
                   </Col>
                 </Row>
-                <Row gutter={[24, 32]}>
+                <Row>
+                <TableComponent
+                      columns={friendsColumns}
+                      data={friendData}
+                      leftIcon="/images/tableIcons/cs-friendsHeart.svg"
+                      leftIconHeight={27}
+                      leftIconWidth={31}
+                      refreshLink="/api/refresh"
+                      title='Amigos'
+                      subtitle='Aprobación'
+                    />
+                </Row>
+                {/* <Row gutter={[24, 32]}>
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <TableComponent
                       columns={wifiColumns}
@@ -378,7 +365,7 @@ export default function WearerDashboard() {
                       subtitle='Aprobación'
                     />
                   </Col>
-                </Row>
+                </Row> */}
                 <Row>
                   <TableComponent
                     columns={userColumns}
