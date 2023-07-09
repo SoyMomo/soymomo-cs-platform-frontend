@@ -43,7 +43,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         collapsedWidth="0"
         trigger={null}
         onBreakpoint={(broken) => {
-          console.log(broken);
+  
         }}
         onCollapse={(collapsed, type) => {
             console.log(collapsed, type);

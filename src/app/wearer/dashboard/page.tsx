@@ -146,27 +146,24 @@ export default async function Dashboard() {
   const [userMessageData, setUserMessageData] = React.useState<DataType[]>([]);
   const [users, setUsers] = React.useState<DataType[]>([]);
   const [contacts, setContacts] = React.useState<DataType[]>([]);
-  const [wearer, setWearer] = useState();
-
-  async function getWearer() {
-    const deviceId = params.get('deviceId');
-    const imei = params.get('imei');
-    let routeParams = {};
-    if (deviceId) {
-      routeParams = { deviceId };
-    } else if (imei) {
-      routeParams = { imei };
-    }
-    const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params: routeParams });
-    return response.data.data[0];
-  }
+  const [wearer, setWearer] = useState<Wearer | null>(null);
 
   useEffect(() => {
-    getWearer().then((data) => {
-      console.log(data)
-      setWearer(data);
-    });
-  }, []);
+    const getWearer = async () => {
+      const deviceId = params.get('deviceId');
+      const imei = params.get('imei');
+      let routeParams = {};
+      if (deviceId) {
+        routeParams = { deviceId };
+      } else if (imei) {
+        routeParams = { imei };
+      }
+      const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params: routeParams });
+      const w: Wearer = response.data.data[0];
+      setWearer(w);
+    }
+    getWearer().catch(console.error);
+  }, [params]);
 
   useEffect(() => {
     console.log("aaaaa")
@@ -204,7 +201,7 @@ export default async function Dashboard() {
   return (
     <>
       <div style={{ padding: 20 }}>
-        <h1>wearer.firstName</h1>
+        <h1>{wearer?.firstName ?? "hola"}</h1>
         <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
           <Row gutter={[24, 32]}>
