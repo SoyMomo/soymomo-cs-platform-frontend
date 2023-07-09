@@ -1,15 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
-
-export interface DataType {
-    key: React.Key;
-    [key: string]: any;
-}
-
-const handleEdit = (key: React.Key) => {
-    console.log(key);
-}
-
-export const wifiColumns: ColumnsType<DataType> = [
+export const wifiColumns = [
     {
         title: '#',
         width: 100,
@@ -53,7 +42,7 @@ export const wifiColumns: ColumnsType<DataType> = [
     // },
 ];
 
-export const friendMessageColumns: ColumnsType<DataType> = [
+export const friendMessageColumns = [
     {
         title: 'Mensaje',
         dataIndex: 'message',
@@ -84,7 +73,7 @@ export const friendMessageColumns: ColumnsType<DataType> = [
     },
 ];
 
-export const friendsColumns: ColumnsType<DataType> = [
+export const friendsColumns = [
     {
         title: 'Nombre',
         dataIndex: 'name',
@@ -115,7 +104,7 @@ export const friendsColumns: ColumnsType<DataType> = [
     }
 ]
 
-export const userColumns: ColumnsType<DataType> = [
+export const userColumns = [
     {
         title: '#',
         dataIndex: 'id',
@@ -172,23 +161,23 @@ export const userColumns: ColumnsType<DataType> = [
         width: 100,
         align: 'center',
     },
-    {
-        title: 'Acción',
-        key: 'action',
-        width: 100,
-        render: (row) => <button onClick={() => handleEdit(row)} style={{backgroundColor: '#32B8C0', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Editar</button>,
-        align: 'center'
-    },
-    {
-        title: 'Admin',
-        key: 'admin',
-        width: 100,
-        render: () => <button style={{backgroundColor: '#F93C7D', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Desvincular</button>,
-        align: 'center',
-    }
+    // {
+    //     title: 'Acción',
+    //     key: 'action',
+    //     width: 100,
+    //     render: (row) => <button onClick={() => handleEdit(row)} style={{backgroundColor: '#32B8C0', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Editar</button>,
+    //     align: 'center'
+    // },
+    // {
+    //     title: 'Admin',
+    //     key: 'admin',
+    //     width: 100,
+    //     render: () => <button style={{backgroundColor: '#F93C7D', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Desvincular</button>,
+    //     align: 'center',
+    // }
 ];
 
-export const contactColumns: ColumnsType<DataType> = [
+export const contactColumns = [
     {
         title: 'Posición',
         dataIndex: 'position',
@@ -225,4 +214,6 @@ export const contactColumns: ColumnsType<DataType> = [
         align: 'center',
     },
 ];
+
+
 

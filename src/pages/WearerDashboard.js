@@ -2,7 +2,7 @@ import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Row, Space, Col, Input } from 'antd'
-import { wifiColumns, friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/columns';
+import { wifiColumns, friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/wearerColumns';
 //import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
