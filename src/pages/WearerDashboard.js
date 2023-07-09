@@ -54,7 +54,7 @@ export default function WearerDashboard() {
         const getWearer = async (params) => {
             const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
             setWearer(response.data.data[0]);
-            setWatchSettings(response.data.data[1]);
+            setWatchSettings(response.data.includes[0].settings);
         }
 
         const getContacts = async (params) => {
@@ -221,16 +221,25 @@ export default function WearerDashboard() {
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
-                          {/* Ultima conexion */}
-                          <DemoBox value={200}>
+                        <WearerSettings
+                          title="Ajustes reloj"
+                          subtitle="Configuración" 
+                          leftIcon="/images/cs-wearerSettings.svg" 
+                          leftIconWidth={24}
+                          leftIconHeight={29}
+                          refreshLink="/api/refresh"
+                          watchSettings={watchSettings}/>
 
-                          </DemoBox>
+                          {/* Ultima conexion */}
+                          {/* <DemoBox value={200}>
+
+                          </DemoBox> */}
                           {/* Ultima conexion */}
 
                           {/* SoyMomoSIM */}
-                          <DemoBox value={200}>
+                          {/* <DemoBox value={200}>
 
-                          </DemoBox>
+                          </DemoBox> */}
                           {/* SoyMomoSIM */}
 
                         </Space>
@@ -276,14 +285,14 @@ export default function WearerDashboard() {
 
 
                     {/* Ajustes reloj */}
-                    <WearerSettings
+                    {/* <WearerSettings
                           title="Ajustes reloj"
                           subtitle="Configuración" 
                           leftIcon="/images/cs-wearerSettings.svg" 
                           leftIconWidth={24}
                           leftIconHeight={29}
                           refreshLink="/api/refresh"
-                          watchSettings={watchSettings}/>
+                          watchSettings={watchSettings}/> */}
                     {/* Ajustes reloj */}
 
                   </Space>
