@@ -140,7 +140,7 @@ export default function TabletDashboard() {
     }, []);
 
     async function onSearch(value) {
-        console.log(value);
+        navigate(`/tablet/dashboard?hid=${value}`);
     }
 
 
@@ -149,7 +149,7 @@ export default function TabletDashboard() {
             children={
                 <>
                     <div style={{ padding: 20 }}>
-                        <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+                        <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
                         <h1>{wearer.firstName}</h1>
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
                             <Row gutter={[24, 32]}>

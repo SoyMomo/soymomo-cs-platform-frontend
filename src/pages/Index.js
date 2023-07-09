@@ -73,7 +73,7 @@ export default function Index() {
             <>
             {contextHolder}
             <div style={{ padding: 20 }}>
-              <Search placeholder="Enter imei or deviceId" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+              <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
             </div>
           </>
         }
