@@ -9,6 +9,7 @@ import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
 import DugHistoryCard from '../components/DugHistoryCard';
 import PersonalInfoTablet from '../components/personalInfoTablet';
+import { useNavigate } from 'react-router-dom';
 
 
 const { Search } = Input;
@@ -91,8 +92,14 @@ export default function TabletDashboard() {
 
     let query = useQuery();
     const [wearer, setWearer] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const hid = query.get('hid');
+        if (!hid) {
+            navigate('/404');
+            return
+        }
         const getWearer = async () => {
             const deviceId = query.get('deviceId');
             const imei = query.get('imei');
@@ -106,7 +113,7 @@ export default function TabletDashboard() {
             setWearer(response.data.data[0]);
         }
         getWearer().catch(console.error);
-    }, [query])
+    }, [query, navigate])
 
     useEffect(() => {
         console.log(wearer)
