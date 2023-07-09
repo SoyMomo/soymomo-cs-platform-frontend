@@ -59,6 +59,10 @@ export default function WearerDashboard() {
         }
         const getWearer = async (params) => {
             const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
+            if (!response.data || response.data.data.length === 0) {
+              navigate('/not-found');
+              return;
+            }
             setWearer(response.data.data[0]);
             setWatchSettings(response.data.includes[0].settings);
         }
@@ -94,7 +98,7 @@ export default function WearerDashboard() {
         getContacts(params).catch(console.error);
         getWatchUsers(params).catch(console.error);
         
-    }, [query])
+    }, [query, navigate])
 
     useEffect(() => {
       const deviceId = query.get('deviceId');
