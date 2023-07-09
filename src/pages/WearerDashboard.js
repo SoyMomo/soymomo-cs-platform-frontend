@@ -9,6 +9,7 @@ import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
 import WearerInfo from '../components/WearerInfo';
 import WearerSettings from '../components/WearerSettings';
+import WearerMainCard from '../components/WearerMainCard';
 
 const DemoBox = (props) => (
   <p style={{ borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value }}>{props.children}</p>
@@ -187,8 +188,9 @@ export default function WearerDashboard() {
       children={
         <>
           <div style={{ padding: 20 }}>
-            <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
-            <h1>{wearer.lastKnownLocation?.longitude}</h1>
+            <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
+              <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+            </div>
             <Space direction="vertical" size={24} style={{ display: 'flex' }}>
               <Row gutter={[24, 32]}>
                 <Col xs={24} sm={24} md={24} lg={16} xl={16}>
@@ -197,8 +199,7 @@ export default function WearerDashboard() {
                   <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
                     {/* Nombre, numero, imei: card principal */}
-                    <DemoBox value={240}>
-                    </DemoBox>
+                    <WearerMainCard wearer={wearer} />
                     {/* Nombre, numero, imei: card principal */}
 
                     {/* Datos principales y Ultima conexion con SoyMomoSIM */}
@@ -220,15 +221,6 @@ export default function WearerDashboard() {
                       {/* Ultima conexion con SoyMomoSIM */}
                       <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
-                        <WearerSettings
-                          title="Ajustes reloj"
-                          subtitle="Configuración" 
-                          leftIcon="/images/cs-wearerSettings.svg" 
-                          leftIconWidth={24}
-                          leftIconHeight={29}
-                          refreshLink="/api/refresh"
-                          watchSettings={watchSettings}/>
 
                           {/* Ultima conexion */}
                           {/* <DemoBox value={200}>
@@ -285,14 +277,14 @@ export default function WearerDashboard() {
 
 
                     {/* Ajustes reloj */}
-                    {/* <WearerSettings
+                    <WearerSettings
                           title="Ajustes reloj"
                           subtitle="Configuración" 
                           leftIcon="/images/cs-wearerSettings.svg" 
                           leftIconWidth={24}
                           leftIconHeight={29}
                           refreshLink="/api/refresh"
-                          watchSettings={watchSettings}/> */}
+                          watchSettings={watchSettings}/>
                     {/* Ajustes reloj */}
 
                   </Space>
