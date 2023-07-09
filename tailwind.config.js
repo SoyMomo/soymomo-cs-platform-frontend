@@ -4,7 +4,18 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: theme => ({
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-linear': 'linear-gradient(180deg, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(var(--tw-gradient-stops))',
+      }),
+      colors: {
+        'purple-custom1': '#603BB0',
+        'purple-custom2': '#8562D5',
+      },
+    }
   },
-  plugins: [],
+  plugins: [
+  ],
 }
