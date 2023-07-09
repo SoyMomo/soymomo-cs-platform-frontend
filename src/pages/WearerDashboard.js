@@ -11,6 +11,7 @@ import ComandsComponent from '../components/Comands';
 import WearerInfo from '../components/WearerInfo';
 import WearerSettings from '../components/WearerSettings';
 import WearerMainCard from '../components/WearerMainCard';
+import AppVersionsCard from '../components/AppVersionsCard';
 
 const DemoBox = (props) => (
   <p style={{ borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value }}>{props.children}</p>
@@ -268,9 +269,7 @@ export default function WearerDashboard() {
                   <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
                     {/* Ultima actualizacion */}
-                    <DemoBox value={120}>
-
-                    </DemoBox>
+                    <AppVersionsCard versionAndroid="5.2.6" versionApple="5.2.6"/>
                     {/* Ultima actualizacion */}
 
                     {/* Comandos */}
