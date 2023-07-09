@@ -1,6 +1,5 @@
 import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
 import { Row, Space, Col, Input, DatePicker } from 'antd'
 import { aplicationColumns, userColumns } from '../components/tables/tabletColumns';
 //import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
@@ -70,7 +69,7 @@ export default function TabletDashboard() {
     }, [dugFromDate, dugToDate, tablet])
 
     async function onSearch(value) {
-        console.log(value);
+        navigate(`/tablet/dashboard?hid=${value}`);
     }
 
 
@@ -79,7 +78,7 @@ export default function TabletDashboard() {
             children={
                 <>
                     <div style={{ padding: 20 }}>
-                        <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+                        <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
                             <Row gutter={[24, 32]}>
                                 <Col xs={24} sm={24} md={24} lg={16} xl={16}>

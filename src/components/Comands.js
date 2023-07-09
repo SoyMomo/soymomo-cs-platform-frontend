@@ -75,7 +75,7 @@ export default function ComandsComponent(Props) {
             <div style={{ maxWidth: '100%', marginTop: '0.75rem' }}>
                 {/* <h3 style={{ fontSize: '1rem', color: '#603BB0', marginLeft: '0.75rem' }}>Cambiar reloj (transferir info.)</h3>
                 <Search loading={isLoading} placeholder="Imei/ID nuevo" onSearch={onSearchCambiarReloj} style={{ padding: 5 }} /> */}
-                <h3 style={{ fontSize: '1rem', color: '#603BB0', marginLeft: '0.75rem' }}>Enviar mensaje a reloj</h3>
+                <h3 style={{ fontSize: '1rem', color: '#603BB0', marginLeft: '0.75rem', textAlign:'start', marginTop: '0.5rem', marginBottom: '0.5rem', marginLeft: '0.5rem' }}><strong>Enviar mensaje a reloj</strong></h3>
                 <Search loading={searchLoading} placeholder="Ingrese mensaje a enviar" onSearch={onSearchMessage} style={{ padding: 5 }} />
 
                 {/* <div style={{ display: 'flex', justifyContent: 'space-between' }}>

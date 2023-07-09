@@ -1,37 +1,71 @@
 import React, { useState } from 'react';
 import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  ClockCircleOutlined,
+  TabletOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
+import { useNavigate } from   "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-  style: { color: 'white' },
-}));
+// const items = [
+//   ClockCircleOutlined,
+//   TabletOutlined,
+// ].map((icon, index) => (
+//   {
+//   key: String(index + 1),
+//   icon: React.createElement(icon),
+//   label: `nav`,
+//   style: { color: 'white' },
+// }));
 
 export default function MainLayout(props) {
+
+  const url = window.location.href;
+  const includesTablet = url.includes('tablet');
+  const items = []
+  if (url.includes('tablet')) {
+    items.push(
+      {
+        key: '1',
+        icon: React.createElement(ClockCircleOutlined),
+        label: 'Reloj',
+        style: { color: 'white' },
+      },
+      {
+        key: '2',
+        icon: React.createElement(TabletOutlined),
+        label: 'Tablet',
+        style: { color: '#603BB0', backgroundColor: 'white' },
+      })
+  } else {
+    items.push(
+      {
+        key: '1',
+        icon: React.createElement(ClockCircleOutlined),
+        label: 'Reloj',
+        style: { color: '#603BB0', backgroundColor: 'white' },
+      },
+      {
+        key: '2',
+        icon: React.createElement(TabletOutlined),
+        label: 'Tablet',
+        style: { color: 'white' },
+      })
+  }
+  console.log(items)
     
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const onClick = (e) => {
+    console.log('click ', e);
+    if (e.key === '1') {
+        navigate('/');
+    } else if (e.key === '2') {
+        navigate('/tablet');
+    }
+  };
+  
 
   return (
     <Layout hasSider>
@@ -55,10 +89,10 @@ export default function MainLayout(props) {
         }}
       >
         <div style={{marginTop: '2vh', marginBottom: '2vh', marginRight: 'auto'}}>
-            <div style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}>
+            <div style={{ display: 'flex', marginLeft: 'auto', marginRight: 'auto', flexDirection: 'column', alignItems: 'center', marginTop: '2rem', marginBottom: '2rem'}}>
                 <img src="/images/cs-soyMomoLogo.svg" alt="logo" width={100} height={100} />
             </div>
-            <Menu mode="inline" defaultSelectedKeys={['1']} items={items} style={{background: '#603BB0', width: 'auto'}} />
+            <Menu onClick={onClick} mode="inline" items={items} style={{background: '#603BB0', width: 'auto'}} />
         </div>
       </Sider>
       <Layout className="site-layout" style={{ marginLeft: collapsed ? 0 : 200 }}>
