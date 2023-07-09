@@ -12,6 +12,7 @@ import WearerInfo from '../components/WearerInfo';
 import WearerSettings from '../components/WearerSettings';
 import WearerMainCard from '../components/WearerMainCard';
 import AppVersionsCard from '../components/AppVersionsCard';
+import WearerLastConnectionCard from '../components/WearerLastConnectionCard';
 
 const DemoBox = (props) => (
   <p style={{ borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value }}>{props.children}</p>
@@ -234,9 +235,7 @@ export default function WearerDashboard() {
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
                           {/* Ultima conexion */}
-                          {/* <DemoBox value={200}>
-
-                          </DemoBox> */}
+                          <WearerLastConnectionCard title="Última conexión" lastTKQ={wearer.lastTKQ} />
                           {/* Ultima conexion */}
 
                           {/* SoyMomoSIM */}
