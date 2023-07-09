@@ -56,11 +56,14 @@ export default function WearerDashboard() {
 
         const getContacts = async (params) => {
             const response = await axios.get('http://localhost/wearer/getContacts', { params });
-            const finalResponse = response.data.data.map((contact) => {
-              contact.sos = contact.sos ? "Si" : "No"
-              return contact
-            })
-            setContacts(finalResponse)
+            let finalResponse;
+            if (response.data.data) {
+              finalResponse = response.data.data.map((contact) => {
+                contact.sos = contact.sos ? "Si" : "No"
+                return contact
+              })
+            }
+            setContacts(finalResponse ?? [])
         }
 
         const getWatchUsers = async (params) => {
@@ -154,7 +157,6 @@ export default function WearerDashboard() {
       }
       const getChatWearer= async (params) => {
         const response = await axios.get('http://localhost/wearer/chatWearer', { params });
-        console.log(response.data.data)
         const messages = response.data.data
         .filter(row => row.chatWearer.type === "text")  // Filter first
         .map(row => {                                // Then map
@@ -264,7 +266,8 @@ export default function WearerDashboard() {
                       subtitle='Modificar'
                       leftIconWidth={24}
                       leftIconHeight={24}
-
+                      imei={wearer.imei}
+                      deviceId={wearer.deviceId}
                     />
                     {/* Comandos */}
 
