@@ -89,20 +89,20 @@ async function getUsers() {
   return users;
 }
 
-async function getContacts() {
-  const contacts = [];
-  for (let i = 0; i < 10; i++) {
-    contacts.push({
-      key: i,
-      position: `${i}`,
-      name: `Francisco Órdenes ${i}`,
-      phone: `app`,
-      sos: `+56959826861`,
-      lastUpdate: `14:05 2021-01-01`,
-    })
-  }
-  return contacts;
-}
+// async function getContacts() {
+//   const contacts = [];
+//   for (let i = 0; i < 10; i++) {
+//     contacts.push({
+//       key: i,
+//       position: `${i}`,
+//       name: `Francisco Órdenes ${i}`,
+//       phone: `app`,
+//       sos: `+56959826861`,
+//       lastUpdate: `14:05 2021-01-01`,
+//     })
+//   }
+//   return contacts;
+// }
 
 const chartData = [
   { quarter: 1, earnings: 13000 },
@@ -129,25 +129,56 @@ export default function WearerDashboard() {
   let query = useQuery();
   const [wearer, setWearer] = useState({});
 
-  useEffect(() => {
-    const getWearer = async () => {
-      const deviceId = query.get('deviceId');
-      const imei = query.get('imei');
-      let params = {};
-      if (deviceId) {
-        params = { deviceId };
-      } else if (imei) {
-        params = { imei };
-      }
-      const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
-      setWearer(response.data.data[0]);
-    }
-    getWearer().catch(console.error);
-  }, [query])
+    useEffect(() => {
+        const deviceId = query.get('deviceId');
+        const imei = query.get('imei');
+        let params = {};
+        if (deviceId) {
+          params = { deviceId };
+        } else if (imei) {
+          params = { imei };
+        }
+        const getWearer = async (params) => {
+            const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
+            setWearer(response.data.data[0]);
+        }
+
+        const getContacts = async (params) => {
+            const response = await axios.get('http://localhost/wearer/getContacts', { params });
+            setContacts(response.data.data)
+        }
+
+        const getWatchUsers = async (params) => {
+            const response = await axios.get('http://localhost/wearer/watchUser/getWatchUserByEmailOrDeviceIdOrImei', { params });
+            let fetchedUsers = response.data.data.users
+            const fetchedWatchUsers = response.data.data.results
+            fetchedUsers.map((user) => {
+              const currentWu = fetchedWatchUsers.find((watchUser) => watchUser.user.objectId === user.objectId)
+              user.id = user.objectId
+              user.name = user.firstName + " " + user.lastName
+              user.facebook = user.fb ? "Si" : "No"
+              user.authorized = currentWu.active ? "Si" : "No"
+              return user
+            })
+            setUsers(fetchedUsers)
+        }
+
+        getWearer(params).catch(console.error);
+        getContacts(params).catch(console.error);
+        getWatchUsers(params).catch(console.error);
+        
+    }, [query])
 
   useEffect(() => {
     console.log(wearer)
   }, [wearer])
+
+    // useEffect(() => {
+    //     console.log(contacts)
+    //     if (contacts.length > 0) {
+    //       console.log(contacts[0].sos)
+    //     }
+    // }, [contacts])
 
 
 
@@ -164,12 +195,9 @@ export default function WearerDashboard() {
     getUserMessageData().then((data) => {
       setUserMessageData(data);
     });
-    getUsers().then((data) => {
-      setUsers(data);
-    });
-    getContacts().then((data) => {
-      setContacts(data);
-    });
+    // getContacts().then((data) => {
+    //   setContacts(data);
+    // });
   }, []);
 
   async function onSearch(value) {
