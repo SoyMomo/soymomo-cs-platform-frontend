@@ -8,6 +8,6 @@ export default async function Dashboard() {
     if (!session) {
         redirect('/login')
     } else {
-      redirect('/dashboardtest')
+      redirect('/wearer/search')
     }
 }

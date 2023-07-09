@@ -32,9 +32,9 @@ const items: MenuProps['items'] = [
   style: { color: 'white' },
 }));
 
-const AppLayout: React.FC = ({children}: PropsWithChildren) => {
+export default function DashboardLayout({ children }: { children: React.ReactNode}) {
     
-    const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Layout hasSider>
@@ -78,5 +78,3 @@ const AppLayout: React.FC = ({children}: PropsWithChildren) => {
     </Layout>
   );
 };
-
-export default AppLayout;

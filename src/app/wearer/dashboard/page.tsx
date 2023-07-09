@@ -1,18 +1,26 @@
 'use client'
 
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import axios from 'axios';
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Button, Row, Space, Typography, Table, Col } from 'antd'
+import { Button, Row, Space, Typography, Table, Col, Input } from 'antd'
 import type { ColumnsType } from 'antd/es/table';
-import { wifiColumns, DataType, friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../../components/tables/columns';
+import { wifiColumns, DataType, friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../../../components/tables/columns';
 import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
-import TableComponent from '../../components/tables/table'
+import TableComponent from '../../../components/tables/table'
 
 const DemoBox: React.FC<{ children: React.ReactNode; value: number }> = (props) => (
   <p style={{borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value}}>{props.children}</p>
 );
 
 const { Title } = Typography
+const { Search } = Input;
+
+type searchWearerParams = {
+  deviceId?: string;
+  imei?: string;
+};
 
 async function getWifiData() {
   const wifiData: DataType[] = [];
@@ -117,17 +125,57 @@ const chartData = [
   { quarter: 10, earnings: 19000 }
 ];
 
-//<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
-export default function AppDir() {
+export async function searchWearer() {
+  const backendUrl = process.env.BACKEND_URL;
+  console.log(backendUrl)
+  return {
+    props: {
+      backendUrl
+    }
+  }
+}
 
+//<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
+export default async function Dashboard() {
+  
+  
+  const params = useSearchParams();
   const [wifiData, setWifiData] = React.useState<DataType[]>([]);
   const [friendMessageData, setFriendMessageData] = React.useState<DataType[]>([]);
   const [friendData, setFriendData] = React.useState<DataType[]>([]);
   const [userMessageData, setUserMessageData] = React.useState<DataType[]>([]);
   const [users, setUsers] = React.useState<DataType[]>([]);
   const [contacts, setContacts] = React.useState<DataType[]>([]);
+  const [wearer, setWearer] = useState();
 
-  React.useEffect(() => {
+  async function getWearer() {
+    const deviceId = params.get('deviceId');
+    const imei = params.get('imei');
+    let routeParams = {};
+    if (deviceId) {
+      routeParams = { deviceId };
+    } else if (imei) {
+      routeParams = { imei };
+    }
+    const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params: routeParams });
+    return response.data.data[0];
+  }
+
+  useEffect(() => {
+    getWearer().then((data) => {
+      console.log(data)
+      setWearer(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("aaaaa")
+    console.log(wearer)
+  }, [wearer])
+
+
+
+  useEffect(() => {
     getWifiData().then((data) => {
       setWifiData(data);
     });
@@ -146,13 +194,18 @@ export default function AppDir() {
     getContacts().then((data) => {
       setContacts(data);
     });
-
   }, []);
+
+  async function onSearch(value: string) {
+    console.log(value);
+  }
 
 
   return (
     <>
       <div style={{ padding: 20 }}>
+        <h1>wearer.firstName</h1>
+        <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
           <Row gutter={[24, 32]}>
             <Col xs={24} sm={24} md={24} lg={16} xl={16}>
