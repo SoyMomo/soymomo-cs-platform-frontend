@@ -126,32 +126,27 @@ export default function WearerDashboard() {
   const [users, setUsers] = useState([]);
   const [contacts, setContacts] = useState([]);
   let query = useQuery();
-
-//   useEffect(() => {
-//     const getWearer = async () => {
-//       const deviceId = params.get('deviceId');
-//       const imei = params.get('imei');
-//       let routeParams = {};
-//       if (deviceId) {
-//         routeParams = { deviceId };
-//       } else if (imei) {
-//         routeParams = { imei };
-//       }
-//       const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params: routeParams });
-//       const w: Wearer = response.data.data[0];
-//       setWearer(w);
-//     }
-//     getWearer().catch(console.error);
-//   }, [params]);
-
-//   useEffect(() => {
-//     console.log("aaaaa")
-//     console.log(wearer)
-//   }, [wearer])
+  const [wearer, setWearer] = useState({});
 
     useEffect(() => {
-        
-    }, [])
+        const getWearer = async () => {
+            const deviceId = query.get('deviceId');
+            const imei = query.get('imei');
+            let params = {};
+            if (deviceId) {
+              params = { deviceId };
+            } else if (imei) {
+              params = { imei };
+            }
+            const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
+            setWearer(response.data.data[0]);
+        }
+        getWearer().catch(console.error);
+    }, [query])
+
+    useEffect(() => {
+        console.log(wearer)
+    }, [wearer])
 
 
 
@@ -187,6 +182,7 @@ export default function WearerDashboard() {
             <>
             <div style={{ padding: 20 }}>
               <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+              <h1>{wearer.firstName}</h1>
               <Space direction="vertical" size={24} style={{ display: 'flex' }}>
                 <Row gutter={[24, 32]}>
                   <Col xs={24} sm={24} md={24} lg={16} xl={16}>
