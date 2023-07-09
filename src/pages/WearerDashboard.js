@@ -8,6 +8,7 @@ import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
 import WearerInfo from '../components/WearerInfo';
+import WearerSettings from '../components/WearerSettings';
 
 const DemoBox = (props) => (
   <p style={{ borderColor: 'red', borderWidth: 5, backgroundColor: 'black', height: props.value }}>{props.children}</p>
@@ -39,6 +40,7 @@ export default function WearerDashboard() {
   const [contacts, setContacts] = useState([]);
   let query = useQuery();
   const [wearer, setWearer] = useState({});
+  const [watchSettings, setWatchSettings] = useState({});
 
     useEffect(() => {
         const deviceId = query.get('deviceId');
@@ -52,6 +54,7 @@ export default function WearerDashboard() {
         const getWearer = async (params) => {
             const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
             setWearer(response.data.data[0]);
+            setWatchSettings(response.data.data[1]);
         }
 
         const getContacts = async (params) => {
@@ -273,9 +276,14 @@ export default function WearerDashboard() {
 
 
                     {/* Ajustes reloj */}
-                    <DemoBox value={400}>
-
-                    </DemoBox>
+                    <WearerSettings
+                          title="Ajustes reloj"
+                          subtitle="Configuración" 
+                          leftIcon="/images/cs-wearerSettings.svg" 
+                          leftIconWidth={24}
+                          leftIconHeight={29}
+                          refreshLink="/api/refresh"
+                          watchSettings={watchSettings}/>
                     {/* Ajustes reloj */}
 
                   </Space>
