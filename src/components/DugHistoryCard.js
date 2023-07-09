@@ -1,4 +1,3 @@
-
 export default function DugHistoryCard(Props) {
     return (
         <div style={{ maxWidth: '200px', margin: '0 auto', padding: '1rem' }}>
