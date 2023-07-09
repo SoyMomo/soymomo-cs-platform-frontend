@@ -43,19 +43,19 @@ async function getFriendMessageData() {
   return friendMessageData;
 }
 
-async function getFriendData() {
-  const friendData = [];
-  for (let i = 0; i < 100; i++) {
-    friendData.push({
-      key: i,
-      name: `Francisco Órdenes ${i}`,
-      approval1: `Aprovado`,
-      approval2: `No aprobado`,
-      deviceID: "283949201203923"
-    });
-  }
-  return friendData;
-}
+// async function getFriendData() {
+//   const friendData = [];
+//   for (let i = 0; i < 100; i++) {
+//     friendData.push({
+//       key: i,
+//       name: `Francisco Órdenes ${i}`,
+//       approval1: `Aprovado`,
+//       approval2: `No aprobado`,
+//       deviceID: "283949201203923"
+//     });
+//   }
+//   return friendData;
+// }
 
 async function getUserMessageData() {
   const userMessageData = [];
@@ -70,39 +70,6 @@ async function getUserMessageData() {
   }
   return userMessageData;
 }
-
-async function getUsers() {
-  const users = [];
-  for (let i = 0; i < 10; i++) {
-    users.push({
-      key: i,
-
-      name: `Francisco Órdenes ${i}`,
-      email: `francisco.ordenesv@gmail.com`,
-      facebook: `Si`,
-      authorized: `Si`,
-      os: `IOS`,
-      version: `Antigua`,
-      country: `Chile`,
-    })
-  }
-  return users;
-}
-
-// async function getContacts() {
-//   const contacts = [];
-//   for (let i = 0; i < 10; i++) {
-//     contacts.push({
-//       key: i,
-//       position: `${i}`,
-//       name: `Francisco Órdenes ${i}`,
-//       phone: `app`,
-//       sos: `+56959826861`,
-//       lastUpdate: `14:05 2021-01-01`,
-//     })
-//   }
-//   return contacts;
-// }
 
 const chartData = [
   { quarter: 1, earnings: 13000 },
@@ -169,6 +136,37 @@ export default function WearerDashboard() {
         
     }, [query])
 
+    useEffect(() => {
+      const deviceId = query.get('deviceId');
+      const imei = query.get('imei');
+      let params = {};
+      if (deviceId) {
+        params = { deviceId };
+      } else if (imei) {
+        params = { imei };
+      }
+      const getFriends = async (params) => {
+          const response = await axios.get('http://localhost/wearer/getWearerFriends', { params });
+          let fetchedFriends = response.data.data
+          for (let i = 0; i < fetchedFriends.length; i++) {
+            const wearer1 = (await axios.get('http://localhost/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+            const wearer2 = (await axios.get('http://localhost/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+            if (wearer1.deviceId === deviceId || wearer1.imei === imei) {
+              fetchedFriends[i].name = wearer2.firstName + " " + wearer2.lastName
+              fetchedFriends[i].deviceId = wearer2.deviceId
+            } else {
+              fetchedFriends[i].name = wearer1.firstName + " " + wearer1.lastName
+              fetchedFriends[i].deviceId = wearer1.deviceId
+            }
+            fetchedFriends[i].id = i
+            fetchedFriends[i].approval1 = fetchedFriends[i].isWatch1Approved ? "Aprobado" : "No aprobado"
+            fetchedFriends[i].approval2 = fetchedFriends[i].isWatch2Approved ? "Aprobado" : "No aprobado"
+          }
+          setFriendData(fetchedFriends)
+      }
+      getFriends(params).catch(console.error);
+    }, [query, wearer])
+
   useEffect(() => {
     console.log(wearer)
   }, [wearer])
@@ -189,15 +187,9 @@ export default function WearerDashboard() {
     getFriendMessageData().then((data) => {
       setFriendMessageData(data);
     });
-    getFriendData().then((data) => {
-      setFriendData(data);
-    });
     getUserMessageData().then((data) => {
       setUserMessageData(data);
     });
-    // getContacts().then((data) => {
-    //   setContacts(data);
-    // });
   }, []);
 
   async function onSearch(value) {

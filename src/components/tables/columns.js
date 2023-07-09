@@ -97,8 +97,8 @@ export const friendsColumns = [
     },
     {
         title: 'Device ID',
-        dataIndex: 'deviceID',
-        key: 'deviceID',
+        dataIndex: 'deviceId',
+        key: 'deviceId',
         width: 150,
         align: 'center',
     }
