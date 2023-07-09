@@ -13,6 +13,7 @@ module.exports = {
       colors: {
         'purple-custom1': '#603BB0',
         'purple-custom2': '#8562D5',
+        'purple-custom3': '#7B57CA',
       },
     }
   },
