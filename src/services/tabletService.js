@@ -28,6 +28,7 @@ export const getTabletUsers = async (hid) => {
     if (!hid) return;
     const response = await axios.get('http://localhost/tablet/tabletUser/getTabletUserByHidOrRecoveryEmail', { params });
     const data = response.data.data;
+    if (!data) return;
     const users = data.map(e => {
         const user = e.user;
         return {
@@ -64,69 +65,30 @@ export const getDugHistory = async (dugFromDate, dugToDate, hid) => {
         }
     });
     return dugHistory
+}
+
+export const updateTablet = async ({ hid, profileName, recoveryEmail, pin }) => {
+    const body = { profileName, recoveryEmail, pin, hid };
+    const response = await axios.post('http://localhost/tablet/updateTabletUserInformation', body);
+    return response.data.data;
+}
+
+export const updateParentalControlSettings = async ({ hid, parentalControlSettings }) => {
+    const body = { hid, ...parentalControlSettings };
+    const response = await axios.post('http://localhost/tablet/updateParentalControlSettings', body);
+    return response.data.data;
 }  
 
 export const getBatteryHistory = async (hid) => {
-    const responseBattery = {
-        "data": [
-            {
-                "chargingMethod": "Descargando",
-                "tablet": {
-                    "type": "Pointer",
-                    "className": "Tablet",
-                    "objectId": "Fe4N97GTHK"
-                },
-                "percentage": 73,
-                "health": "Buena",
-                "createdAtOnTablet": {
-                    "type": "Date",
-                    "iso": "2023-07-09T06:23:15.030Z"
-                },
-                "createdAt": "2023-07-09T14:47:06.283Z",
-                "updatedAt": "2023-07-09T14:47:06.283Z",
-                "objectId": "zpz0RRiNKY"
-            },
-            {
-                "chargingMethod": "Descargando",
-                "tablet": {
-                    "type": "Pointer",
-                    "className": "Tablet",
-                    "objectId": "Fe4N97GTHK"
-                },
-                "percentage": 64,
-                "health": "Buena",
-                "createdAtOnTablet": {
-                    "type": "Date",
-                    "iso": "2023-07-09T12:08:16.019Z"
-                },
-                "createdAt": "2023-07-09T14:47:06.283Z",
-                "updatedAt": "2023-07-09T14:47:06.283Z",
-                "objectId": "f12Akuu6UE"
-            },
-            {
-                "chargingMethod": "Descargando",
-                "tablet": {
-                    "type": "Pointer",
-                    "className": "Tablet",
-                    "objectId": "Fe4N97GTHK"
-                },
-                "percentage": 89,
-                "health": "Buena",
-                "createdAtOnTablet": {
-                    "type": "Date",
-                    "iso": "2023-07-08T20:23:13.216Z"
-                },
-                "createdAt": "2023-07-09T14:47:06.283Z",
-                "updatedAt": "2023-07-09T14:47:06.283Z",
-                "objectId": "KcRtZfXZ2I"
-            }
-    ]}
-    // const response = await axios.get('http://localhost/tablet/batteryHistory/getBatteryHistoryByHid', { params: { hid } });
-    const data = responseBattery.data;
+    let from = new Date(); 
+    from.setDate(from.getDate() - 7); 
+    from = from.toISOString();
+    let to = new Date();
+    to = to.toISOString();
+    const response = await axios.get('http://localhost/tablet/batteryInfo/getBatteryHistory', { params: { hid, from, to } });
+    const data = response.data.data;
+    if (!data) return;
     const batteryHistory = data.map((e, index) => {
-        const date = new Date(e.createdAt);
-        const time = date.getHours() + ':' + date.getMinutes();
-        const dateStr = date.toLocaleDateString();
         return {
             createdAt: e.createdAtOnTablet.iso,
             battery: e.percentage

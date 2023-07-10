@@ -53,12 +53,10 @@ export default function MainLayout(props) {
         style: { color: 'white' },
       })
   }
-  console.log(items)
     
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const onClick = (e) => {
-    console.log('click ', e);
     if (e.key === '1') {
         navigate('/');
     } else if (e.key === '2') {
@@ -66,6 +64,10 @@ export default function MainLayout(props) {
     }
   };
   
+
+  const handleLogoClick = () => {
+    navigate('/');
+  }
 
   return (
     <Layout hasSider>
@@ -90,7 +92,7 @@ export default function MainLayout(props) {
       >
         <div style={{marginTop: '2vh', marginBottom: '2vh', marginRight: 'auto'}}>
             <div style={{ display: 'flex', marginLeft: 'auto', marginRight: 'auto', flexDirection: 'column', alignItems: 'center', marginTop: '2rem', marginBottom: '2rem'}}>
-                <img src="/images/cs-soyMomoLogo.svg" alt="logo" width={100} height={100} />
+                <img src="/images/cs-soyMomoLogo.svg" alt="logo" width={100} height={100} onClick={handleLogoClick} style={{cursor: 'pointer'}} />
             </div>
             <Menu onClick={onClick} mode="inline" items={items} style={{background: '#603BB0', width: 'auto'}} />
         </div>

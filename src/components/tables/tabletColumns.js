@@ -1,4 +1,4 @@
-export const aplicationColumns = [
+export const aplicationColumns = (handleAllow) => [
     {
         title: 'Nombre Aplicación',
         dataIndex: 'appName',
@@ -20,13 +20,13 @@ export const aplicationColumns = [
         width: 150,
         align: 'center',
     },
-    {
-        title: 'Acción',
-        key: 'action',
-        width: 100,
-        render: (row) => <button onClick={() => console.log("A")} style={{backgroundColor: '#32B8C0', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Permitir</button>,
-        align: 'center'
-    }
+    // {
+    //     title: 'Acción',
+    //     key: 'action',
+    //     width: 100,
+    //     render: (row) => <button onClick={() => console.log(row)} style={{backgroundColor: '#32B8C0', color: 'white', padding: '0.25rem', borderRadius: '1rem', width: '100px'}}>Permitir</button>,
+    //     align: 'center'
+    // }
 ];
 
 export const userColumns = [

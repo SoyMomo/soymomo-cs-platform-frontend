@@ -1,14 +1,8 @@
 import * as React from 'react';
-import { Button, Row, Space, Typography, Table, Col } from 'antd'
+import { Table } from 'antd'
 
 
 export default function TableComponent(Props) {
-
-    async function handleRefresh() {
-        console.log("refreshing", Props.refreshLink)
-        console.log("height", Props.leftIconHeight)
-        console.log("width", Props.leftIconWidth)
-    }
 
     return (
 
@@ -23,7 +17,7 @@ export default function TableComponent(Props) {
                                 <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>{Props.subtitle}</p>
                             </div>
                         </div>
-                        <div onClick={handleRefresh} style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }}>
+                        <div onClick={Props.handleRefresh} style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }}>
                             <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
                         </div>
                     </div>

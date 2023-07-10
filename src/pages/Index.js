@@ -2,6 +2,7 @@
 import MainLayout from "../layouts/layout";
 import { useNavigate } from   "react-router-dom";
 import { Input, message } from 'antd'
+import { useState } from "react";
 import axios from 'axios';
 
 const { Search } = Input;
@@ -12,6 +13,7 @@ export default function Index() {
   const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
   const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState('');
 
   async function onSearch(value) {
 
@@ -39,13 +41,14 @@ export default function Index() {
 
     try {
       const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
-      if (!response.data || response.data.length === 0) {
+      if (!response || !response.data || response.data.length === 0) {
         messageApi.open({
           key,
           type: 'error',
           content: 'Not found!',
           duration: 2,
         });
+        setInputValue('');
       } else {
         messageApi.open({
           key,
@@ -64,6 +67,7 @@ export default function Index() {
         content: 'Not found!',
         duration: 2,
       });
+      setInputValue('');
     }
   }
 
@@ -73,7 +77,7 @@ export default function Index() {
             <>
             {contextHolder}
             <div style={{ padding: 20 }}>
-              <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+              <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} value={inputValue} style={{ width: 500, padding: 5 }} />
             </div>
           </>
         }

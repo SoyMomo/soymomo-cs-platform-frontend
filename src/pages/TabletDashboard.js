@@ -1,6 +1,6 @@
 import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
-import { Row, Space, Col, Input, DatePicker } from 'antd'
+import { Row, Space, Col, Input, DatePicker, message } from 'antd'
 import { aplicationColumns, userColumns } from '../components/tables/tabletColumns';
 //import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 import TableComponent from '../components/tables/table'
@@ -27,6 +27,9 @@ export default function TabletDashboard() {
     const [personalInfo, setPersonalInfo] = useState([]);
     const [dugFromDate, setDugFromDate] = useState(null);
     const [dugToDate, setDugToDate] = useState(null);
+    const [messageApi, contextHolder] = message.useMessage();
+    const key = 'updatable';
+    const [inputValue, setInputValue] = useState('');
     const [batteryHistory, setBatteryHistory] = useState([]);
 
     let query = useQuery();
@@ -69,28 +72,172 @@ export default function TabletDashboard() {
                 }).catch(console.error);
             }
         }
-    }, [dugFromDate, dugToDate, tablet])
+    }, [dugFromDate, dugToDate, tablet, messageApi])
 
     useEffect(() => {
-        if (tablet) {
+        if (tablet && tablet.hid) {
             getBatteryHistory(tablet.hid).then((batteryHistory) => {
                 setBatteryHistory(batteryHistory);
-            }).catch(console.error);
+            }).catch(() => {
+                messageApi.open({
+                    key,
+                    type: 'error',
+                    content: 'Error fetching battery history!',
+                    duration: 2,
+                    });
+            });
         }
-    }, [tablet])
+    }, [tablet, messageApi])
+
+
 
 
     async function onSearch(value) {
-        navigate(`/tablet/dashboard?hid=${value}`);
+        if (value === '') return;
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
+        try {
+            const response = await getTablet(value);
+            if (!response) {
+                messageApi.open({
+                    key,
+                    type: 'error',
+                    content: 'Not found!',
+                    duration: 2,
+                    });
+                setInputValue('');
+            } else {
+                messageApi.open({
+                    key,
+                    type: 'success',
+                    content: 'Loaded!',
+                    duration: 2,
+                    });
+                setInputValue('');
+                navigate(`/tablet/dashboard?hid=${value}`);
+            }
+        } catch(error) {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Not found!',
+                duration: 2,
+                });
+            setInputValue('');
+        }
     }
 
+    const handleRefreshPersonalInfo = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
+        getTablet(tablet.hid).then((tablet) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
+            setPersonalInfo(tablet);
+        }).catch(console.error);
+    }
+
+    const handleRefreshApps = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
+        getInstalledApps(tablet.objectId).then((apps) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
+            setAplicationsData(apps);
+        }).catch(console.error);
+    }
+
+    const handleRefreshTabletUsers = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
+        getTabletUsers(tablet.hid).then((users) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
+            setUsersData(users);
+        }).catch(console.error);
+    }
+
+    const handleRefreshDugHistory = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
+        if (dugFromDate === null || dugToDate === null) {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Please select a date range!',
+                duration: 2,
+                });
+            return;
+        }
+        getDugHistory(dugFromDate, dugToDate, tablet.hid).then((dugHistory) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
+            setDugHistory(dugHistory);
+        }).catch(console.error);
+    }
+
+    const handleBatteryHistoryRefresh = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
+        getBatteryHistory(tablet.hid).then((batteryHistory) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
+            setBatteryHistory(batteryHistory);
+        }).catch(() => {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Error fetching battery history!',
+                duration: 2,
+                });
+        });
+    }
 
     return (
         <MainLayout
             children={
                 <>
+                    {contextHolder}
                     <div style={{ padding: 20 }}>
-                        <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+                        <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
                             <Row gutter={[24, 32]}>
                                 <Col xs={24} sm={24} md={24} lg={16} xl={16}>
@@ -163,16 +310,20 @@ export default function TabletDashboard() {
 
 
                             <Space direction="vertical" size={12} style={{ display: 'flex' }}>
-                                <PersonalInfoTablet
-                                    personalInfo={personalInfo}
-                                />
+                                    <PersonalInfoTablet
+                                        personalInfo={personalInfo}
+                                        handleRefresh={handleRefreshPersonalInfo}
+                                        hid={tablet.hid}
+                                        setTablet={setTablet}
+                                    />
                                 <TabletBatteryHistory
                                     data={batteryHistory}
+                                    handleRefresh={handleBatteryHistoryRefresh}
                                 />
 
                                 <Row>
                                     <TableComponent
-                                        columns={aplicationColumns}
+                                        columns={aplicationColumns()}
                                         data={aplicationsData}
                                         leftIcon="/images/tableIcons/cs-aplicationsTablet.svg"
                                         leftIconHeight={29}
@@ -180,6 +331,7 @@ export default function TabletDashboard() {
                                         refreshLink="/api/refresh"
                                         title='Aplicaciones'
                                         subtitle='Tablet'
+                                        handleRefresh={handleRefreshApps}
                                     />
                                 </Row>
                                 <Row>
@@ -192,6 +344,7 @@ export default function TabletDashboard() {
                                         refreshLink="/api/refresh"
                                         title='Usuarios'
                                         subtitle='Tablet'
+                                        handleRefresh={handleRefreshTabletUsers}
                                     />
                                 </Row>
 
@@ -206,7 +359,7 @@ export default function TabletDashboard() {
                                                 <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>Tablet</p>
                                             </div>
                                         </div>
-                                        <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }}>
+                                        <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }} onClick={handleRefreshDugHistory}>
                                             <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
                                         </div>
                                     </div>
