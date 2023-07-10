@@ -1,7 +1,8 @@
 import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Row, Space, Col, Input } from 'antd'
+import axios from 'axios';
+import { Row, Space, Col, Input, message } from 'antd'
 import { friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/wearerColumns';
 
 import TableComponent from '../components/tables/table'
@@ -19,6 +20,9 @@ const { Search } = Input;
 
 export default function WearerDashboard() {
 
+  const [messageApi, contextHolder] = message.useMessage();
+  const key = 'updatable';
+  const [inputValue, setInputValue] = useState('');
   const [friendMessageData, setFriendMessageData] = useState([]);
   const [friendData, setFriendData] = useState([]);
   const [userMessageData, setUserMessageData] = useState([]);
@@ -119,7 +123,58 @@ export default function WearerDashboard() {
 
 
   async function onSearch(value) {
-    console.log(value);
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+
+    let params = {};
+
+    if (value.length === 10) {
+      params = { deviceId: value };
+    } else if (value.length === 15) {
+      params = { imei: value };
+    } else {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Invalid input, enter imei or deviceId!',
+        duration: 2,
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params });
+      if (!response || !response.data || response.data.length === 0) {
+        messageApi.open({
+          key,
+          type: 'error',
+          content: 'Not found!',
+          duration: 2,
+        });
+        setInputValue('');
+      } else {
+        messageApi.open({
+          key,
+          type: 'success',
+          content: 'Loaded!',
+          duration: 2,
+        });
+        const routeParam = params.deviceId ? `?deviceId=${params.deviceId}` : `?imei=${params.imei}`;
+        navigate(`/wearer${routeParam}`);
+
+      }
+    } catch (error) {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Not found!',
+        duration: 2,
+      });
+      setInputValue('');
+    }
   }
 
 
@@ -129,7 +184,8 @@ export default function WearerDashboard() {
         <>
           <div style={{ padding: 20 }}>
             <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
-              <Search placeholder="input search text" onSearch={onSearch} style={{ width: 500, padding: 5 }} />
+              { contextHolder }
+              <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} value={inputValue} onChange={(e) => setInputValue(e.target.value)} style={{ width: 500, padding: 5 }} />
             </div>
             <Space direction="vertical" size={24} style={{ display: 'flex' }}>
               <Row gutter={[24, 32]}>
