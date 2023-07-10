@@ -29,13 +29,11 @@ export default function LoginForm() {
             );
             if (response.data.challengeName && response.data.challengeName === 'NEW_PASSWORD_REQUIRED') {
                 // navegar a vista cambiar contraseña
-                console.log(response.data);
                 Cookies.set('session', response.data.session);
                 navigate('/change-password?email=' + email);
                
             } else {
                 // iniciar sesión y navegar a dashboard
-                console.log(response.data);
                 setTokens(response.data);
                 navigate('/');
             }
