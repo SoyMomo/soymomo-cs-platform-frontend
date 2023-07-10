@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Input } from 'antd';
+import AuthContext from "../authContext";
 
 const { Search } = Input;
 
 export default function ComandsComponent(Props) {
 
     const [searchLoading, setSearchLoading] = useState(false);
+    const { tokens } = useContext(AuthContext);
 
     // function onSearchCambiarReloj(value) {
     //     console.log(value)
@@ -20,7 +22,7 @@ export default function ComandsComponent(Props) {
         } else {
             deviceId = Props.deviceId;
         }
-        await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/sendMessageToWearer', { message, deviceId });
+        await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/sendMessageToWearer', { message, deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
         setSearchLoading(false);
     }
 
@@ -31,7 +33,7 @@ export default function ComandsComponent(Props) {
         } else {
             deviceId = Props.deviceId;
         }
-        await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/powerOff', { deviceId });
+        await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/powerOff', { deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
     }
 
     return (
