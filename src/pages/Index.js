@@ -2,18 +2,26 @@
 import MainLayout from "../layouts/layout";
 import { useNavigate } from   "react-router-dom";
 import { Input, message } from 'antd'
-import { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
+import AuthContext from "../authContext";
 
 const { Search } = Input;
 
 
 export default function Index() {
+  const { tokens } = useContext(AuthContext);
 
   const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    if (!tokens) {
+      navigate('/login');
+    }
+  }, [tokens, navigate]);
 
   async function onSearch(value) {
 
