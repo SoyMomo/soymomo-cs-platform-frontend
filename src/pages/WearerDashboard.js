@@ -462,7 +462,7 @@ export default function WearerDashboard() {
       params = { imei };
     }
     const getWearer = async (params) => {
-      const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params });
       if (!response.data || response.data.data.length === 0) {
         navigate('/not-found');
         return;
@@ -472,7 +472,7 @@ export default function WearerDashboard() {
     }
 
     const getContacts = async (params) => {
-      const response = await axios.get('http://localhost/wearer/getContacts', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getContacts', { params });
       let finalResponse;
       if (response.data.data) {
         finalResponse = response.data.data.map((contact) => {
@@ -484,7 +484,7 @@ export default function WearerDashboard() {
     }
 
     const getWatchUsers = async (params) => {
-      const response = await axios.get('http://localhost/wearer/watchUser/getWatchUserByEmailOrDeviceIdOrImei', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/watchUser/getWatchUserByEmailOrDeviceIdOrImei', { params });
       let fetchedUsers = response.data.data.users
       const fetchedWatchUsers = response.data.data.results
       fetchedUsers.map((user) => {
@@ -514,11 +514,11 @@ export default function WearerDashboard() {
       params = { imei };
     }
     const getFriends = async (params) => {
-      const response = await axios.get('http://localhost/wearer/getWearerFriends', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerFriends', { params });
       let fetchedFriends = response.data.data
       for (let i = 0; i < fetchedFriends.length; i++) {
-        const wearer1 = (await axios.get('http://localhost/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
-        const wearer2 = (await axios.get('http://localhost/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+        const wearer1 = (await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+        const wearer2 = (await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
         if (wearer1.deviceId === deviceId || wearer1.imei === imei) {
           fetchedFriends[i].name = wearer2.firstName + " " + wearer2.lastName
           fetchedFriends[i].deviceId = wearer2.deviceId
@@ -545,7 +545,7 @@ export default function WearerDashboard() {
       params = { imei };
     }
     const getChatUser = async (params) => {
-      const response = await axios.get('http://localhost/wearer/chatUser', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/chatUser', { params });
       const messages = response.data.data
         .filter(row => row.chatUser.type === "text")  // Filter first
         .map(row => {                                // Then map
@@ -573,7 +573,7 @@ export default function WearerDashboard() {
       params = { imei };
     }
     const getChatWearer = async (params) => {
-      const response = await axios.get('http://localhost/wearer/chatWearer', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/chatWearer', { params });
       const messages = response.data.data
         .filter(row => row.chatWearer.type === "text")  // Filter first
         .map(row => {                                // Then map
@@ -601,7 +601,7 @@ export default function WearerDashboard() {
       params = { imei };
     }
     const getBatteryHistory = async (params) => {
-      // const response = await axios.get('http://localhost/wearer/getBatteryHistory', { params }); 
+      // const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getBatteryHistory', { params }); 
       setBatteryHistory(responseBattery.data)
     }
     getBatteryHistory(params).catch(console.error);

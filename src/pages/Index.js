@@ -40,7 +40,7 @@ export default function Index() {
     }
 
     try {
-      const response = await axios.get('http://localhost/wearer/getWearerByDeviceIdOrImei', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params });
       if (!response || !response.data || response.data.length === 0) {
         messageApi.open({
           key,
@@ -77,7 +77,7 @@ export default function Index() {
             <>
             {contextHolder}
             <div style={{ padding: 20 }}>
-              <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} value={inputValue} style={{ width: 500, padding: 5 }} />
+              <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} value={inputValue} onChange={(e) => setInputValue(e.target.value)} style={{ width: 500, padding: 5 }} />
             </div>
           </>
         }

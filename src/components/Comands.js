@@ -20,7 +20,7 @@ export default function ComandsComponent(Props) {
         } else {
             deviceId = Props.deviceId;
         }
-        await axios.post('http://localhost/wearer/sendMessageToWearer', { message, deviceId });
+        await axios.post(process.env.REACT_APP_BACKEND_HOST + '/wearer/sendMessageToWearer', { message, deviceId });
         setSearchLoading(false);
     }
 
@@ -55,7 +55,7 @@ export default function ComandsComponent(Props) {
         } else {
             deviceId = Props.deviceId;
         }
-        await axios.post('http://localhost/wearer/powerOff', { deviceId });
+        await axios.post(process.env.REACT_APP_BACKEND_HOST + '/wearer/powerOff', { deviceId });
     }
 
     return (
