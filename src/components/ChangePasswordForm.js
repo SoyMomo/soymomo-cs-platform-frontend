@@ -32,6 +32,12 @@ export default function ChangePasswordForm() {
                 session,
             });
 
+            if (response.data.challengeName && response.data.challengeName === 'MFA_SETUP') {
+                // MFA is required to complete sign in
+                // override session cookie with new session
+                Cookies.set('session', response.data.session);
+            }
+
             // Login again with the new password
             const signInResponse = await axios.post('http://localhost:8080/login', {
                 email,

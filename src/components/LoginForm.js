@@ -41,7 +41,7 @@ export default function LoginForm() {
             }
         } catch (error) {
             // handle the error
-            setError("fallo");
+            setError(error.message || "Something went wrong.");
         } finally {
             // stop loading
             setLoading(false);
