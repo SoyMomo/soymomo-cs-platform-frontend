@@ -13,9 +13,7 @@ export const getTablet = async (hid) => {
 export const getInstalledApps = async (objectId) => {
     const params = { objectId };
     if (!objectId) return;
-    console.log(response)
     const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletInstalledApps', { params });
-    console.log(response)
     if (!response) return;
     if (!response.data) return;
     if (!response.data.data) return;

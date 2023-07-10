@@ -1,12 +1,8 @@
 
 
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 export default function WearerBatteryHistory(Props) {
-
-    function handleRefresh() {
-        console.log("refreshing")
-    }
 
     return (
         <div style={{ backgroundColor: '#fff', borderRadius: '0.5rem', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', padding: '1rem', marginBottom: '0.625rem', maxWidth: '100%', overflow: 'auto', scrollbarColor: 'dark' }}>
@@ -20,7 +16,7 @@ export default function WearerBatteryHistory(Props) {
                         <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>Carga batería</p>
                     </div>
                 </div>
-                <div onClick={handleRefresh} style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }}>
+                <div onClick={Props.handleRefresh} style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }}>
                     <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
                 </div>
             </div>

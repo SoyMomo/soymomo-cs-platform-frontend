@@ -5,7 +5,6 @@ import { aplicationColumns, userColumns } from '../components/tables/tabletColum
 //import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
-import ComandsComponent from '../components/Comands';
 import DugHistoryCard from '../components/DugHistoryCard';
 import PersonalInfoTablet from '../components/personalInfoTablet';
 import TabletBatteryHistory from '../components/TabletBatteryHistory';

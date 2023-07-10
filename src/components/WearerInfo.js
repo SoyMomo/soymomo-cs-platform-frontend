@@ -24,7 +24,7 @@ export default function WearerInfo(props) {
       leftIcon={props.leftIcon}
       leftIconWidth={props.leftIconWidth}
       leftIconHeight={props.leftIconHeight}
-      refreshLink={props.refreshLink}
+      handleRefresh={props.handleRefresh}
     >
       <WearerInfoRow
         iconSrc="/images/cs-wearerInfoUser.svg"
