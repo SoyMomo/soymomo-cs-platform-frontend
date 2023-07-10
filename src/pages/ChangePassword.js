@@ -1,4 +1,4 @@
-import LoginForm from "../components/LoginForm"
+import ChangePasswordForm from "../components/ChangePasswordForm"
 
 
 export default function Login() {
@@ -11,11 +11,11 @@ export default function Login() {
                 </div>
 
 
-                <h1 className="text-2xl font-bold text-center text-[#603BB0]">Log in</h1>
+                <h1 className="text-2xl font-bold text-center text-[#603BB0]">Change Password</h1>
                 
 
 
-                <LoginForm/>
+                <ChangePasswordForm/>
                 <a href="/">
                     <h3 className="mt-5 text-xs text-center text-[#603BB0] hover:underline">¿Olvidaste tu contraseña?</h3>
                 </a>

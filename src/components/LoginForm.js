@@ -1,5 +1,10 @@
 import { useState } from "react";
 import TextField from "./TextField"
+import axios from "axios";
+import AuthContext from "../authContext";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import Cookies from 'js-cookie';
 
 export default function LoginForm() {
 
@@ -7,9 +12,40 @@ export default function LoginForm() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);  // Loading state
+    const { setTokens } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     async function handleSubmit() {
-
+        // start loading
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axios.post(
+                "http://localhost:8080/auth/login",
+                {
+                    email,
+                    password,
+                }
+            );
+            if (response.data.challengeName && response.data.challengeName === 'NEW_PASSWORD_REQUIRED') {
+                // navegar a vista cambiar contraseña
+                console.log(response.data);
+                Cookies.set('session', response.data.session);
+                navigate('/change-password?email=' + email);
+               
+            } else {
+                // iniciar sesión y navegar a dashboard
+                console.log(response.data);
+                setTokens(response.data);
+                navigate('/');
+            }
+        } catch (error) {
+            // handle the error
+            setError("fallo");
+        } finally {
+            // stop loading
+            setLoading(false);
+        }
     }
     
     return (
