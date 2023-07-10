@@ -2,12 +2,6 @@ import * as React from 'react';
 
 export default function CardHeader(props) {
 
-    async function handleRefresh() {
-        console.log("refreshing", props.refreshLink)
-        console.log("height", props.leftIconHeight)
-        console.log("width", props.leftIconWidth)
-    }
-
     return (
         <div style={{ backgroundColor: '#fff', borderRadius: '0.5rem', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', padding: '1rem', marginBottom: '0.625rem', maxWidth: '100%'}}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -22,7 +16,7 @@ export default function CardHeader(props) {
                         <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start' }}>{props.subtitle}</p>
                     </div>
                 </div>
-                <div onClick={handleRefresh} style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }}>
+                <div onClick={props.handleRefresh} style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }}>
                     <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
                 </div>
             </div>

@@ -8,7 +8,7 @@ export default function WearerLastConnectionCard(props) {
     <CardHeader
       title={props.title}
       subtitle={props.subtitle}
-      refreshLink={props.refreshLink}
+      handleRefresh={props.handleRefresh}
     >
         <div className="bg-purple-custom3 rounded-md shadow-sm p-4 w-full">
             <p className="text-sm text-start text-white">Este imei se encuentra activo hasta: <span className='text-white font-bold'>{lastTKQ?.iso}</span></p>

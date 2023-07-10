@@ -81,6 +81,82 @@ export default function WearerDashboard() {
     });
   }, [query, wearer])
 
+  const handleContactRefresh = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getContacts(params).then((response) => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Loaded!',
+        duration: 2,
+      });
+      setContacts(response);
+    }).catch(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Error fetching data!',
+        duration: 2,
+      });
+    });
+  }
+
+  const handleWatchUserRefresh = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getWatchUsers(params).then((response) => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Loaded!',
+        duration: 2,
+      });
+      setUsers(response);
+    }).catch(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Error fetching data!',
+        duration: 2,
+      });
+    });
+  }
+
+  const handleFriendsRefresh = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getFriends(params, params.deviceId, params.imei).then((response) => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Loaded!',
+        duration: 2,
+      });
+      setFriendData(response);
+    }).catch(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Error fetching data!',
+        duration: 2,
+      });
+    });
+  }
+
+
   useEffect(() => {
     const deviceId = query.get('deviceId');
     const imei = query.get('imei');
@@ -119,6 +195,84 @@ export default function WearerDashboard() {
       }
     }
   }, [query, wearer])
+
+  const handleChatUserRefresh = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getChatUser(params).then((response) => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Loaded!',
+        duration: 2,
+      });
+      setUserMessageData(response);
+    }).catch(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Error fetching data!',
+        duration: 2,
+      });
+    });
+  }
+
+  const handleChatWearerRefresh = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getChatWearer(params).then((response) => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Loaded!',
+        duration: 2,
+      });
+      setFriendMessageData(response);
+    }).catch(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Error fetching data!',
+        duration: 2,
+      });
+    });
+  }
+
+  const handleBatteryHistoryRefresh = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+    if (wearer) {
+      if (wearer.deviceId) {
+        getBatteryHistory(wearer.deviceId).then((response) => {
+          messageApi.open({
+            key,
+            type: 'success',
+            content: 'Loaded!',
+            duration: 2,
+          });
+          setBatteryHistory(response);
+        }).catch(() => {
+          messageApi.open({
+            key,
+            type: 'error',
+            content: 'Error fetching data!',
+            duration: 2,
+          });
+        });
+      }
+    }
+  }
 
 
 
@@ -177,6 +331,45 @@ export default function WearerDashboard() {
     }
   }
 
+  const handleWearerInfoRefresh = () => {
+    const params = {
+      deviceId: wearer.deviceId,
+      imei: wearer.imei,
+    }
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+
+    getWearer(params).then((response) => {
+      if (!response.data || response.data.data.length === 0) {
+        messageApi.open({
+          key,
+          type: 'error',
+          content: 'Error fetching data!',
+          duration: 2,
+        });
+        return;
+      }
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Loaded!',
+        duration: 2,
+      });
+      setWearer(response.data.data[0]);
+      setWatchSettings(response.data.includes[0].settings);
+    }).catch(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Error fetching data!',
+        duration: 2,
+      });
+    });
+  }
+
 
   return (
     <MainLayout
@@ -209,7 +402,7 @@ export default function WearerDashboard() {
                           leftIcon="/images/cs-wearerInfo.svg"
                           leftIconWidth={24}
                           leftIconHeight={29}
-                          refreshLink="/api/refresh"
+                          handleRefresh={handleWearerInfoRefresh}
                           wearer={wearer} />
                       </Col>
                       {/* Datos principales */}
@@ -219,7 +412,7 @@ export default function WearerDashboard() {
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
                           {/* Ultima conexion */}
-                          <WearerLastConnectionCard title="Última conexión" lastTKQ={wearer.lastTKQ} />
+                          <WearerLastConnectionCard title="Última conexión" lastTKQ={wearer.lastTKQ} handleRefresh={handleWearerInfoRefresh} />
                           {/* Ultima conexion */}
 
                           {/* SoyMomoSIM */}
@@ -238,6 +431,7 @@ export default function WearerDashboard() {
                     {/* Historial de bateria */}
                     <WearerBatteryHistory
                       data={batteryHistory}
+                      handleRefresh={handleBatteryHistoryRefresh}
                     />
                     {/* Historial de bateria */}
 
@@ -274,7 +468,7 @@ export default function WearerDashboard() {
                       leftIcon="/images/cs-wearerSettings.svg"
                       leftIconWidth={24}
                       leftIconHeight={29}
-                      refreshLink="/api/refresh"
+                      handleRefresh={handleWearerInfoRefresh}
                       watchSettings={watchSettings} />
                     {/* Ajustes reloj */}
 
@@ -292,7 +486,7 @@ export default function WearerDashboard() {
                       leftIcon="/images/tableIcons/cs-friendMessagesIcon.svg"
                       leftIconHeight={29}
                       leftIconWidth={24}
-                      refreshLink="/api/refresh"
+                      handleRefresh={handleChatWearerRefresh}
                       title='Mensajes de amigos'
                       subtitle='Externos'
                     />
@@ -304,7 +498,7 @@ export default function WearerDashboard() {
                       leftIcon="/images/tableIcons/cs-userMessagesIcon.svg"
                       leftIconHeight={29}
                       leftIconWidth={24}
-                      refreshLink="/api/refresh"
+                      handleRefresh={handleChatUserRefresh}
                       title='Mensajes de usuarios'
                       subtitle='Familiares'
                     />
@@ -317,7 +511,7 @@ export default function WearerDashboard() {
                     leftIcon="/images/tableIcons/cs-friendsHeart.svg"
                     leftIconHeight={27}
                     leftIconWidth={31}
-                    refreshLink="/api/refresh"
+                    handleRefresh={handleFriendsRefresh}
                     title='Amigos'
                     subtitle='Aprobación'
                   />
@@ -355,7 +549,7 @@ export default function WearerDashboard() {
                     leftIcon="/images/tableIcons/cs-usersIcon.svg"
                     leftIconHeight={29}
                     leftIconWidth={38}
-                    refreshLink="/api/refresh"
+                    handleRefresh={handleWatchUserRefresh}
                     title='Usuarios'
                     subtitle='Familiares'
                   />
@@ -367,7 +561,7 @@ export default function WearerDashboard() {
                     leftIcon="/images/tableIcons/cs-contactIcon.svg"
                     leftIconHeight={29}
                     leftIconWidth={38}
-                    refreshLink="/api/refresh"
+                    handleRefresh={handleContactRefresh}
                     title='Contactos'
                     subtitle='Reloj'
                   />
