@@ -6,23 +6,11 @@ import {
 import { Layout, Menu } from 'antd';
 import { useNavigate } from   "react-router-dom";
 
-const { Header, Content, Footer, Sider } = Layout;
-
-// const items = [
-//   ClockCircleOutlined,
-//   TabletOutlined,
-// ].map((icon, index) => (
-//   {
-//   key: String(index + 1),
-//   icon: React.createElement(icon),
-//   label: `nav`,
-//   style: { color: 'white' },
-// }));
+const { Content, Sider } = Layout;
 
 export default function MainLayout(props) {
 
   const url = window.location.href;
-  const includesTablet = url.includes('tablet');
   const items = []
   if (url.includes('tablet')) {
     items.push(

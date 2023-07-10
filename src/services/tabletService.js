@@ -57,6 +57,7 @@ export const getDugHistory = async (dugFromDate, dugToDate, hid) => {
         const dateStr = date.toLocaleDateString();
         return {
             id: index,
+            key: index,
             image: e.screenshot.url,
             date: dateStr,
             category: e.classType,
@@ -90,6 +91,7 @@ export const getBatteryHistory = async (hid) => {
     if (!data) return;
     const batteryHistory = data.map((e, index) => {
         return {
+            key: index,
             createdAt: e.createdAtOnTablet.iso,
             battery: e.percentage
         }
