@@ -1,8 +1,10 @@
 import MainLayout from '../layouts/layout';
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Input, message } from 'antd'
 import { getTablet } from '../services/tabletService';
+import AuthContext from "../authContext";
+
 
 
 
@@ -11,10 +13,17 @@ const { Search } = Input;
 
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function TabletSearch() {
+    const { tokens } = useContext(AuthContext);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const key = 'updatable';
     const [inputValue, setInputValue] = useState('');
+
+    useEffect(() => {
+        if (!tokens) {
+            navigate('/login');
+        }
+    }, [tokens, navigate]);
 
     async function onSearch(value) {
         messageApi.open({

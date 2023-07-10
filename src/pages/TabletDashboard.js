@@ -1,8 +1,8 @@
 import MainLayout from '../layouts/layout';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Row, Space, Col, Input, DatePicker, message } from 'antd'
 import { aplicationColumns, userColumns } from '../components/tables/tabletColumns';
-//import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
+import AuthContext from '../authContext';
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import DugHistoryCard from '../components/DugHistoryCard';
@@ -19,7 +19,7 @@ const { Search } = Input;
 
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function TabletDashboard() {
-
+    const { tokens } = useContext(AuthContext);
     const [aplicationsData, setAplicationsData] = useState([]);
     const [usersData, setUsersData] = useState([]);
     const [dugHistory, setDugHistory] = useState([]);
@@ -34,6 +34,12 @@ export default function TabletDashboard() {
     let query = useQuery();
     const [tablet, setTablet] = useState({});
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!tokens) {
+            navigate('/login');
+        }
+    }, [tokens, navigate]);
 
     useEffect(() => {
         const hid = query.get('hid');
@@ -83,7 +89,7 @@ export default function TabletDashboard() {
                     type: 'error',
                     content: 'Error fetching battery history!',
                     duration: 2,
-                    });
+                });
             });
         }
     }, [tablet, messageApi])
@@ -97,7 +103,7 @@ export default function TabletDashboard() {
             key,
             type: 'loading',
             content: 'Loading...',
-          });
+        });
         try {
             const response = await getTablet(value);
             if (!response) {
@@ -106,7 +112,7 @@ export default function TabletDashboard() {
                     type: 'error',
                     content: 'Not found!',
                     duration: 2,
-                    });
+                });
                 setInputValue('');
             } else {
                 messageApi.open({
@@ -114,17 +120,17 @@ export default function TabletDashboard() {
                     type: 'success',
                     content: 'Loaded!',
                     duration: 2,
-                    });
+                });
                 setInputValue('');
                 navigate(`/tablet/dashboard?hid=${value}`);
             }
-        } catch(error) {
+        } catch (error) {
             messageApi.open({
                 key,
                 type: 'error',
                 content: 'Not found!',
                 duration: 2,
-                });
+            });
             setInputValue('');
         }
     }
@@ -134,14 +140,14 @@ export default function TabletDashboard() {
             key,
             type: 'loading',
             content: 'Loading...',
-          });
+        });
         getTablet(tablet.hid).then((tablet) => {
             messageApi.open({
                 key,
                 type: 'success',
                 content: 'Loaded!',
                 duration: 2,
-                });
+            });
             setPersonalInfo(tablet);
         }).catch(() => {
             messageApi.open({
@@ -149,7 +155,7 @@ export default function TabletDashboard() {
                 type: 'error',
                 content: 'Error fetching tablet!',
                 duration: 2,
-                });
+            });
         });
     }
 
@@ -158,14 +164,14 @@ export default function TabletDashboard() {
             key,
             type: 'loading',
             content: 'Loading...',
-          });
+        });
         getInstalledApps(tablet.objectId).then((apps) => {
             messageApi.open({
                 key,
                 type: 'success',
                 content: 'Loaded!',
                 duration: 2,
-                });
+            });
             setAplicationsData(apps);
         }).catch(() => {
             messageApi.open({
@@ -173,7 +179,7 @@ export default function TabletDashboard() {
                 type: 'error',
                 content: 'Error fetching apps!',
                 duration: 2,
-                });
+            });
         });
     }
 
@@ -182,14 +188,14 @@ export default function TabletDashboard() {
             key,
             type: 'loading',
             content: 'Loading...',
-          });
+        });
         getTabletUsers(tablet.hid).then((users) => {
             messageApi.open({
                 key,
                 type: 'success',
                 content: 'Loaded!',
                 duration: 2,
-                });
+            });
             setUsersData(users);
         }).catch(() => {
             messageApi.open({
@@ -197,7 +203,7 @@ export default function TabletDashboard() {
                 type: 'error',
                 content: 'Error fetching tablet users!',
                 duration: 2,
-                });
+            });
         });
     }
 
@@ -206,14 +212,14 @@ export default function TabletDashboard() {
             key,
             type: 'loading',
             content: 'Loading...',
-          });
+        });
         if (dugFromDate === null || dugToDate === null) {
             messageApi.open({
                 key,
                 type: 'error',
                 content: 'Please select a date range!',
                 duration: 2,
-                });
+            });
             return;
         }
         getDugHistory(dugFromDate, dugToDate, tablet.hid).then((dugHistory) => {
@@ -222,7 +228,7 @@ export default function TabletDashboard() {
                 type: 'success',
                 content: 'Loaded!',
                 duration: 2,
-                });
+            });
             setDugHistory(dugHistory);
         }).catch(() => {
             messageApi.open({
@@ -230,7 +236,7 @@ export default function TabletDashboard() {
                 type: 'error',
                 content: 'Error fetching DUG history!',
                 duration: 2,
-                });
+            });
         });
     }
 
@@ -239,14 +245,14 @@ export default function TabletDashboard() {
             key,
             type: 'loading',
             content: 'Loading...',
-          });
+        });
         getBatteryHistory(tablet.hid).then((batteryHistory) => {
             messageApi.open({
                 key,
                 type: 'success',
                 content: 'Loaded!',
                 duration: 2,
-                });
+            });
             setBatteryHistory(batteryHistory);
         }).catch(() => {
             messageApi.open({
@@ -254,7 +260,7 @@ export default function TabletDashboard() {
                 type: 'error',
                 content: 'Error fetching battery history!',
                 duration: 2,
-                });
+            });
         });
     }
 
@@ -337,12 +343,12 @@ export default function TabletDashboard() {
 
 
                             <Space direction="vertical" size={12} style={{ display: 'flex' }}>
-                                    <PersonalInfoTablet
-                                        personalInfo={personalInfo}
-                                        handleRefresh={handleRefreshPersonalInfo}
-                                        hid={tablet.hid}
-                                        setTablet={setTablet}
-                                    />
+                                <PersonalInfoTablet
+                                    personalInfo={personalInfo}
+                                    handleRefresh={handleRefreshPersonalInfo}
+                                    hid={tablet.hid}
+                                    setTablet={setTablet}
+                                />
                                 <TabletBatteryHistory
                                     data={batteryHistory}
                                     handleRefresh={handleBatteryHistoryRefresh}
