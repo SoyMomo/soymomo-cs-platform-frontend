@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from './pages/Login'
 import Index from './pages/Index'
 import WearerDashboard from "./pages/WearerDashboard";

@@ -8,13 +8,15 @@ import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
 import DugHistoryCard from '../components/DugHistoryCard';
 import PersonalInfoTablet from '../components/personalInfoTablet';
+import TabletBatteryHistory from '../components/TabletBatteryHistory';
 import { useNavigate } from 'react-router-dom';
-import { getTablet, getInstalledApps, getTabletUsers, getDugHistory } from '../services/tabletService.js';
+import { getTablet, getInstalledApps, getTabletUsers, getDugHistory, getBatteryHistory } from '../services/tabletService.js';
 
 const { RangePicker } = DatePicker;
 
 
 const { Search } = Input;
+
 
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function TabletDashboard() {
@@ -28,6 +30,7 @@ export default function TabletDashboard() {
     const [messageApi, contextHolder] = message.useMessage();
     const key = 'updatable';
     const [inputValue, setInputValue] = useState('');
+    const [batteryHistory, setBatteryHistory] = useState([]);
 
     let query = useQuery();
     const [tablet, setTablet] = useState({});
@@ -44,7 +47,7 @@ export default function TabletDashboard() {
                 setTablet(tablet);
             }).catch(() => {
             });
-        }        
+        }
     }, [query, navigate])
 
     useEffect(() => {
@@ -69,7 +72,25 @@ export default function TabletDashboard() {
                 }).catch(console.error);
             }
         }
-    }, [dugFromDate, dugToDate, tablet])
+    }, [dugFromDate, dugToDate, tablet, messageApi])
+
+    useEffect(() => {
+        if (tablet && tablet.hid) {
+            getBatteryHistory(tablet.hid).then((batteryHistory) => {
+                setBatteryHistory(batteryHistory);
+            }).catch(() => {
+                messageApi.open({
+                    key,
+                    type: 'error',
+                    content: 'Error fetching battery history!',
+                    duration: 2,
+                    });
+            });
+        }
+    }, [tablet, messageApi])
+
+
+
 
     async function onSearch(value) {
         if (value === '') return;
@@ -110,24 +131,62 @@ export default function TabletDashboard() {
     }
 
     const handleRefreshPersonalInfo = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
         getTablet(tablet.hid).then((tablet) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
             setPersonalInfo(tablet);
         }).catch(console.error);
     }
 
     const handleRefreshApps = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
         getInstalledApps(tablet.objectId).then((apps) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
             setAplicationsData(apps);
         }).catch(console.error);
     }
 
     const handleRefreshTabletUsers = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
         getTabletUsers(tablet.hid).then((users) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
             setUsersData(users);
         }).catch(console.error);
     }
 
     const handleRefreshDugHistory = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
         if (dugFromDate === null || dugToDate === null) {
             messageApi.open({
                 key,
@@ -138,8 +197,38 @@ export default function TabletDashboard() {
             return;
         }
         getDugHistory(dugFromDate, dugToDate, tablet.hid).then((dugHistory) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
             setDugHistory(dugHistory);
         }).catch(console.error);
+    }
+
+    const handleBatteryHistoryRefresh = () => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+          });
+        getBatteryHistory(tablet.hid).then((batteryHistory) => {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: 'Loaded!',
+                duration: 2,
+                });
+            setBatteryHistory(batteryHistory);
+        }).catch(() => {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Error fetching battery history!',
+                duration: 2,
+                });
+        });
     }
 
     return (
@@ -190,7 +279,6 @@ export default function TabletDashboard() {
 
                                         {/* Historial de bateria */}
 
-
                                         {/* Historial de bateria */}
 
                                     </Space>
@@ -228,6 +316,10 @@ export default function TabletDashboard() {
                                         hid={tablet.hid}
                                         setTablet={setTablet}
                                     />
+                                <TabletBatteryHistory
+                                    data={batteryHistory}
+                                    handleRefresh={handleBatteryHistoryRefresh}
+                                />
 
                                 <Row>
                                     <TableComponent
@@ -287,10 +379,10 @@ export default function TabletDashboard() {
                                             })
                                         }
                                     </div>
-                                    <RangePicker onChange={(dates, dateString)=> {
-                                            setDugFromDate(dateString[0])
-                                            setDugToDate(dateString[1])
-                                        }
+                                    <RangePicker onChange={(dates, dateString) => {
+                                        setDugFromDate(dateString[0])
+                                        setDugToDate(dateString[1])
+                                    }
                                     } />
                                 </div>
 

@@ -28,6 +28,7 @@ export const getTabletUsers = async (hid) => {
     if (!hid) return;
     const response = await axios.get('http://localhost/tablet/tabletUser/getTabletUserByHidOrRecoveryEmail', { params });
     const data = response.data.data;
+    if (!data) return;
     const users = data.map(e => {
         const user = e.user;
         return {
@@ -76,4 +77,22 @@ export const updateParentalControlSettings = async ({ hid, parentalControlSettin
     const body = { hid, ...parentalControlSettings };
     const response = await axios.post('http://localhost/tablet/updateParentalControlSettings', body);
     return response.data.data;
+}  
+
+export const getBatteryHistory = async (hid) => {
+    let from = new Date(); 
+    from.setDate(from.getDate() - 7); 
+    from = from.toISOString();
+    let to = new Date();
+    to = to.toISOString();
+    const response = await axios.get('http://localhost/tablet/batteryInfo/getBatteryHistory', { params: { hid, from, to } });
+    const data = response.data.data;
+    if (!data) return;
+    const batteryHistory = data.map((e, index) => {
+        return {
+            createdAt: e.createdAtOnTablet.iso,
+            battery: e.percentage
+        }
+    });
+    return batteryHistory;
 }
