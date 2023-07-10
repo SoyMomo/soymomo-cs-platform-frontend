@@ -8,13 +8,15 @@ import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
 import DugHistoryCard from '../components/DugHistoryCard';
 import PersonalInfoTablet from '../components/personalInfoTablet';
+import TabletBatteryHistory from '../components/TabletBatteryHistory';
 import { useNavigate } from 'react-router-dom';
-import { getTablet, getInstalledApps, getTabletUsers, getDugHistory } from '../services/tabletService.js';
+import { getTablet, getInstalledApps, getTabletUsers, getDugHistory, getBatteryHistory } from '../services/tabletService.js';
 
 const { RangePicker } = DatePicker;
 
 
 const { Search } = Input;
+
 
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function TabletDashboard() {
@@ -25,6 +27,7 @@ export default function TabletDashboard() {
     const [personalInfo, setPersonalInfo] = useState([]);
     const [dugFromDate, setDugFromDate] = useState(null);
     const [dugToDate, setDugToDate] = useState(null);
+    const [batteryHistory, setBatteryHistory] = useState([]);
 
     let query = useQuery();
     const [tablet, setTablet] = useState({});
@@ -41,7 +44,7 @@ export default function TabletDashboard() {
                 setTablet(tablet);
             }).catch(() => {
             });
-        }        
+        }
     }, [query, navigate])
 
     useEffect(() => {
@@ -67,6 +70,15 @@ export default function TabletDashboard() {
             }
         }
     }, [dugFromDate, dugToDate, tablet])
+
+    useEffect(() => {
+        if (tablet) {
+            getBatteryHistory(tablet.hid).then((batteryHistory) => {
+                setBatteryHistory(batteryHistory);
+            }).catch(console.error);
+        }
+    }, [tablet])
+
 
     async function onSearch(value) {
         navigate(`/tablet/dashboard?hid=${value}`);
@@ -120,7 +132,6 @@ export default function TabletDashboard() {
 
                                         {/* Historial de bateria */}
 
-
                                         {/* Historial de bateria */}
 
                                     </Space>
@@ -152,9 +163,12 @@ export default function TabletDashboard() {
 
 
                             <Space direction="vertical" size={12} style={{ display: 'flex' }}>
-                                    <PersonalInfoTablet
-                                        personalInfo={personalInfo}
-                                    />
+                                <PersonalInfoTablet
+                                    personalInfo={personalInfo}
+                                />
+                                <TabletBatteryHistory
+                                    data={batteryHistory}
+                                />
 
                                 <Row>
                                     <TableComponent
@@ -212,10 +226,10 @@ export default function TabletDashboard() {
                                             })
                                         }
                                     </div>
-                                    <RangePicker onChange={(dates, dateString)=> {
-                                            setDugFromDate(dateString[0])
-                                            setDugToDate(dateString[1])
-                                        }
+                                    <RangePicker onChange={(dates, dateString) => {
+                                        setDugFromDate(dateString[0])
+                                        setDugToDate(dateString[1])
+                                    }
                                     } />
                                 </div>
 
