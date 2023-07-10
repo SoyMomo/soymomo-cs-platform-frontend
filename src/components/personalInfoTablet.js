@@ -1,7 +1,7 @@
 import { Modal, Input, Button, message } from 'antd';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
+import { useAuth } from "../authContext";
 import { updateTablet, updateParentalControlSettings } from '../services/tabletService';
-import AuthContext from "../authContext";
 
 const tableHeaderStyle = {
     padding: '12px 16px',
@@ -24,7 +24,7 @@ export default function PersonalInfoTablet(Props) {
     const [type, setType] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
     const key = 'updatable';
-    const { tokens } = useContext(AuthContext);
+    const { tokens } = useAuth();
 
     async function handleName() {
         setInputValue(personalInfo.profileName)

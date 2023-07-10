@@ -7,7 +7,7 @@ import TabletSearch from "./pages/TabletSearch";
 import ChangePassword from "./pages/ChangePassword";
 import NotFound from "./pages/NotFound";
 import './App.css';
-import AuthContext from "./authContext";
+import AuthProvider from "./authContext";
 import { useState } from "react";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
   const [tokens, setTokens] = useState(null)
 
   return (
-    <AuthContext.Provider value={{tokens, setTokens}}>
+    <AuthProvider>
       <div className="App">
         <Routes>
           <Route path="/login" element={<Login/>}/>
@@ -27,7 +27,7 @@ function App() {
           <Route path="*" element={<NotFound/>} />
         </Routes>
       </div>
-    </AuthContext.Provider>
+    </AuthProvider>
   );
 }
 

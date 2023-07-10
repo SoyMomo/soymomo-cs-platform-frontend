@@ -1,9 +1,8 @@
 import { useState } from "react";
 import TextField from "./TextField"
 import axios from "axios";
-import AuthContext from "../authContext";
+import { useAuth } from "../authContext";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import Cookies from 'js-cookie';
 
 export default function LoginForm() {
@@ -12,7 +11,7 @@ export default function LoginForm() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);  // Loading state
-    const { setTokens } = useContext(AuthContext);
+    const { setTokens } = useAuth();
     const navigate = useNavigate();
 
     async function handleSubmit() {

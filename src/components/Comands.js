@@ -1,14 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Input } from 'antd';
-import AuthContext from "../authContext";
+import { useAuth } from "../authContext";
 
 const { Search } = Input;
 
 export default function ComandsComponent(Props) {
 
     const [searchLoading, setSearchLoading] = useState(false);
-    const { tokens } = useContext(AuthContext);
+    const { tokens } = useAuth();
 
     // function onSearchCambiarReloj(value) {
     //     console.log(value)

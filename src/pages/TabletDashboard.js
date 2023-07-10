@@ -1,8 +1,7 @@
 import MainLayout from '../layouts/layout';
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row, Space, Col, Input, DatePicker, message } from 'antd'
 import { aplicationColumns, userColumns } from '../components/tables/tabletColumns';
-import AuthContext from '../authContext';
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import DugHistoryCard from '../components/DugHistoryCard';
@@ -10,6 +9,7 @@ import PersonalInfoTablet from '../components/personalInfoTablet';
 import TabletBatteryHistory from '../components/TabletBatteryHistory';
 import { useNavigate } from 'react-router-dom';
 import { getTablet, getInstalledApps, getTabletUsers, getDugHistory, getBatteryHistory } from '../services/tabletService.js';
+import { useAuth } from "../authContext";
 
 const { RangePicker } = DatePicker;
 
@@ -19,7 +19,7 @@ const { Search } = Input;
 
 //<Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} />
 export default function TabletDashboard() {
-    const { tokens } = useContext(AuthContext);
+    const { tokens } = useAuth();
     const [aplicationsData, setAplicationsData] = useState([]);
     const [usersData, setUsersData] = useState([]);
     const [dugHistory, setDugHistory] = useState([]);
@@ -270,7 +270,9 @@ export default function TabletDashboard() {
                 <>
                     {contextHolder}
                     <div style={{ padding: 20 }}>
-                        <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+                        <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
+                            <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+                        </div>
                         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
                             <Row gutter={[24, 32]}>
                                 <Col xs={24} sm={24} md={24} lg={16} xl={16}>

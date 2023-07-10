@@ -2,15 +2,15 @@
 import MainLayout from "../layouts/layout";
 import { useNavigate } from   "react-router-dom";
 import { Input, message } from 'antd'
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../authContext";
 import axios from 'axios';
-import AuthContext from "../authContext";
 
 const { Search } = Input;
 
 
 export default function Index() {
-  const { tokens } = useContext(AuthContext);
+  const { tokens } = useAuth();
 
   const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
@@ -90,7 +90,9 @@ export default function Index() {
             <>
             {contextHolder}
             <div style={{ padding: 20 }}>
-              <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} value={inputValue} onChange={(e) => setInputValue(e.target.value)} style={{ width: 500, padding: 5 }} />
+              <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
+                <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} value={inputValue} onChange={(e) => setInputValue(e.target.value)} style={{ width: 500, padding: 5 }} />
+              </div>
             </div>
           </>
         }

@@ -1,10 +1,10 @@
 import MainLayout from '../layouts/layout';
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Row, Space, Col, Input, message } from 'antd'
 import { friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/wearerColumns';
-import AuthContext from "../authContext";
+import { useAuth } from "../authContext";
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
@@ -19,7 +19,7 @@ import { getWearer, getContacts, getWatchUsers, getFriends, getChatUser, getChat
 const { Search } = Input;
 
 export default function WearerDashboard() {
-  const { tokens } = useContext(AuthContext);
+  const { tokens } = useAuth();
   const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
   const [inputValue, setInputValue] = useState('');
