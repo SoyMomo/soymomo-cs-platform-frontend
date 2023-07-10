@@ -1,6 +1,7 @@
 import { Modal, Input, Button, message } from 'antd';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { updateTablet, updateParentalControlSettings } from '../services/tabletService';
+import AuthContext from "../authContext";
 
 const tableHeaderStyle = {
     padding: '12px 16px',
@@ -23,6 +24,7 @@ export default function PersonalInfoTablet(Props) {
     const [type, setType] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
     const key = 'updatable';
+    const { tokens } = useContext(AuthContext);
 
     async function handleName() {
         setInputValue(personalInfo.profileName)
@@ -53,7 +55,7 @@ export default function PersonalInfoTablet(Props) {
             const parentalControlSettings = {
                 browserAllowed
             }
-            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings });
+            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings, token: tokens.AccessToken });
             if (response) {
                 Props.setTablet(response);
                 messageApi.open({
@@ -92,7 +94,7 @@ export default function PersonalInfoTablet(Props) {
             const parentalControlSettings = {
                 remoteBlocked
             }
-            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings });
+            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings, token: tokens.AccessToken });
             if (response) {
                 Props.setTablet(response);
                 messageApi.open({
@@ -130,7 +132,7 @@ export default function PersonalInfoTablet(Props) {
             const parentalControlSettings = {
                 smartDetectionEnabled
             }
-            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings });
+            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings, token: tokens.AccessToken });
             if (response) {
                 Props.setTablet(response);
                 messageApi.open({
@@ -168,7 +170,7 @@ export default function PersonalInfoTablet(Props) {
             const parentalControlSettings = {
                 profanityDetectionEnabled
             }
-            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings });
+            const response = await updateParentalControlSettings({ hid: Props.hid, parentalControlSettings, token: tokens.AccessToken });
             if (response) {
                 Props.setTablet(response);
                 messageApi.open({
@@ -204,17 +206,17 @@ export default function PersonalInfoTablet(Props) {
           });
         try {
             if (type === 'name') {
-                const response = await updateTablet({ hid: Props.hid, profileName: inputValue, recoveryEmail: null, pin: null});
+                const response = await updateTablet({ hid: Props.hid, profileName: inputValue, recoveryEmail: null, pin: null, token: tokens.AccessToken});
                 if (response) {
                     Props.setTablet(response);
                 }
             } else if (type === 'email') {
-                const response = await updateTablet({ hid: Props.hid, profileName: null, recoveryEmail: inputValue, pin: null});
+                const response = await updateTablet({ hid: Props.hid, profileName: null, recoveryEmail: inputValue, pin: null, token: tokens.AccessToken});
                 if (response) {
                     Props.setTablet(response);
                 }
             } else if (type === 'pin') {
-                const response = await updateTablet({ hid: Props.hid, profileName: null, recoveryEmail: null, pin: inputValue});
+                const response = await updateTablet({ hid: Props.hid, profileName: null, recoveryEmail: null, pin: inputValue, token: tokens.AccessToken});
                 if (response) {
                     Props.setTablet(response);
                 }

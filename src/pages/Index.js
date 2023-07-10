@@ -48,7 +48,12 @@ export default function Index() {
     }
 
     try {
-      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { 
+        params: params, 
+        headers: { 
+          Authorization: `Bearer ${tokens.AccessToken}` 
+        } 
+      });
       if (!response || !response.data || response.data.length === 0) {
         messageApi.open({
           key,

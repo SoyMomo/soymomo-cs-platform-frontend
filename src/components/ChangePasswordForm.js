@@ -18,9 +18,6 @@ export default function ChangePasswordForm() {
 
     async function handleSubmit() {
         setLoading(true)
-        console.log('submit')
-        console.log(email);
-        console.log(newPassword)
 
         try {
             const response = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/auth/respondToAuthChallenge', {
@@ -48,7 +45,6 @@ export default function ChangePasswordForm() {
                 setError("Your email or password is incorrect.")
             } else {
                 navigate('/')
-                console.log('success')
             }
 
         } catch (error) {

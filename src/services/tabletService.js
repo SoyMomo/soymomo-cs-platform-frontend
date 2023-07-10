@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getTablet = async (hid, token) => {
     const params = { hid };
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletByHidOrRecoveryEmail', { params }, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletByHidOrRecoveryEmail', { params, headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     if (!response.data.data) return;
@@ -13,7 +13,7 @@ export const getTablet = async (hid, token) => {
 export const getInstalledApps = async (objectId, token) => {
     const params = { objectId };
     if (!objectId) return;
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletInstalledApps', { params }, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletInstalledApps', { params, headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     if (!response.data.data) return;
@@ -31,7 +31,7 @@ export const getInstalledApps = async (objectId, token) => {
 export const getTabletUsers = async (hid, token) => {
     const params = { hid };
     if (!hid) return;
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/tabletUser/getTabletUserByHidOrRecoveryEmail', { params }, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/tabletUser/getTabletUserByHidOrRecoveryEmail', { params, headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     const data = response.data.data;
@@ -56,7 +56,7 @@ export const getDugHistory = async (dugFromDate, dugToDate, hid, token) => {
     from = from ? from.toISOString() : null;
     to = to ? to.toISOString() : null;
     const params = { hid, from, to };
-    const result = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/smartDetection/getDugHistory', { params }, { headers: { Authorization: `Bearer ${token}` } })
+    const result = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/smartDetection/getDugHistory', { params, headers: { Authorization: `Bearer ${token}` } })
     if (!result) return;
     if (!result.data) return;
     const data = result.data.data;
@@ -100,7 +100,7 @@ export const getBatteryHistory = async (hid, token) => {
     from = from.toISOString();
     let to = new Date();
     to = to.toISOString();
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/batteryInfo/getBatteryHistory', { params: { hid, from, to } }, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/batteryInfo/getBatteryHistory', { params: { hid, from, to }, headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     const data = response.data.data;
