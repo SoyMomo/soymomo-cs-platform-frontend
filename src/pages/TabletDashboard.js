@@ -144,7 +144,14 @@ export default function TabletDashboard() {
                 duration: 2,
                 });
             setPersonalInfo(tablet);
-        }).catch(console.error);
+        }).catch(() => {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Error fetching tablet!',
+                duration: 2,
+                });
+        });
     }
 
     const handleRefreshApps = () => {
@@ -161,7 +168,14 @@ export default function TabletDashboard() {
                 duration: 2,
                 });
             setAplicationsData(apps);
-        }).catch(console.error);
+        }).catch(() => {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Error fetching apps!',
+                duration: 2,
+                });
+        });
     }
 
     const handleRefreshTabletUsers = () => {
@@ -178,7 +192,14 @@ export default function TabletDashboard() {
                 duration: 2,
                 });
             setUsersData(users);
-        }).catch(console.error);
+        }).catch(() => {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Error fetching tablet users!',
+                duration: 2,
+                });
+        });
     }
 
     const handleRefreshDugHistory = () => {
@@ -204,7 +225,14 @@ export default function TabletDashboard() {
                 duration: 2,
                 });
             setDugHistory(dugHistory);
-        }).catch(console.error);
+        }).catch(() => {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: 'Error fetching DUG history!',
+                duration: 2,
+                });
+        });
     }
 
     const handleBatteryHistoryRefresh = () => {
