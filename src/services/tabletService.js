@@ -64,4 +64,16 @@ export const getDugHistory = async (dugFromDate, dugToDate, hid) => {
         }
     });
     return dugHistory
-}  
+}
+
+export const updateTablet = async ({ hid, profileName, recoveryEmail, pin }) => {
+    const body = { profileName, recoveryEmail, pin, hid };
+    const response = await axios.post('http://localhost/tablet/updateTabletUserInformation', body);
+    return response.data.data;
+}
+
+export const updateParentalControlSettings = async ({ hid, parentalControlSettings }) => {
+    const body = { hid, ...parentalControlSettings };
+    const response = await axios.post('http://localhost/tablet/updateParentalControlSettings', body);
+    return response.data.data;
+}

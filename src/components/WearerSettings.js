@@ -5,8 +5,6 @@ import WearerInfoRow from './WearerInfoRow';
 export default function WearerSettings(props) {
   const watchSettings = props.watchSettings || {};
 
-  console.log("watchSettings: ------------", watchSettings);
-
   const {
     timeZone = 'undefined',
     amPm = 'undefined',
