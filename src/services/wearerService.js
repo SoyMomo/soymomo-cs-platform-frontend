@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-export const getWearer = async (params) => {
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params });
+export const getWearer = async (params, token) => {
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params }, { headers: { Authorization: `Bearer ${token}` } });
     return response;
 }
 
-export const getContacts = async (params) => {
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getContacts', { params });
+export const getContacts = async (params, token) => {
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getContacts', { params }, { headers: { Authorization: `Bearer ${token}` } });
     let finalResponse;
     if (response.data.data) {
       finalResponse = response.data.data.map((contact) => {
@@ -17,8 +17,8 @@ export const getContacts = async (params) => {
     return finalResponse ?? [];
   }
 
-export const getWatchUsers = async (params) => {
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/watchUser/getWatchUserByEmailOrDeviceIdOrImei', { params });
+export const getWatchUsers = async (params, token) => {
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/watchUser/getWatchUserByEmailOrDeviceIdOrImei', { params }, { headers: { Authorization: `Bearer ${token}` } });
     let fetchedUsers = response.data.data.users
     const fetchedWatchUsers = response.data.data.results
     fetchedUsers = fetchedUsers.map((user) => {
@@ -32,12 +32,12 @@ export const getWatchUsers = async (params) => {
     return fetchedUsers;
   }
 
-export const getFriends = async (params, deviceId, imei) => {
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerFriends', { params });
+export const getFriends = async (params, deviceId, imei, token) => {
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerFriends', { params }, { headers: { Authorization: `Bearer ${token}` } });
     let fetchedFriends = response.data.data
     for (let i = 0; i < fetchedFriends.length; i++) {
-      const wearer1 = (await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
-      const wearer2 = (await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByObjectId', { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+      const wearer1 = (await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByObjectId', { headers: { Authorization: `Bearer ${token}` } }, { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
+      const wearer2 = (await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByObjectId', { headers: { Authorization: `Bearer ${token}` } }, { params: { objectId: fetchedFriends[i].watch2.objectId } })).data.data[0];
       if (wearer1.deviceId === deviceId || wearer1.imei === imei) {
         fetchedFriends[i].name = wearer2.firstName + " " + wearer2.lastName
         fetchedFriends[i].deviceId = wearer2.deviceId
@@ -52,8 +52,8 @@ export const getFriends = async (params, deviceId, imei) => {
     return fetchedFriends;
   }
 
-export const getChatUser = async (params) => {
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/chatUser', { params });
+export const getChatUser = async (params, token) => {
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/chatUser', { params }, { headers: { Authorization: `Bearer ${token}` } });
     const messages = response.data.data
       .filter(row => row.chatUser.type === "text")  // Filter first
       .map((row, index) => {                                // Then map
@@ -70,8 +70,8 @@ export const getChatUser = async (params) => {
     return messages;
   }
 
-  export const getChatWearer = async (params) => {
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/chatWearer', { params });
+  export const getChatWearer = async (params, token) => {
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/chatWearer', { params }, { headers: { Authorization: `Bearer ${token}` } });
     const messages = response.data.data
       .filter(row => row.chatWearer.type === "text")  // Filter first
       .map((row, index) => {                                // Then map
@@ -88,13 +88,13 @@ export const getChatUser = async (params) => {
     return messages
   }
 
-  export const getBatteryHistory = async (deviceId) => {
+  export const getBatteryHistory = async (deviceId, token) => {
     let from = new Date(); 
     from.setDate(from.getDate() - 7); 
     from = from.toISOString();
     let to = new Date();
     to = to.toISOString();
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/historyBattery', { params: { deviceId, from, to } });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/historyBattery', { params: { deviceId, from, to } }, { headers: { Authorization: `Bearer ${token}` } });
     const data = response.data.data
     return data
   }

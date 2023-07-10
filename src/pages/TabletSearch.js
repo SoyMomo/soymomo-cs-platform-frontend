@@ -32,7 +32,7 @@ export default function TabletSearch() {
             content: 'Loading...',
           });
         try {
-            const response = await getTablet(value);
+            const response = await getTablet(value, tokens.AccessToken);
             if (!response) {
                 messageApi.open({
                     key,

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export const getTablet = async (hid) => {
+export const getTablet = async (hid, token) => {
     const params = { hid };
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletByHidOrRecoveryEmail', { params });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletByHidOrRecoveryEmail', { params }, { headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     if (!response.data.data) return;
@@ -10,10 +10,10 @@ export const getTablet = async (hid) => {
     return tab;
 }
 
-export const getInstalledApps = async (objectId) => {
+export const getInstalledApps = async (objectId, token) => {
     const params = { objectId };
     if (!objectId) return;
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletInstalledApps', { params });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/getTabletInstalledApps', { params }, { headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     if (!response.data.data) return;
@@ -28,10 +28,10 @@ export const getInstalledApps = async (objectId) => {
     return apps;
 }
 
-export const getTabletUsers = async (hid) => {
+export const getTabletUsers = async (hid, token) => {
     const params = { hid };
     if (!hid) return;
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/tabletUser/getTabletUserByHidOrRecoveryEmail', { params });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/tabletUser/getTabletUserByHidOrRecoveryEmail', { params }, { headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     const data = response.data.data;
@@ -50,13 +50,13 @@ export const getTabletUsers = async (hid) => {
     return users
 }
 
-export const getDugHistory = async (dugFromDate, dugToDate, hid) => {
+export const getDugHistory = async (dugFromDate, dugToDate, hid, token) => {
     let from = dugFromDate ? new Date(dugFromDate) : null;
     let to = dugToDate ? new Date(dugToDate) : null;
     from = from ? from.toISOString() : null;
     to = to ? to.toISOString() : null;
     const params = { hid, from, to };
-    const result = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/smartDetection/getDugHistory', { params })
+    const result = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/smartDetection/getDugHistory', { params }, { headers: { Authorization: `Bearer ${token}` } })
     if (!result) return;
     if (!result.data) return;
     const data = result.data.data;
@@ -78,29 +78,29 @@ export const getDugHistory = async (dugFromDate, dugToDate, hid) => {
     return dugHistory
 }
 
-export const updateTablet = async ({ hid, profileName, recoveryEmail, pin }) => {
+export const updateTablet = async ({ hid, profileName, recoveryEmail, pin, token}) => {
     const body = { profileName, recoveryEmail, pin, hid };
-    const response = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/tablet/updateTabletUserInformation', body);
+    const response = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/tablet/updateTabletUserInformation', body, { headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     return response.data.data;
 }
 
-export const updateParentalControlSettings = async ({ hid, parentalControlSettings }) => {
+export const updateParentalControlSettings = async ({ hid, parentalControlSettings, token }) => {
     const body = { hid, ...parentalControlSettings };
-    const response = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/tablet/updateParentalControlSettings', body);
+    const response = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/tablet/updateParentalControlSettings', body, { headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     return response.data.data;
 }  
 
-export const getBatteryHistory = async (hid) => {
+export const getBatteryHistory = async (hid, token) => {
     let from = new Date(); 
     from.setDate(from.getDate() - 7); 
     from = from.toISOString();
     let to = new Date();
     to = to.toISOString();
-    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/batteryInfo/getBatteryHistory', { params: { hid, from, to } });
+    const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/tablet/batteryInfo/getBatteryHistory', { params: { hid, from, to } }, { headers: { Authorization: `Bearer ${token}` } });
     if (!response) return;
     if (!response.data) return;
     const data = response.data.data;

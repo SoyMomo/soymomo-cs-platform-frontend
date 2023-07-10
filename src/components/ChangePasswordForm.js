@@ -23,7 +23,7 @@ export default function ChangePasswordForm() {
         console.log(newPassword)
 
         try {
-            const response = await axios.post('http://localhost:8080/auth/respondToAuthChallenge', {
+            const response = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/auth/respondToAuthChallenge', {
                 challengeName: 'NEW_PASSWORD_REQUIRED',
                 challengeResponses: {
                     USERNAME: email, // assuming `email` is in scope
@@ -39,7 +39,7 @@ export default function ChangePasswordForm() {
             }
 
             // Login again with the new password
-            const signInResponse = await axios.post('http://localhost:8080/login', {
+            const signInResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/login', {
                 email,
                 password: newPassword,
             });

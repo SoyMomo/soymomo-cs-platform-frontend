@@ -54,7 +54,7 @@ export default function WearerDashboard() {
       params = { imei };
     }
 
-    getWearer(params).then((response) => {
+    getWearer(params, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.data.length === 0) {
         navigate('/not-found');
         return;
@@ -63,15 +63,15 @@ export default function WearerDashboard() {
       setWatchSettings(response.data.includes[0].settings);
     }).catch(console.error);
 
-    getContacts(params).then((response) => {
+    getContacts(params, tokens.AccessToken).then((response) => {
       setContacts(response);
     });
     
-    getWatchUsers(params).then((response) => {
+    getWatchUsers(params, tokens.AccessToken).then((response) => {
       setUsers(response);
     }).catch(console.error);
 
-  }, [query, navigate])
+  }, [query, navigate, tokens])
 
   useEffect(() => {
     const deviceId = query.get('deviceId');
@@ -82,10 +82,10 @@ export default function WearerDashboard() {
     } else if (imei) {
       params = { imei };
     }
-    getFriends(params, deviceId, imei).then((response) => {
+    getFriends(params, deviceId, imei, tokens.AccessToken).then((response) => {
       setFriendData(response);
     });
-  }, [query, wearer])
+  }, [query, wearer, tokens])
 
   const handleContactRefresh = () => {
     messageApi.open({
@@ -94,7 +94,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getContacts(params).then((response) => {
+    getContacts(params, tokens.AccessToken).then((response) => {
       messageApi.open({
         key,
         type: 'success',
@@ -119,7 +119,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getWatchUsers(params).then((response) => {
+    getWatchUsers(params, tokens.AccessToken).then((response) => {
       messageApi.open({
         key,
         type: 'success',
@@ -144,7 +144,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getFriends(params, params.deviceId, params.imei).then((response) => {
+    getFriends(params, params.deviceId, params.imei, tokens.AccessToken).then((response) => {
       messageApi.open({
         key,
         type: 'success',
@@ -172,11 +172,11 @@ export default function WearerDashboard() {
     } else if (imei) {
       params = { imei };
     }
-    getChatUser(params).then((response) => {
+    getChatUser(params, tokens.AccessToken).then((response) => {
       setUserMessageData(response);
     }).catch(console.error);
   
-  }, [query, wearer])
+  }, [query, wearer, tokens])
 
   useEffect(() => {
     const deviceId = query.get('deviceId');
@@ -187,20 +187,20 @@ export default function WearerDashboard() {
     } else if (imei) {
       params = { imei };
     }
-    getChatWearer(params).then((response) => {
+    getChatWearer(params, tokens.AccessToken).then((response) => {
       setFriendMessageData(response);
     }).catch(console.error);
-  }, [query, wearer])
+  }, [query, wearer, tokens])
 
   useEffect(() => {
     if (wearer) {
       if (wearer.deviceId) {
-        getBatteryHistory(wearer.deviceId).then((response) => {
+        getBatteryHistory(wearer.deviceId, tokens.AccessToken).then((response) => {
           setBatteryHistory(response);
         }).catch(console.error);
       }
     }
-  }, [query, wearer])
+  }, [query, wearer, tokens])
 
   const handleChatUserRefresh = () => {
     messageApi.open({
@@ -209,7 +209,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getChatUser(params).then((response) => {
+    getChatUser(params, tokens.AccessToken).then((response) => {
       messageApi.open({
         key,
         type: 'success',
@@ -234,7 +234,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getChatWearer(params).then((response) => {
+    getChatWearer(params, tokens.AccessToken).then((response) => {
       messageApi.open({
         key,
         type: 'success',
@@ -260,7 +260,7 @@ export default function WearerDashboard() {
     });
     if (wearer) {
       if (wearer.deviceId) {
-        getBatteryHistory(wearer.deviceId).then((response) => {
+        getBatteryHistory(wearer.deviceId, tokens.AccessToken).then((response) => {
           messageApi.open({
             key,
             type: 'success',
@@ -306,7 +306,7 @@ export default function WearerDashboard() {
     }
 
     try {
-      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params });
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByDeviceIdOrImei', { params }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
       if (!response || !response.data || response.data.length === 0) {
         messageApi.open({
           key,
@@ -348,7 +348,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
 
-    getWearer(params).then((response) => {
+    getWearer(params, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.data.length === 0) {
         messageApi.open({
           key,

@@ -21,7 +21,7 @@ export default function LoginForm() {
         setError(null);
         try {
             const response = await axios.post(
-                "http://localhost:8080/auth/login",
+                process.env.REACT_APP_BACKEND_HOST + "/auth/login",
                 {
                     email,
                     password,

@@ -47,41 +47,41 @@ export default function TabletDashboard() {
             navigate('/404');
             return
         } else {
-            getTablet(hid).then((tablet) => {
+            getTablet(hid, tokens.AccessToken).then((tablet) => {
                 if (!tablet) navigate('/404');
                 setTablet(tablet);
             }).catch(() => {
             });
         }
-    }, [query, navigate])
+    }, [query, navigate, tokens])
 
     useEffect(() => {
         if (tablet) {
             setPersonalInfo(tablet);
 
-            getTabletUsers(tablet.hid).then((users) => {
+            getTabletUsers(tablet.hid, tokens.AccessToken).then((users) => {
                 setUsersData(users);
             }).catch(console.error);
 
-            getInstalledApps(tablet.objectId).then((apps) => {
+            getInstalledApps(tablet.objectId, tokens.AccessToken).then((apps) => {
                 setAplicationsData(apps);
             }).catch(console.error);
         }
-    }, [tablet])
+    }, [tablet, tokens])
 
     useEffect(() => {
         if (tablet) {
             if (dugFromDate !== null && dugToDate !== null) {
-                getDugHistory(dugFromDate, dugToDate, tablet.hid).then((dugHistory) => {
+                getDugHistory(dugFromDate, dugToDate, tablet.hid, tokens.AccessToken).then((dugHistory) => {
                     setDugHistory(dugHistory);
                 }).catch(console.error);
             }
         }
-    }, [dugFromDate, dugToDate, tablet, messageApi])
+    }, [dugFromDate, dugToDate, tablet, messageApi, tokens])
 
     useEffect(() => {
         if (tablet && tablet.hid) {
-            getBatteryHistory(tablet.hid).then((batteryHistory) => {
+            getBatteryHistory(tablet.hid, tokens.AccessToken).then((batteryHistory) => {
                 setBatteryHistory(batteryHistory);
             }).catch(() => {
                 messageApi.open({
@@ -92,7 +92,7 @@ export default function TabletDashboard() {
                 });
             });
         }
-    }, [tablet, messageApi])
+    }, [tablet, messageApi, tokens])
 
 
 
@@ -105,7 +105,7 @@ export default function TabletDashboard() {
             content: 'Loading...',
         });
         try {
-            const response = await getTablet(value);
+            const response = await getTablet(value, tokens.AccessToken);
             if (!response) {
                 messageApi.open({
                     key,
@@ -141,7 +141,7 @@ export default function TabletDashboard() {
             type: 'loading',
             content: 'Loading...',
         });
-        getTablet(tablet.hid).then((tablet) => {
+        getTablet(tablet.hid, tokens.AccessToken).then((tablet) => {
             messageApi.open({
                 key,
                 type: 'success',
@@ -165,7 +165,7 @@ export default function TabletDashboard() {
             type: 'loading',
             content: 'Loading...',
         });
-        getInstalledApps(tablet.objectId).then((apps) => {
+        getInstalledApps(tablet.objectId, tokens.AccessToken).then((apps) => {
             messageApi.open({
                 key,
                 type: 'success',
@@ -189,7 +189,7 @@ export default function TabletDashboard() {
             type: 'loading',
             content: 'Loading...',
         });
-        getTabletUsers(tablet.hid).then((users) => {
+        getTabletUsers(tablet.hid, tokens.AccessToken).then((users) => {
             messageApi.open({
                 key,
                 type: 'success',
@@ -222,7 +222,7 @@ export default function TabletDashboard() {
             });
             return;
         }
-        getDugHistory(dugFromDate, dugToDate, tablet.hid).then((dugHistory) => {
+        getDugHistory(dugFromDate, dugToDate, tablet.hid, tokens.AccessToken).then((dugHistory) => {
             messageApi.open({
                 key,
                 type: 'success',
@@ -246,7 +246,7 @@ export default function TabletDashboard() {
             type: 'loading',
             content: 'Loading...',
         });
-        getBatteryHistory(tablet.hid).then((batteryHistory) => {
+        getBatteryHistory(tablet.hid, tokens.AccessToken).then((batteryHistory) => {
             messageApi.open({
                 key,
                 type: 'success',
