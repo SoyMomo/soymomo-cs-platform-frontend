@@ -1,22 +1,24 @@
 import * as React from 'react';
+import styles from '../styles/AppVersionsCard.module.css';
 
 export default function AppVersionsCard(props) {
 
   return (
-    <div className="flex flex-col bg-white rounded-md shadow-md p-4 mb-4 w-full">
-        <p className="text-sm text-start text-[#603BB0] font-bold">Últimas versiones de software</p>
-        <div className="flex space-x-2">
-            <div className="flex bg-white rounded-md shadow-md p-4 my-2 w-full space-x-2">
+    <div className={styles.softVerCont}>
+        <p className={`${styles.text} ${styles.bold}`}>Últimas versiones de software</p>
+        <div className={styles.secondRow}>
+            <div className={styles.miniCard}>
                 <img src="/images/cs-AndroidIcon.svg" alt="SoyMomo Icon" />
-                <p className="text-sm text-start text-[#603BB0] font-bold">Version: </p>
-                <p className="text-sm text-start text-[#603BB0]">{props.versionAndroid}</p>
+                <p className={`${styles.text} ${styles.bold}`}>Version: </p>
+                <p className={styles.text}>{props.versionAndroid}</p>
             </div>
-            <div className="flex bg-white rounded-md shadow-md p-4 my-2 w-full space-x-2">
+            <div className={styles.miniCard}>
                 <img src="/images/cs-AppleIcon.svg" alt="SoyMomo Icon" />
-                <p className="text-sm text-start text-[#603BB0] font-bold">Version: </p>
-                <p className="text-sm text-start text-[#603BB0]">{props.versionApple}</p>
+                <p className={`${styles.text} ${styles.bold}`}>Version: </p>
+                <p className={styles.text}>{props.versionApple}</p>
             </div>
         </div>
     </div>
   );
 }
+

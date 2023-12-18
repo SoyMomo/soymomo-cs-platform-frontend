@@ -3,6 +3,7 @@ import TextField from "./TextField"
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Cookies from 'js-cookie';
+import styles from "../styles/ChangePasswordForm.module.css"
 
 export default function ChangePasswordForm() {
     const navigate = useNavigate();
@@ -57,7 +58,7 @@ export default function ChangePasswordForm() {
     return (
         <div>
             {error && (
-                <span className="block w-full px-4 py-2 mt-6 text-white bg-red-500 rounded-3xl font-poppins">
+                <span className={styles.errorContainer}>
                     {error}
                 </span>
             )}
@@ -66,7 +67,7 @@ export default function ChangePasswordForm() {
             <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className={`w-full px-4 py-2 mt-6 text-white bg-[#3CB5C7] hover:bg-cyan-600 rounded-3xl font-poppins`}
+                className={styles.submitBtn}
             >
                 {loading ? 'Loading...' : 'Change password'}
             </button>
