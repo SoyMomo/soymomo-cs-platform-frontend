@@ -2,6 +2,8 @@ import { Modal, Input, Button, message } from 'antd';
 import { useState } from 'react';
 import { useAuth } from "../authContext";
 import { updateTablet, updateParentalControlSettings } from '../services/tabletService';
+import styles from '../styles/personalInfoTablet.module.css'
+import sharedStyles from '../styles/Common.module.css'
 
 const tableHeaderStyle = {
     padding: '12px 16px',
@@ -254,13 +256,13 @@ export default function PersonalInfoTablet(Props) {
         ]}>
             <Input value={inputValue} onChange={e => setInputValue(e.target.value)} />
         </Modal>
-        <div style={{ backgroundColor: '#fff', borderRadius: '0.5rem', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', padding: '1rem', marginBottom: '0.625rem', Width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '1rem' }}>
+        <div className={styles.generalContainer}>
+            <div className={sharedStyles.cardSubContainer}>
+                <div className={sharedStyles.flexCenter}>
+                    <div className={sharedStyles.imgContainer}>
                         <img src="/images/tableIcons/cs-infoPrincipal.svg" width={23} height={23} alt='SoyMomo Logo' />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div className={sharedStyles.flexAndCol}>
                         <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#603BB0', marginLeft: '0.75rem' }}>Datos personales</h1>
                         <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>Tablet</p>
                     </div>
