@@ -5,7 +5,7 @@ import sharedStyles from '../styles/Common.module.css'
 export default function WearerBatteryHistory(Props) {
 
     return (
-        <div className={styles.container}>
+        <div className={styles.generalContainer}>
             <div className={sharedStyles.cardSubContainer}>
                 <div className={sharedStyles.flexCenter}>
                     <div className={styles.iconContainer}>

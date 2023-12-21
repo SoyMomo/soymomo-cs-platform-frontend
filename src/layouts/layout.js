@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
   ClockCircleOutlined,
-  TabletOutlined
+  TabletOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useNavigate } from   "react-router-dom";
@@ -41,6 +42,14 @@ export default function MainLayout(props) {
         style: { color: 'white' },
       })
   }
+  items.push(
+    {
+      key: '3',
+      icon: React.createElement(LogoutOutlined),
+      label: 'Cerrar Sesión',
+      style: { color: 'white' },
+    }
+  )
     
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -49,6 +58,9 @@ export default function MainLayout(props) {
         navigate('/');
     } else if (e.key === '2') {
         navigate('/tablet');
+    } else if (e.key === '3') {
+        window.localStorage.removeItem('tokens');
+        navigate('/login')
     }
   };
   

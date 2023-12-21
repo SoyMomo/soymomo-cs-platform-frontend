@@ -1,6 +1,6 @@
 /* WearerBatteryHistory.module.css */
 .generalContainer {
-  @apply bg-white rounded-md shadow-md p-4 mb-4 max-w-full overflow-auto scrollbar-dark;
+  @apply bg-white rounded-md shadow-md p-4 mb-4 max-w-full overflow-auto;
 }
 
 .iconContainer {
