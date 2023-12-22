@@ -2,7 +2,7 @@
 # exit on error
 set -o errexit
 
-export REACT_APP_BACKEND_HOST="https://customerservice.soymomo.io"
+export REACT_APP_BACKEND_HOST="https://csapi.soymomo.io"
 export FAST_REFRESH=false
 
 npm run build

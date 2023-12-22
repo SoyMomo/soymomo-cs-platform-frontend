@@ -1,5 +1,4 @@
 import * as React from 'react';
-import styles from '../styles/CardHeader.module.css';
 import sharedStyles from '../styles/Common.module.css'
 
 export default function CardHeader(props) {
@@ -18,8 +17,8 @@ export default function CardHeader(props) {
                         <p className={sharedStyles.iconSubTitle}>{props.subtitle}</p>
                     </div>
                 </div>
-                <div onClick={props.handleRefresh} className={styles.refreshBtn}>
-                    <img src="/images/tableIcons/cs-refreshIcon.svg" className={styles.refreshImg} alt='Refresh Logo' />
+                <div onClick={props.handleRefresh} className={sharedStyles.refreshContainer}>
+                    <img src="/images/tableIcons/cs-refreshIcon.svg" className={sharedStyles.refreshImg} alt='Refresh Logo' />
                 </div>
             </div>
             <div className={sharedStyles.metaData}>

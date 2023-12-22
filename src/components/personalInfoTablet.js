@@ -5,19 +5,6 @@ import { updateTablet, updateParentalControlSettings } from '../services/tabletS
 import styles from '../styles/personalInfoTablet.module.css'
 import sharedStyles from '../styles/Common.module.css'
 
-const tableHeaderStyle = {
-    padding: '12px 16px',
-    backgroundColor: '#f0f0f0',
-    fontWeight: 'bold',
-    textAlign: 'left',
-    borderBottom: '1px solid #e8e8e8',
-};
-
-const tableCellStyle = {
-    padding: '10px 16px',
-    borderBottom: '1px solid #e8e8e8',
-    textAlign: 'left',
-};
 
 export default function PersonalInfoTablet(Props) {
     const personalInfo = Props.personalInfo;
@@ -250,7 +237,7 @@ export default function PersonalInfoTablet(Props) {
           <Button key="back" onClick={handleCancel}>
             Return
           </Button>,
-          <Button key="submit" type="primary" style={{backgroundColor: 'blue', color: 'white'}} onClick={handleOk}>
+          <Button key="submit" type="primary" style={styles.submitBtn} onClick={handleOk}>
             OK
           </Button>,
         ]}>
@@ -263,110 +250,110 @@ export default function PersonalInfoTablet(Props) {
                         <img src="/images/tableIcons/cs-infoPrincipal.svg" width={23} height={23} alt='SoyMomo Logo' />
                     </div>
                     <div className={sharedStyles.flexAndCol}>
-                        <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#603BB0', marginLeft: '0.75rem' }}>Datos personales</h1>
-                        <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>Tablet</p>
+                        <h1 style={styles.title}>Datos personales</h1>
+                        <p style={styles.subtitle}>Tablet</p>
                     </div>
                 </div>
-                <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }} onClick={Props.handleRefresh}>
-                    <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
+                <div style={sharedStyles.refreshContainer} onClick={Props.handleRefresh}>
+                    <img src="/images/tableIcons/cs-refreshIcon.svg" style={sharedStyles.refreshImg} alt='SoyMomo Logo' />
                 </div>
             </div>
-            <div style={{ maxWidth: '100%', marginTop: '0.75rem', display: "flex", flexWrap: 'wrap' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div style={styles.tableContainer}>
+                <table style={styles.table}>
                     <thead>
                         <tr>
-                            <th style={tableHeaderStyle}>Datos principales</th>
-                            <th style={tableHeaderStyle}></th>
-                            <th style={tableHeaderStyle}>Acciones</th>
+                            <th style={styles.tableHeaderStyle}>Datos principales</th>
+                            <th style={styles.tableHeaderStyle}></th>
+                            <th style={styles.tableHeaderStyle}>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style={tableCellStyle}>Nombre:</td>
-                            <td style={tableCellStyle}>{personalInfo.profileName}</td>
-                            <td style={tableCellStyle}><button onClick={handleName} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
+                            <td style={styles.tableCellStyle}>Nombre:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.profileName}</td>
+                            <td style={styles.tableCellStyle}><button onClick={handleName} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Email de recuperación:</td>
-                            <td style={tableCellStyle}>{personalInfo.recoveryEmail}</td>
-                            <td style={tableCellStyle}><button onClick={handleEmail} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
+                            <td style={styles.tableCellStyle}>Email de recuperación:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.recoveryEmail}</td>
+                            <td style={styles.tableCellStyle}><button onClick={handleEmail} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>PIN:</td>
-                            <td style={tableCellStyle}>{personalInfo.pin}</td>
-                            <td style={tableCellStyle}><button onClick={handlePin} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
+                            <td style={styles.tableCellStyle}>PIN:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.pin}</td>
+                            <td style={styles.tableCellStyle}><button onClick={handlePin} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Modelo de Tablet</td>
-                            <td style={tableCellStyle}>{personalInfo.hardwareModel}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>Modelo de Tablet</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.hardwareModel}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Versión software</td>
-                            <td style={tableCellStyle}>{personalInfo.versionName}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>Versión software</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.versionName}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr>
                         {/* <tr>
-                            <td style={tableCellStyle}>País</td>
-                            <td style={tableCellStyle}>{personalInfo.country}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>País</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.country}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr> */}
                         <tr>
-                            <td style={tableCellStyle}>Navegación internet:</td>
-                            <td style={tableCellStyle}>{personalInfo.browserAllowed ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleInternetNavigation} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td style={styles.tableCellStyle}>Navegación internet:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.browserAllowed ? "Si" : "No"}</td>
+                            <td style={styles.tableCellStyle}><button onClick={handleInternetNavigation} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Bloqueo remoto:</td>
-                            <td style={tableCellStyle}>{personalInfo.remoteBlocked ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleRemoteBlocked} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td style={styles.tableCellStyle}>Bloqueo remoto:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.remoteBlocked ? "Si" : "No"}</td>
+                            <td style={styles.tableCellStyle}><button onClick={handleRemoteBlocked} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Algoritmo de detección:</td>
-                            <td style={tableCellStyle}>{personalInfo.smartDetectionEnabled ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleDetectionAlgorithm} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td style={styles.tableCellStyle}>Algoritmo de detección:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.smartDetectionEnabled ? "Si" : "No"}</td>
+                            <td style={styles.tableCellStyle}><button onClick={handleDetectionAlgorithm} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Detección de cyberbulling:</td>
-                            <td style={tableCellStyle}>{personalInfo.profanityDetectionEnabled ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleCyberbullying} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td style={styles.tableCellStyle}>Detección de cyberbulling:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.profanityDetectionEnabled ? "Si" : "No"}</td>
+                            <td style={styles.tableCellStyle}><button onClick={handleCyberbullying} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Ingreso a BD:</td>
+                            <td style={styles.tableCellStyle}>Ingreso a BD:</td>
 
-                            <td style={tableCellStyle}>{personalInfo.updatedAt}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>{personalInfo.updatedAt}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Última modificación:</td>
-                            <td style={tableCellStyle}>{personalInfo.updatedAt}</td>
+                            <td style={styles.tableCellStyle}>Última modificación:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.updatedAt}</td>
 
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr>
                         {/* <tr>
-                            <td style={tableCellStyle}>Último envío de Stats:</td>
-                            <td style={tableCellStyle}>{personalInfo.lastStats}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>Último envío de Stats:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.lastStats}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr> */}
                         <tr>
-                            <td style={tableCellStyle}>Cumpleaños:</td>
-                            <td style={tableCellStyle}>{personalInfo.kidBirthday?.iso ?? "Not data"}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>Cumpleaños:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.kidBirthday?.iso ?? "Not data"}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Fabricante hardware:</td>
-                            <td style={tableCellStyle}>{personalInfo.hardwareManufacturer}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>Fabricante hardware:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.hardwareManufacturer}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Brand de hardware:</td>
-                            <td style={tableCellStyle}>{personalInfo.hardwareBrand}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>Brand de hardware:</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.hardwareBrand}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr>
                         {/* <tr>
-                            <td style={tableCellStyle}>Salud de la batería</td>
-                            <td style={tableCellStyle}>{personalInfo.battery}</td>
-                            <td style={tableCellStyle}></td>
+                            <td style={styles.tableCellStyle}>Salud de la batería</td>
+                            <td style={styles.tableCellStyle}>{personalInfo.battery}</td>
+                            <td style={styles.tableCellStyle}></td>
                         </tr> */}
 
                     </tbody>

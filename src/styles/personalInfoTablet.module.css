@@ -5,3 +5,31 @@
 .imgContainer {
     @apply bg-[#603BB0] rounded-xl p-4
 }
+
+.title {
+    @apply text-xl font-bold text-[#603BB0] ml-3;
+}
+
+.subtitle {
+    @apply text-base text-[#603BB0] self-start ml-3;
+}
+
+.tableContainer {
+    @apply max-w-full mt-3 flex flex-wrap;
+}
+
+.table {
+    @apply w-full border-collapse;
+}
+
+.tableHeaderStyle {
+    @apply px-4 py-3 bg-[#f0f0f0] font-bold text-left border-b border-[#e8e8e8];
+}
+
+.tableCellStyle {
+    @apply px-4 py-2 border-b border-[#e8e8e8] text-left;
+}
+
+.submitBtn {
+    @apply bg-blue-500 text-white;
+}
