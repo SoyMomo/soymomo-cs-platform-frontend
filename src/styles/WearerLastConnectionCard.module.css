@@ -1,0 +1,12 @@
+/* WearerLastConnectionCard.module.css */
+.textContainer {
+    @apply bg-purple-custom3 rounded-md shadow-sm p-4 w-full;
+}
+  
+.text {
+    @apply text-sm text-start text-white;
+}
+  
+.variable {
+    @apply text-white font-bold;
+}

@@ -4,6 +4,7 @@ import { useAuth } from "../authContext";
 import { updateTablet, updateParentalControlSettings } from '../services/tabletService';
 import styles from '../styles/personalInfoTablet.module.css'
 import sharedStyles from '../styles/Common.module.css'
+import formatISODate from '../utils/formater';
 
 
 export default function PersonalInfoTablet(Props) {
@@ -337,7 +338,7 @@ export default function PersonalInfoTablet(Props) {
                         </tr> */}
                         <tr>
                             <td style={styles.tableCellStyle}>Cumpleaños:</td>
-                            <td style={styles.tableCellStyle}>{personalInfo.kidBirthday?.iso ?? "Not data"}</td>
+                            <td style={styles.tableCellStyle}>{formatISODate(personalInfo.kidBirthday?.iso) ?? "No data"}</td>
                             <td style={styles.tableCellStyle}></td>
                         </tr>
                         <tr>

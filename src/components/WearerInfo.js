@@ -1,6 +1,8 @@
 import * as React from 'react';
 import CardHeader from './CardHeader';
 import WearerInfoRow from './WearerInfoRow';
+import formatISODate from '../utils/formater';
+
 
 export default function WearerInfo(props) {
   const wearer = props.wearer || {};
@@ -43,8 +45,8 @@ export default function WearerInfo(props) {
       />
       <WearerInfoRow
         iconSrc="/images/cs-wearerInfoCalendar.svg"
-        label="Últimas actualización coordenadas"
-        value={lastLocationTime?.iso} // You might need to format this date
+        label="Última actualización coordenadas"
+        value={formatISODate(lastLocationTime?.iso)}
       />
       <WearerInfoRow
         iconSrc="/images/cs-wearerInfoGps.svg"
@@ -59,7 +61,7 @@ export default function WearerInfo(props) {
       <WearerInfoRow
         iconSrc="/images/cs-wearerInfoConnection.svg"
         label="Última conexión"
-        value={lastTKQ?.iso}
+        value={formatISODate(lastTKQ?.iso)}
       />
       <WearerInfoRow
         iconSrc="/images/cs-wearerInfoSaveBattery.svg"
