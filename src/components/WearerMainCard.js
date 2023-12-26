@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './WearerMainCard.module.css';
+import styles from '../styles/WearerMainCard.module.css';
 
 
 export default function WearerMainCard(props) {

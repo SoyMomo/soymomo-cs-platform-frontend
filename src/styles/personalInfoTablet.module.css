@@ -33,3 +33,11 @@
 .submitBtn {
     @apply bg-blue-500 text-white;
 }
+
+.modBtn {
+    @apply rounded-2xl bg-gray-300 text-[#22478E] p-1 mt-2 w-24;
+}
+
+.deactivateBtn {
+    @apply rounded-2xl bg-red-500 text-white p-1 mt-2 w-24;
+}

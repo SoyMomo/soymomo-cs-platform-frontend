@@ -17,7 +17,7 @@ export default function WearerBatteryHistory(Props) {
                     </div>
                 </div>
                 <div onClick={Props.handleRefresh} className={sharedStyles.refreshContainer}>
-                    <img src="/images/tableIcons/cs-refreshIcon.svg" style={sharedStyles.refreshImg} alt='SoyMomo Logo' />
+                    <img src="/images/tableIcons/cs-refreshIcon.svg" className={sharedStyles.refreshImg} alt='SoyMomo Logo' />
                 </div>
             </div>
             <div className={styles.chartContainer}>
