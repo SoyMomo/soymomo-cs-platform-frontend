@@ -28,6 +28,7 @@ jobs:
       
       - name: Deploy to GH Pages
         run: |
+          git pull origin
           git subtree push --prefix build origin gh-deploy
 
       # - name: Deploy to AWS S3
