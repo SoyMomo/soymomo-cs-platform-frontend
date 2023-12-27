@@ -19,6 +19,18 @@ jobs:
       #     aws-access-key-id: $ {{ secrets.AWS_ACCESS_KEY }}
       #     aws-secret-access-key: $ {{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     aws-region: us-east-1
+
+      - name: Checkout to pre_deploy branch
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com" \
+          && git config --global user.name "github-actions[bot]" \
+          && git config --global credential.helper store \
+          && echo 'https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com' > ~/.git-credentials \
+          && git pull \
+          && git fetch origin gh-deploy:gh-deploy \
+          && git checkout pre_deploy \
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
       - name: Build static website
         run: |
@@ -28,9 +40,11 @@ jobs:
       
       - name: Deploy to GH Pages
         run: |
-          git fetch origin gh-deploy:gh-deploy
-          git subtree push --prefix build origin gh-deploy --force
-        # OJO Ver el --force
+          git add . \
+          && git commit -m"build: building website" \
+          && git push origin pre_deploy
+          && git subtree push --prefix build origin gh-deploy
+        
 
       # - name: Deploy to AWS S3
       #   run: |
