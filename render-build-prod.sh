@@ -6,3 +6,4 @@ export REACT_APP_BACKEND_HOST="https://csapi.soymomo.io"
 export FAST_REFRESH=false
 
 npm run build
+cp ./build/index.html ./build/404.html
