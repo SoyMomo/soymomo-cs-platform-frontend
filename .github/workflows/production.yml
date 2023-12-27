@@ -28,15 +28,9 @@ jobs:
       
       - name: Deploy to GH Pages
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com" \
-          && git config --global user.name "github-actions[bot]" \
-          && echo 'https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com' > ~/.git-credentials \
-          && git fetch origin gh-deploy:gh-deploy \
-          && git add . \
-          && git commit -m"build: Building website" \
-          && git subtree push --prefix build origin gh-deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git fetch origin gh-deploy:gh-deploy
+          git subtree push --prefix build origin gh-deploy --force
+        # OJO Ver el --force
 
       # - name: Deploy to AWS S3
       #   run: |
