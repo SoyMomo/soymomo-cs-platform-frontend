@@ -16,13 +16,15 @@ jobs:
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
     
       - name: Build static website
         run: |
-          ./render-build-prod.sh
+          export REACT_APP_BACKEND_HOST=${{secrets.REACT_APP_BACKEND_HOST}} &&
+          export FAST_REFRESH=$FAST_REFRESH &&
+          ./render-build-cd.sh
 
       - name: Deploy to AWS S3
         run: |
