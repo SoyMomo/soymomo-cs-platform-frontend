@@ -1,14 +1,15 @@
+import styles from '../styles/DugHistoryCard.module.css';
+
 export default function DugHistoryCard(Props) {
     return (
-        <div style={{ maxWidth: '200px', margin: '0 auto', padding: '1rem' }}>
-            <div style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
-                <img src={Props.image} alt="Card" style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }} />
+        <div className={styles.generalContainer}>
+            <div className={styles.imageContainer}>
+                <img src={Props.image} alt="Card" className={styles.image} />
             </div>
-            <div style={{ padding: '1rem' }}>
-                <p style={{ margin: '0', fontWeight: 'bold' }}>Categoria: {Props.category}</p>
-                <p style={{ margin: '0', color: 'gray' }}>Detectado en {Props.app} el día {Props.date} a las {Props.time}</p>
+            <div className={styles.textContainer}>
+                <p className={styles.category}>Categoria: {Props.category}</p>
+                <p className={styles.date}>Detectado en {Props.app} el día {Props.date} a las {Props.time}</p>
             </div>
         </div>
     )
-
 }

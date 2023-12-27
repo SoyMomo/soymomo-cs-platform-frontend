@@ -1,3 +1,6 @@
+import styles from '../styles/TextField.module.css'
+
+
 export default function TextField(props) {
     // const [value, setValue] = useState('')
     const handleChange = (e) => {
@@ -6,8 +9,7 @@ export default function TextField(props) {
 
     return (
         <input
-            className="mt-6 w-full px-4 py-3 rounded-xl border-[#603BB0] border-2 focus:outline-none 
-            pla focus:border-[#603BB0] text-[#603BB0] placeholder-[#D8CEEE]"
+            className={styles.textField}
             type={props.type}
             placeholder={props.label}
             value={props.value}

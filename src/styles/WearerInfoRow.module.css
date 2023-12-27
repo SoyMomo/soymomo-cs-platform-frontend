@@ -1,0 +1,16 @@
+/* WearerInfoRow.module.css */
+.generalContainer {
+    @apply flex items-center space-x-2;
+}
+
+.textContainer {
+    @apply flex justify-between w-full;
+}
+
+.title {
+    @apply text-purple-700 font-semibold;
+}
+
+.subTitle {
+    @apply text-purple-700;
+}

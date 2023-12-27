@@ -1,13 +1,13 @@
 import * as React from 'react';
+import styles from '../styles/WearerInfoRow.module.css';
 
-export default function WearerInfoRow({ iconSrc, label, value }){
-
+export default function WearerInfoRow({ iconSrc, label, value }) {
     return (
-        <div className="flex items-center space-x-2">
+        <div className={styles.generalContainer}>
             <img src={iconSrc} alt={`${label} Icon`} />
-            <div className="flex justify-between w-full">
-                <h3 className="text-purple-700 font-semibold">{label}:</h3>
-                <p className='text-purple-700'>{value}</p>
+            <div className={styles.textContainer}>
+                <h3 className={styles.title}>{label}:</h3>
+                <p className={styles.subTitle}>{value}</p>
             </div>
         </div>
     )

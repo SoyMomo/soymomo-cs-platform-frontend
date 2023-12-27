@@ -1,5 +1,7 @@
 import * as React from 'react';
 import CardHeader from './CardHeader';
+import styles from '../styles/WearerLastConnectionCard.module.css'
+import formatISODate from '../utils/formater';
 
 export default function WearerLastConnectionCard(props) {
   const lastTKQ = props.lastTKQ || { iso: '' };
@@ -10,8 +12,8 @@ export default function WearerLastConnectionCard(props) {
       subtitle={props.subtitle}
       handleRefresh={props.handleRefresh}
     >
-        <div className="bg-purple-custom3 rounded-md shadow-sm p-4 w-full">
-            <p className="text-sm text-start text-white">Este imei se encuentra activo hasta: <span className='text-white font-bold'>{lastTKQ?.iso}</span></p>
+        <div className={styles.textContainer}>
+            <p className={styles.text}>Este imei se encuentra activo hasta: <span className={styles.variable}>{formatISODate(lastTKQ?.iso)}</span></p>
         </div>
     </CardHeader>
   );
