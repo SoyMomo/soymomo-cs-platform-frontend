@@ -28,9 +28,16 @@ jobs:
       
       - name: Deploy to GH Pages
         run: |
+<<<<<<< HEAD
           git pull origin
+=======
+>>>>>>> e22a6aa (feat: se cambia el CD a GH en vez de S3)
           git subtree push --prefix build origin gh-deploy
 
       # - name: Deploy to AWS S3
       #   run: |
+<<<<<<< HEAD
       #     aws s3 sync ./build s3://customerservice-dev.soymomo.io --delete
+=======
+      #     aws s3 sync ./build s3://customerservice-dev.soymomo.io --delete
+>>>>>>> e22a6aa (feat: se cambia el CD a GH en vez de S3)
