@@ -2,20 +2,10 @@ import { Modal, Input, Button, message } from 'antd';
 import { useState } from 'react';
 import { useAuth } from "../authContext";
 import { updateTablet, updateParentalControlSettings } from '../services/tabletService';
+import styles from '../styles/personalInfoTablet.module.css'
+import sharedStyles from '../styles/Common.module.css'
+import formatISODate from '../utils/formater';
 
-const tableHeaderStyle = {
-    padding: '12px 16px',
-    backgroundColor: '#f0f0f0',
-    fontWeight: 'bold',
-    textAlign: 'left',
-    borderBottom: '1px solid #e8e8e8',
-};
-
-const tableCellStyle = {
-    padding: '10px 16px',
-    borderBottom: '1px solid #e8e8e8',
-    textAlign: 'left',
-};
 
 export default function PersonalInfoTablet(Props) {
     const personalInfo = Props.personalInfo;
@@ -248,123 +238,123 @@ export default function PersonalInfoTablet(Props) {
           <Button key="back" onClick={handleCancel}>
             Return
           </Button>,
-          <Button key="submit" type="primary" style={{backgroundColor: 'blue', color: 'white'}} onClick={handleOk}>
+          <Button key="submit" type="primary" className={styles.submitBtn} onClick={handleOk}>
             OK
           </Button>,
         ]}>
             <Input value={inputValue} onChange={e => setInputValue(e.target.value)} />
         </Modal>
-        <div style={{ backgroundColor: '#fff', borderRadius: '0.5rem', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', padding: '1rem', marginBottom: '0.625rem', Width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '1rem' }}>
+        <div className={styles.generalContainer}>
+            <div className={sharedStyles.cardSubContainer}>
+                <div className={sharedStyles.flexCenter}>
+                    <div className={sharedStyles.imgContainer}>
                         <img src="/images/tableIcons/cs-infoPrincipal.svg" width={23} height={23} alt='SoyMomo Logo' />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#603BB0', marginLeft: '0.75rem' }}>Datos personales</h1>
-                        <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>Tablet</p>
+                    <div className={sharedStyles.flexAndCol}>
+                        <h1 className={styles.title}>Datos personales</h1>
+                        <p className={styles.subtitle}>Tablet</p>
                     </div>
                 </div>
-                <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }} onClick={Props.handleRefresh}>
-                    <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
+                <div className={sharedStyles.refreshContainer} onClick={Props.handleRefresh}>
+                    <img src="/images/tableIcons/cs-refreshIcon.svg" className={sharedStyles.refreshImg} alt='SoyMomo Logo' />
                 </div>
             </div>
-            <div style={{ maxWidth: '100%', marginTop: '0.75rem', display: "flex", flexWrap: 'wrap' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div className={styles.tableContainer}>
+                <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th style={tableHeaderStyle}>Datos principales</th>
-                            <th style={tableHeaderStyle}></th>
-                            <th style={tableHeaderStyle}>Acciones</th>
+                            <th className={styles.tableHeaderStyle}>Datos principales</th>
+                            <th className={styles.tableHeaderStyle}></th>
+                            <th className={styles.tableHeaderStyle}>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style={tableCellStyle}>Nombre:</td>
-                            <td style={tableCellStyle}>{personalInfo.profileName}</td>
-                            <td style={tableCellStyle}><button onClick={handleName} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
+                            <td className={styles.tableCellStyle}>Nombre:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.profileName}</td>
+                            <td className={styles.tableCellStyle}><button onClick={handleName} className={styles.modBtn}>Modificar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Email de recuperación:</td>
-                            <td style={tableCellStyle}>{personalInfo.recoveryEmail}</td>
-                            <td style={tableCellStyle}><button onClick={handleEmail} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
+                            <td className={styles.tableCellStyle}>Email de recuperación:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.recoveryEmail}</td>
+                            <td className={styles.tableCellStyle}><button onClick={handleEmail} className={styles.modBtn}>Modificar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>PIN:</td>
-                            <td style={tableCellStyle}>{personalInfo.pin}</td>
-                            <td style={tableCellStyle}><button onClick={handlePin} style={{borderRadius: '1rem', backgroundColor: 'lightgray', color: '#22478E', padding: '0.25rem', width: '100px', marginTop: '0.5rem' }}>Modificar</button></td>
+                            <td className={styles.tableCellStyle}>PIN:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.pin}</td>
+                            <td className={styles.tableCellStyle}><button onClick={handlePin} className={styles.modBtn}>Modificar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Modelo de Tablet</td>
-                            <td style={tableCellStyle}>{personalInfo.hardwareModel}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>Modelo de Tablet</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.hardwareModel}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Versión software</td>
-                            <td style={tableCellStyle}>{personalInfo.versionName}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>Versión software</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.versionName}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr>
                         {/* <tr>
-                            <td style={tableCellStyle}>País</td>
-                            <td style={tableCellStyle}>{personalInfo.country}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>País</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.country}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr> */}
                         <tr>
-                            <td style={tableCellStyle}>Navegación internet:</td>
-                            <td style={tableCellStyle}>{personalInfo.browserAllowed ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleInternetNavigation} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td className={styles.tableCellStyle}>Navegación internet:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.browserAllowed ? "Si" : "No"}</td>
+                            <td className={styles.tableCellStyle}><button onClick={handleInternetNavigation} className={styles.deactivateBtn}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Bloqueo remoto:</td>
-                            <td style={tableCellStyle}>{personalInfo.remoteBlocked ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleRemoteBlocked} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td className={styles.tableCellStyle}>Bloqueo remoto:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.remoteBlocked ? "Si" : "No"}</td>
+                            <td className={styles.tableCellStyle}><button onClick={handleRemoteBlocked} className={styles.deactivateBtn}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Algoritmo de detección:</td>
-                            <td style={tableCellStyle}>{personalInfo.smartDetectionEnabled ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleDetectionAlgorithm} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td className={styles.tableCellStyle}>Algoritmo de detección:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.smartDetectionEnabled ? "Si" : "No"}</td>
+                            <td className={styles.tableCellStyle}><button onClick={handleDetectionAlgorithm} className={styles.deactivateBtn}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Detección de cyberbulling:</td>
-                            <td style={tableCellStyle}>{personalInfo.profanityDetectionEnabled ? "Si" : "No"}</td>
-                            <td style={tableCellStyle}><button onClick={handleCyberbullying} style={{borderRadius: '1rem', backgroundColor: 'red', color: 'white', padding: '0.25rem', width: '100px', marginTop: '0.5rem'}}>Desactivar</button></td>
+                            <td className={styles.tableCellStyle}>Detección de cyberbulling:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.profanityDetectionEnabled ? "Si" : "No"}</td>
+                            <td className={styles.tableCellStyle}><button onClick={handleCyberbullying} className={styles.deactivateBtn}>Desactivar</button></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Ingreso a BD:</td>
+                            <td className={styles.tableCellStyle}>Ingreso a BD:</td>
 
-                            <td style={tableCellStyle}>{personalInfo.updatedAt}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>{personalInfo.updatedAt}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Última modificación:</td>
-                            <td style={tableCellStyle}>{personalInfo.updatedAt}</td>
+                            <td className={styles.tableCellStyle}>Última modificación:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.updatedAt}</td>
 
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr>
                         {/* <tr>
-                            <td style={tableCellStyle}>Último envío de Stats:</td>
-                            <td style={tableCellStyle}>{personalInfo.lastStats}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>Último envío de Stats:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.lastStats}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr> */}
                         <tr>
-                            <td style={tableCellStyle}>Cumpleaños:</td>
-                            <td style={tableCellStyle}>{personalInfo.kidBirthday?.iso ?? "Not data"}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>Cumpleaños:</td>
+                            <td className={styles.tableCellStyle}>{formatISODate(personalInfo.kidBirthday?.iso)}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Fabricante hardware:</td>
-                            <td style={tableCellStyle}>{personalInfo.hardwareManufacturer}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>Fabricante hardware:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.hardwareManufacturer}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr>
                         <tr>
-                            <td style={tableCellStyle}>Brand de hardware:</td>
-                            <td style={tableCellStyle}>{personalInfo.hardwareBrand}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>Brand de hardware:</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.hardwareBrand}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr>
                         {/* <tr>
-                            <td style={tableCellStyle}>Salud de la batería</td>
-                            <td style={tableCellStyle}>{personalInfo.battery}</td>
-                            <td style={tableCellStyle}></td>
+                            <td className={styles.tableCellStyle}>Salud de la batería</td>
+                            <td className={styles.tableCellStyle}>{personalInfo.battery}</td>
+                            <td className={styles.tableCellStyle}></td>
                         </tr> */}
 
                     </tbody>

@@ -1,0 +1,39 @@
+.generalCard {
+    @apply bg-white rounded-lg shadow-md p-4 mb-2.5 w-full
+}
+
+.cardSubContainer {
+    @apply flex items-center justify-between
+}
+
+.flexCenter {
+    @apply flex items-center
+}
+
+.flexAndCol {
+    @apply flex flex-col
+}
+
+.iconContainer {
+    @apply bg-[#603BB0] rounded-xl p-4 mr-3
+}
+
+.iconTitle {
+    @apply text-xl font-bold text-[#603BB0]
+}
+
+.iconSubTitle {
+    @apply text-sm text-[#603BB0] self-start
+}
+
+.metaData {
+    @apply max-w-full mt-3
+}
+
+.refreshContainer {
+    @apply bg-[#603BB0] rounded-xl py-2 px-4 cursor-pointer
+}
+
+.refreshImg {
+    @apply w-4 h-4
+}

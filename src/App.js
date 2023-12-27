@@ -9,6 +9,9 @@ import NotFound from "./pages/NotFound";
 import './App.css';
 import AuthProvider from "./authContext";
 import { useState } from "react";
+// require('dotenv').config()
+
+
 
 function App() {
 
