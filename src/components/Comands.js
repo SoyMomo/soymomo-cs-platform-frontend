@@ -9,7 +9,7 @@ import { FaChevronRight } from "react-icons/fa";
 
 export default function ComandsComponent(Props) {
 
-    const [sendLoading, setSendLoading] = useState(false);
+    // const [sendLoading, setSendLoading] = useState(false);
     const [message, setMessage] = useState("")
     const { tokens } = useAuth();
 
@@ -22,7 +22,7 @@ export default function ComandsComponent(Props) {
     }
 
     async function onSendMessage(message) {
-        setSendLoading(true);
+        // setSendLoading(true);
         let deviceId;
         if (Props.imei) {
             deviceId = Props.imei.slice(4, 14);
@@ -32,7 +32,7 @@ export default function ComandsComponent(Props) {
         if (message !== "") {
             await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/sendMessageToWearer', { message, deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
         }
-        setSendLoading(false);
+        // setSendLoading(false);
     }
 
     async function apagar() {
