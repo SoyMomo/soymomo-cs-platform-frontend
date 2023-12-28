@@ -29,6 +29,7 @@ jobs:
           && git pull \
           && git fetch origin gh-deploy:gh-deploy \
           && git checkout pre_deploy \
+          && git pull\
           && git reset --hard main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
