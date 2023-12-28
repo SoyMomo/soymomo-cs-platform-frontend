@@ -46,7 +46,7 @@ jobs:
           git add . \
           && git commit -m"build: building website" \
           && git push origin pre_deploy \
-          && SHA=$(git subtree split --prefix build origin gh-deploy) \
+          && SHA=$(git subtree split --prefix build) \
           && git push origin $SHA:gh-deploy --force
         
 
