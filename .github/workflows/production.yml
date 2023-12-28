@@ -46,7 +46,8 @@ jobs:
           git add . \
           && git commit -m"build: building website" \
           && git push origin pre_deploy \
-          && git subtree push --prefix build origin gh-deploy
+          && SHA=$(git subtree split --prefix build origin gh-deploy) \
+          && git push origin $SHA:gh-deploy --force
         
 
       # - name: Deploy to AWS S3
