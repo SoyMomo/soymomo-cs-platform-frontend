@@ -127,7 +127,7 @@ export default function Index() {
                   <Button
                     type="danger"
                     onClick={cleanTable}
-                    style={{ marginLeft: '15px', backgroundColor: 'red' }}
+                    style={{ marginLeft: '15px', backgroundColor: '#F93C7C', color: 'white' }}
                   >
                     Limpiar Tabla
                   </Button>
