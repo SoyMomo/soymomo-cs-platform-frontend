@@ -15,6 +15,7 @@ import AppVersionsCard from '../components/AppVersionsCard';
 import WearerLastConnectionCard from '../components/WearerLastConnectionCard';
 import WearerBatteryHistory from '../components/WearerBatteryHistory';
 import { getWearer, getContacts, getWatchUsers, getFriends, getChatUser, getChatWearer, getBatteryHistory } from '../services/wearerService';
+import WearerSIMCard from '../components/WearerSIMCard';
 
 const { Search } = Input;
 
@@ -378,9 +379,8 @@ export default function WearerDashboard() {
                           {/* Ultima conexion */}
 
                           {/* SoyMomoSIM */}
-                          {/* <DemoBox value={200}>
+                          <WearerSIMCard />
 
-                          </DemoBox> */}
                           {/* SoyMomoSIM */}
 
                         </Space>
