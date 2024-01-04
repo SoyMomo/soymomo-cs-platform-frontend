@@ -1,0 +1,40 @@
+/* WearerSIMCard.module.css */
+.generalContainer {
+    @apply flex flex-col bg-gradient-to-b from-purple-custom1 to-purple-custom2 rounded-3xl shadow-sm p-4 mb-4 w-full;
+}
+
+.firstRow {
+    @apply flex justify-between content-start
+}
+
+.leftContainer {
+    @apply ms-4 flex;
+}
+  
+.textContainer {
+    @apply flex flex-col content-start;
+}
+  
+.title {
+    @apply text-xl font-bold text-start text-white mb-2;
+}
+
+.btn {
+    @apply bg-[#32B8C0] rounded-xl text-white w-full text-lg p-0.5
+}
+
+.hardwareDesc {
+    @apply text-sm text-start text-white;
+}
+
+.imgContainer {
+    @apply flex
+}
+  
+.image {
+    @apply w-44 h-36;
+}
+
+.verticalSpace {
+    @apply flex h-2
+}

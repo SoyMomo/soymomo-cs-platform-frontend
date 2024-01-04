@@ -53,7 +53,7 @@ export default function Index() {
 
   const handleRowClick = (deviceId, imei) => {
 		const routeParam = deviceId ? `?deviceId=${deviceId}` : `?imei=${imei}`;
-        navigate(`/wearer${routeParam}`);
+        navigate(`/wearer${routeParam}`, {state: { imei }});
 	}
 
   const cleanTable = () => {
@@ -110,52 +110,51 @@ export default function Index() {
   }
 
   return (
-    <MainLayout
-        children={
-            <>
-            {contextHolder}
-            <div style={{ padding: 20 }}>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
-                <Search
-                  placeholder="Buscar reloj por imei o deviceId"
-                  onSearch={onSearch}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  style={{ width: 500, padding: 5 }}
-                />
-                {listItems.length > 0 && (
-                  <Button
-                    type="danger"
-                    onClick={cleanTable}
-                    style={{ marginLeft: '15px', backgroundColor: '#F93C7C', color: 'white' }}
-                  >
-                    Limpiar Tabla
-                  </Button>
+    <MainLayout>
+      <>
+        {contextHolder}
+        <div style={{ padding: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
+            <Search
+              placeholder="Buscar reloj por imei o deviceId"
+              onSearch={onSearch}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              style={{ width: 500, padding: 5 }}
+            />
+            {listItems.length > 0 && (
+              <Button
+                type="danger"
+                onClick={cleanTable}
+                style={{ marginLeft: '15px', backgroundColor: '#F93C7C', color: 'white' }}
+              >
+                Limpiar Tabla
+              </Button>
+            )}
+          </div>
+          {listItems.length !== 0 ? 
+            <div>
+              <ListTitle/>
+              <div className="list">
+                {listItems.map((item, index) => 
+                  <ListItem
+                  key={index}
+                  objectId={item.objectId}
+                  deviceId={item.deviceId}
+                  firstName={item.firstName}
+                  lastName={item.lastName}
+                  imei={item.imei}
+                  phone={item.phone}
+                  handleClick={() => handleRowClick(item.deviceId, item.imei)}
+                  />
                 )}
               </div>
-              {listItems.length !== 0 ? 
-                <div>
-                  <ListTitle/>
-                  <div className="list">
-                    {listItems.map((item, index) => 
-                      <ListItem
-                      objectId={item.objectId}
-                      deviceId={item.deviceId}
-                      firstName={item.firstName}
-                      lastName={item.lastName}
-                      imei={item.imei}
-                      phone={item.phone}
-                      handleClick={() => handleRowClick(item.deviceId, item.imei)}
-                      />
-                    )}
-                  </div>
-                </div> :
-                false
-              }
-              
-            </div>
-          </>
-        }
-    />
+            </div> :
+            false
+          }
+          
+        </div>
+      </>
+    </MainLayout>
     )
 }

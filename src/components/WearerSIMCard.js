@@ -1,35 +1,70 @@
 import * as React from 'react';
-import styles from '../styles/WearerMainCard.module.css';
+import PropTypes from 'prop-types';
+import styles from '../styles/WearerSIMCard.module.css';
 
 
 export default function WearerSIMCard(props) {
-  const wearer = props.wearer || {};
+  const simCard = props.simCard || {};
 
   const {
-    firstName = '',
-    lastName = '',
-    phone = '',
-    imei = '',
-    hardwareModel = '',
-  } = wearer;
+    planName = 'Null',
+    providerName = 'Null',
+    phone = 'Null',
+    state = 'Null',
+  } = simCard;
+  console.log(planName)
 
   // TODO: Cambiar variable por prop recibida
-  const state = 'vinculada';
 
 
   return (
     <div className={styles.generalContainer}>
         <div className={styles.firstRow}>
             <div className={styles.textContainer}>
-                <h1 className={styles.name}>SoyMomo SIM</h1>
-                <p className={styles.hardwareDesc}>{state}</p>
+                <h1 className={styles.title}>SoyMomo SIM</h1>
+                {/* <span className={styles.verticalSpace}/> */}
+                <p className={styles.hardwareDesc}>
+                  <strong>Plan:</strong>   {simCard.planName ? planName : <p className={styles.missingInfo}>Null</p>}
+                </p>
+                <p className={styles.hardwareDesc}>
+                  <strong>msisdn:</strong>   {simCard.phone ?
+                    phone :
+                    <p className={styles.missingInfo}>Null</p>
+                  }
+                </p>
+                <p className={styles.hardwareDesc}>
+                  <strong>Proveedor:</strong>   {simCard.providerName ?
+                    providerName :
+                    <p className={styles.missingInfo}>Null</p>
+                  }
+                </p>
+                <p className={styles.hardwareDesc}>
+                  <strong>Estado:</strong>   {simCard.state ?
+                    state :
+                    <p className={styles.missingInfo}>Null</p>
+                  }
+                </p>
+                {/* <p className={styles.hardwareDesc}><strong>Estado:</strong>   {state}</p>
+                <p className={styles.hardwareDesc}><strong>Plan:</strong> {planName}</p>
+                <p className={styles.hardwareDesc}><strong>Proveedor:</strong> {providerName}</p> */}
             </div>
-            <img src="/images/cs-simCard.svg" alt="SoyMomo Icon" />
+            <div className={styles.imgContainer}>
+                <img src="/images/cs-simCard.svg" alt="SoyMomo Icon" className={styles.image} />
+            </div>
         </div>
         <div className={styles.secondRow}>
             {/* TODO: boton */}
+            {/* <button className={styles.btn}><strong>Ver Info</strong></button> */}
         </div>
-        <img src="/images/cs-defaultWatchModelShadow.svg" alt="SoyMomo default watch model" className={styles.image} />
     </div>
   );
 }
+
+WearerSIMCard.propTypes = {
+  simCard: PropTypes.shape({
+    planName: PropTypes.string,
+    providerName: PropTypes.string,
+    phone: PropTypes.string,
+    state: PropTypes.string,
+  }),
+};
