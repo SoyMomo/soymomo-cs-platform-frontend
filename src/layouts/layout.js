@@ -75,9 +75,9 @@ export default function MainLayout(props) {
         breakpoint="lg"
         collapsedWidth="0"
         trigger={null}
-        onBreakpoint={(broken) => {
+        onBreakpoint={() => {
         }}
-        onCollapse={(collapsed, type) => {
+        onCollapse={(collapsed) => {
             setCollapsed(collapsed);
         }}
         style={{ 
@@ -108,4 +108,4 @@ export default function MainLayout(props) {
       </Layout>
     </Layout>
   );
-};
+}

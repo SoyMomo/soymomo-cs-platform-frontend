@@ -11,4 +11,4 @@ export default function WearerInfoRow({ iconSrc, label, value }) {
             </div>
         </div>
     )
-};
+}
