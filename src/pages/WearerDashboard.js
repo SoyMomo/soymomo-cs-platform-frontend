@@ -85,10 +85,9 @@ export default function WearerDashboard() {
       setUsers(response);
     }).catch(console.error);
 
-    console.log(imei)
+    // console.log(imei)
 
     getSimInfo(imei, tokens.AccessToken).then((response) => {
-      console.log('what')
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
@@ -99,6 +98,7 @@ export default function WearerDashboard() {
           providerName: body.sim.mnoProvider.name,
           phone: body.msisdn,
           state: body.status,
+          networkProvider: body.sim.networkOperator.name,
         };
         setSimData(simCard)
       }
@@ -313,6 +313,52 @@ export default function WearerDashboard() {
     }
   }
 
+  const handleSIMRefresh = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+    let imeiValue;
+
+    if (imei) {
+      imeiValue = imei;
+    } else if (wearer && wearer.imei) {
+      imeiValue = wearer.imei
+    } else return;
+
+    getSimInfo(imeiValue, tokens.AccessToken).then((response) => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Loaded!',
+        duration: 2,
+      });
+
+      if (!response.data || response.data.length === 0) {
+        setSimData({})
+      } else {
+        console.log(response)
+        const body = response.data.data[0];
+        const simCard = {
+          planName: body.plan.title,
+          providerName: body.sim.mnoProvider.name,
+          phone: body.msisdn,
+          state: body.status,
+          networkProvider: body.sim.networkOperator.name,
+        };
+        setSimData(simCard)
+      }
+    }).catch(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Error fetching data!',
+        duration: 2,
+      });
+    });
+  }
+
 
 
   async function onSearch(value) {
@@ -411,6 +457,7 @@ export default function WearerDashboard() {
                       {/* SoyMomoSIM */}
                       <WearerSIMCard
                         simCard={simData}
+                        handleRefresh={handleSIMRefresh}
                       />
 
                       {/* SoyMomoSIM */}

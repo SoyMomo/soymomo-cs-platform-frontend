@@ -31,7 +31,8 @@
 }
 
 .okBtn {
-    background-color: #603BB0;
+    @apply bg-[#8A66DA] border-[#8A66DA] text-white !important
+    /* background-color: #603BB0;
     border-color: #603BB0;
-    color:'white'
+    color:'white' */
 }

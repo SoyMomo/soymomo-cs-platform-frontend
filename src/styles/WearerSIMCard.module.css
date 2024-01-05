@@ -12,7 +12,7 @@
 }
   
 .textContainer {
-    @apply flex flex-col content-start;
+    @apply flex flex-col  content-start;
 }
   
 .title {
@@ -20,7 +20,7 @@
 }
 
 .btn {
-    @apply bg-[#32B8C0] rounded-xl text-white w-full text-lg p-0.5
+    @apply bg-[#32B8C0] rounded-xl text-white w-full text-base p-0.5 m-2
 }
 
 .hardwareDesc {
@@ -37,4 +37,28 @@
 
 .verticalSpace {
     @apply flex h-2
+}
+
+.rightCol {
+    @apply flex flex-col justify-end content-end
+}
+
+.refreshSuperContainer {
+    @apply flex justify-end
+}
+
+.refreshContainer {
+    @apply border-white border-2 rounded-xl py-1.5 px-3.5 cursor-pointer w-12 flex justify-center
+}
+
+.refreshImg {
+    @apply w-4 h-4
+}
+
+.secondRow {
+    @apply bg-[#8A66DA] rounded-3xl w-full flex flex-col
+}
+
+.btnsSubset {
+    @apply w-full flex flex-row
 }

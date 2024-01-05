@@ -17,6 +17,7 @@ export default function ComandsComponent(Props) {
 
     const { Option } = Select;
 
+    // eslint-disable-next-line no-unused-vars
     const [options, setOptions] = useState([
         { value: 'option1', label: 'Option 1' },
         { value: 'option2', label: 'Option 2' },
@@ -104,6 +105,7 @@ export default function ComandsComponent(Props) {
             <div className={sharedStyles.metaData}>
                 <h3 className={styles.comandTitle2}><strong>Enviar mensaje</strong></h3>
                 <Space.Compact className={styles.inputContainer}>
+                    {/* eslint-disable-next-line react/no-unknown-property */}
                     <input placeholder="Ingrese mensaje a enviar" onChange={handleChange} value={message} onPressEnter={onSendMessage} className={styles.textBox}/>
                     <div className={styles.space}/>
                     <div  className={styles.sendIcon}><FaChevronRight onClick={onSendMessage}/></div>
@@ -129,13 +131,15 @@ export default function ComandsComponent(Props) {
                     <div  className={styles.sendIcon}><FaChevronRight onClick={onSendMessage}/></div>
                 </Space.Compact>
                 {/* <Search loading={sendLoading} placeholder="Ingrese mensaje a enviar" onSearch={onSendMessage} enterButton="Enviar" className='bg-[#603BB0] hover:bg-[#3CB5C7] rounded-lg'/> */}
-                <button onClick={showShutdownModal} className={styles.shutDownBtn}>Apagar</button>
-                <button onClick={showResetModal} className={styles.shutDownBtn}>Resetear Reloj</button>
+                <button onClick={showShutdownModal} className={styles.shutDownBtn}><strong>Apagar</strong></button>
+                <button onClick={showResetModal} className={styles.shutDownBtn}><strong>Resetear Reloj</strong></button>
                 <Modal
                     title="Resetear Reloj"
                     open={toggleResetModal}
                     onOk={handleResetOk}
                     onCancel={handleResetCancel}
+                    okButtonProps={{ className: styles.okBtn }}
+                    cancelButtonProps={{ className: styles.cancelBtn }}
                     // Add your custom styles here
                     // bodyStyle={{ /* Your custom styles */ }}
                     // You can also add a className and define your styles in a CSS file
@@ -147,9 +151,9 @@ export default function ComandsComponent(Props) {
                     title="Apagar Reloj"
                     open={toggleShutdownModal}
                     onOk={handleShutdownOk}
-                    okButtonProps={{ className: "okBtn" }}
-                    cancelButtonProps={{ className: styles.cancelBtn }}
                     onCancel={handleShutdownCancel}
+                    okButtonProps={{ className: styles.okBtn }}
+                    cancelButtonProps={{ className: styles.cancelBtn }}
                     // Add your custom styles here
                     // bodyStyle={{ /* Your custom styles */ }}
                     // You can also add a className and define your styles in a CSS file
