@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 // authContext.js
 import { createContext, useState, useContext, useEffect } from "react";
+import React from 'react'
 
 const AuthContext = createContext();
 
