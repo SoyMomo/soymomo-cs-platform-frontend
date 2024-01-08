@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from '../styles/ListItem.module.css'
-import sharedStyles from '../styles/Common.module.css'
+// import sharedStyles from '../styles/Common.module.css'
 
 
 export function ListItem(props) {
@@ -68,7 +68,7 @@ export function ListItem(props) {
     )
 }
 
-export function ListTitle(props) {
+export function ListTitle() {
 
     return (
         <div className={styles.titleRow}>

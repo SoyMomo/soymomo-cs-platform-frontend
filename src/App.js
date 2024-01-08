@@ -9,6 +9,7 @@ import ChangePassword from "./pages/ChangePassword";
 import NotFound from "./pages/NotFound";
 import './App.css';
 import AuthProvider from "./authContext";
+import SimDashboard from "./pages/SimDashboard";
 // import { useState } from "react";
 // require('dotenv').config()
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/" element={<Index/>}/>
           <Route path="/wearer" element={<WearerDashboard/>}/>
+          <Route path="/sim" element={<SimDashboard/>}/>
           <Route path="/tablet/dashboard" element={<TabletDashboard/>}/>
           <Route path="/tablet" element={<TabletSearch/>}/>
           <Route path="/change-password" element={<ChangePassword/>}/>

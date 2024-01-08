@@ -1,10 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import styles from '../styles/WearerSIMCard.module.css';
+import styles from '../styles/SimMainCard.module.css';
 // import sharedStyles from '../styles/Common.module.css'
 
 
-export default function WearerSIMCard(props) {
+export default function SimMainCard(props) {
   const simCard = props.simCard || {};
 
   const {
@@ -14,15 +14,17 @@ export default function WearerSIMCard(props) {
     phone = 'Null',
     state = 'Null',
     networkProvider = 'Null',
+    paymentProvider = 'Null',
   } = simCard;
-
+  
   let planName;
 
   if (plan != 'Null') {
     planName = plan.title
   }
-
+  
   console.log(planName)
+
 
   // TODO: Cambiar variable por prop recibida
 
@@ -37,7 +39,7 @@ export default function WearerSIMCard(props) {
                   <strong>iccId:</strong>   {simCard.iccId ? iccId : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Plan:</strong>   {planName != 'Null' ? planName : <span className={styles.missingInfo}>Null</span>}
+                  <strong>Plan:</strong>   {plan != 'Null' ? planName : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
                   <strong>msisdn:</strong>   {simCard.phone ?
@@ -63,6 +65,12 @@ export default function WearerSIMCard(props) {
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
+                <p className={styles.hardwareDesc}>
+                  <strong>Compañía de Pagos:</strong>   {simCard.paymentProvider ?
+                    paymentProvider :
+                    <span className={styles.missingInfo}>Null</span>
+                  }
+                </p>
                 {/* <p className={styles.hardwareDesc}><strong>Estado:</strong>   {state}</p>
                 <p className={styles.hardwareDesc}><strong>Plan:</strong> {planName}</p>
                 <p className={styles.hardwareDesc}><strong>Proveedor:</strong> {providerName}</p> */}
@@ -78,26 +86,25 @@ export default function WearerSIMCard(props) {
               </div>
             </div>
         </div>
-        <div className={styles.secondRow}>
+        {/* <div className={styles.secondRow}>
           <div className={styles.btnsSubset}>
             <button className={styles.btn}><strong>Cancelar Suscripción</strong></button>
             <button className={styles.btn}><strong>Reset Suscripción</strong></button>
           </div>
           <div className={styles.btnsSubset}>
             <button className={styles.btn}><strong>Pausar Suscripción</strong></button>
-            <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
+            <button className={styles.btn}><strong>Ver Info</strong></button>
           </div>
           <div className={styles.btnsSubset}>
             <button className={styles.btn}><strong>Ver Info</strong></button>
             <button className={styles.btn}><strong>Ver Info</strong></button>
           </div>
-            {/* TODO: boton */}
-        </div>
+        </div> */}
     </div>
   );
 }
 
-WearerSIMCard.propTypes = {
+SimMainCard.propTypes = {
   simCard: PropTypes.shape({
     planName: PropTypes.string,
     providerName: PropTypes.string,

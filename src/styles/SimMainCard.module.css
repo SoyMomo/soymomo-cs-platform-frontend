@@ -28,11 +28,11 @@
 }
 
 .imgContainer {
-    @apply flex
+    @apply flex mr-4
 }
   
 .image {
-    @apply w-44 h-36;
+    @apply w-64 h-52;
 }
 
 .verticalSpace {

@@ -12,7 +12,7 @@
 }
   
 .textContainer {
-    @apply flex flex-col  content-start;
+    @apply flex flex-col content-start;
 }
   
 .title {
@@ -24,15 +24,15 @@
 }
 
 .hardwareDesc {
-    @apply text-sm text-start text-white;
+    @apply text-sm text-start text-purple-700;
 }
 
 .imgContainer {
-    @apply flex
+    @apply flex mr-4
 }
   
 .image {
-    @apply w-44 h-36;
+    @apply w-64 h-52;
 }
 
 .verticalSpace {
@@ -40,15 +40,15 @@
 }
 
 .rightCol {
-    @apply flex flex-col justify-end content-end
+    @apply flex flex-col justify-start content-end
 }
 
 .refreshSuperContainer {
-    @apply flex justify-end
+    @apply flex justify-start
 }
 
 .refreshContainer {
-    @apply border-white border-2 rounded-xl py-1.5 px-3.5 cursor-pointer w-12 flex justify-center
+    @apply border-white border-2 rounded-xl py-1.5 px-3.5 cursor-pointer w-12 flex justify-start
 }
 
 .refreshImg {
@@ -64,5 +64,5 @@
 }
 
 .missingInfo {
-    @apply text-[#d8c8ff]
+    @apply text-[#9b73ff]
 }
