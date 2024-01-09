@@ -1,5 +1,5 @@
 .comandTitle2 {
-    @apply text-base text-[#603BB0] ml-3 text-start my-2
+    @apply text-base text-[#603BB0] text-start mb-2 mt-4
 }
 
 .inputContainer {
@@ -8,6 +8,10 @@
 
 .textBox{
     @apply w-full border-2 border-slate-300 rounded-lg p-1.5
+}
+
+.selectBox {
+    @apply w-full border-2 border-slate-300 rounded-md
 }
 
 .space {
@@ -20,4 +24,15 @@
 
 .shutDownBtn {
     @apply bg-[#F93C7C] text-white p-1 rounded-full w-full mt-2
+}
+
+.cancelBtn {
+    @apply border-[#F93C7C] text-[#F93C7C]
+}
+
+.okBtn {
+    @apply bg-[#8A66DA] border-[#8A66DA] text-white !important
+    /* background-color: #603BB0;
+    border-color: #603BB0;
+    color:'white' */
 }

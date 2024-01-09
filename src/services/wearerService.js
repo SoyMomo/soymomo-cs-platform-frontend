@@ -98,3 +98,14 @@ export const getChatUser = async (params, token) => {
     const data = response.data.data
     return data
   }
+
+  export const getSimInfo = async (imei, token) => {
+    const response = await axios.get(
+      process.env.REACT_APP_BACKEND_HOST + '/wearer/getSIMInfo',
+      {
+        params: { imei },
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+    return response
+  }

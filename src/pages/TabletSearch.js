@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Input, message } from 'antd'
 import { getTablet } from '../services/tabletService';
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 
 
 
@@ -20,7 +20,7 @@ export default function TabletSearch() {
     const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
-        if (!tokens) {
+        if (!tokens || !checkAuth(tokens)) {
             navigate('/login');
         }
     }, [tokens, navigate]);
@@ -64,17 +64,15 @@ export default function TabletSearch() {
 
 
     return (
-        <MainLayout
-            children={
-                <>
-                    {contextHolder}
-                    <div style={{ padding: 20 }}>
-                        <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
-                            <Search placeholder="Buscar tablet por hid" value={inputValue} onChange={e => setInputValue(e.target.value)} onSearch={onSearch} style={{ width: 500, padding: 5 }} />
-                        </div>
+        <MainLayout>
+            <>
+                {contextHolder}
+                <div style={{ padding: 20 }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
+                        <Search placeholder="Buscar tablet por hid" value={inputValue} onChange={e => setInputValue(e.target.value)} onSearch={onSearch} style={{ width: 500, padding: 5 }} />
                     </div>
-                </>
-            }
-        />
+                </div>
+            </>
+        </MainLayout>
     )
 }

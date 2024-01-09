@@ -3,10 +3,16 @@ import TextField from "./TextField"
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { useAuth } from '../authContext';
 import styles from "../styles/ChangePasswordForm.module.css"
 
+
+// Solo funciona para cambiar la clave por primera vez
+// Se mantiene así pues para hacer un cambio de contraseña seguro se necesita un mailer
+// o algo por el estilo.
 export default function ChangePasswordForm() {
     const navigate = useNavigate();
+    const { setTokens } = useAuth();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const email = queryParams.get('email');
@@ -35,16 +41,17 @@ export default function ChangePasswordForm() {
                 // override session cookie with new session
                 Cookies.set('session', response.data.session);
             }
-
+            
             // Login again with the new password
             const signInResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/login', {
                 email,
                 password: newPassword,
             });
-
+            
             if (signInResponse.data.error) {
                 setError("Your email or password is incorrect.")
             } else {
+                setTokens(response.data);
                 navigate('/')
             }
 

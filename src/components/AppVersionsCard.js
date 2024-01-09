@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import styles from '../styles/AppVersionsCard.module.css';
 
 export default function AppVersionsCard(props) {
@@ -22,3 +23,7 @@ export default function AppVersionsCard(props) {
   );
 }
 
+AppVersionsCard.propTypes = {
+  versionAndroid: PropTypes.string.isRequired,
+  versionApple: PropTypes.string.isRequired,
+};

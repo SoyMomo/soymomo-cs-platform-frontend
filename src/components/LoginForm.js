@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from 'react';
 import TextField from "./TextField"
 import axios from "axios";
 import { useAuth } from "../authContext";
@@ -32,15 +33,18 @@ export default function LoginForm() {
                 // navegar a vista cambiar contraseña
                 Cookies.set('session', response.data.session);
                 navigate('/change-password?email=' + email);
-               
-            } else {
+            }else {
                 // iniciar sesión y navegar a dashboard
                 setTokens(response.data);
                 navigate('/');
             }
         } catch (error) {
             // handle the error
-            setError(error.message || "Something went wrong.");
+            if (error.response.status === 401) {
+                setError("Email y/o contraseña inválidos")
+            } else {
+                setError(error.message || "Something went wrong.");
+            }
         } finally {
             // stop loading
             setLoading(false);

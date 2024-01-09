@@ -9,7 +9,7 @@ import PersonalInfoTablet from '../components/personalInfoTablet';
 import TabletBatteryHistory from '../components/TabletBatteryHistory';
 import { useNavigate } from 'react-router-dom';
 import { getTablet, getInstalledApps, getTabletUsers, getDugHistory, getBatteryHistory } from '../services/tabletService.js';
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 
 const { RangePicker } = DatePicker;
 
@@ -36,7 +36,7 @@ export default function TabletDashboard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!tokens) {
+        if (!tokens || !checkAuth(tokens)) {
             navigate('/login');
         }
     }, [tokens, navigate]);
@@ -265,168 +265,166 @@ export default function TabletDashboard() {
     }
 
     return (
-        <MainLayout
-            children={
-                <>
-                    {contextHolder}
-                    <div style={{ padding: 20 }}>
-                        <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
-                            <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-                        </div>
-                        <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-                            <Row gutter={[24, 32]}>
-                                <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+        <MainLayout>
+            <>
+                {contextHolder}
+                <div style={{ padding: 20 }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
+                        <Search placeholder="Buscar tablet por hid" onSearch={onSearch} style={{ width: 500, padding: 5 }} value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+                    </div>
+                    <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+                        <Row gutter={[24, 32]}>
+                            <Col xs={24} sm={24} md={24} lg={16} xl={16}>
 
-                                    {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
-                                    <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+                                {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
+                                <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
-                                        {/* Nombre, numero, imei: card principal */}
+                                    {/* Nombre, numero, imei: card principal */}
 
-                                        {/* Nombre, numero, imei: card principal */}
+                                    {/* Nombre, numero, imei: card principal */}
 
-                                        {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-                                        <Row gutter={[24, 32]}>
+                                    {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+                                    <Row gutter={[24, 32]}>
 
-                                            {/* Datos principales */}
-                                            <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                        {/* Datos principales */}
+                                        <Col xs={24} sm={24} md={24} lg={12} xl={12}>
 
-                                            </Col>
-                                            {/* Datos principales */}
+                                        </Col>
+                                        {/* Datos principales */}
 
-                                            {/* Ultima conexion con SoyMomoSIM */}
-                                            <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                                <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+                                        {/* Ultima conexion con SoyMomoSIM */}
+                                        <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                            <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
-                                                    {/* Ultima conexion */}
+                                                {/* Ultima conexion */}
 
-                                                    {/* Ultima conexion */}
+                                                {/* Ultima conexion */}
 
-                                                    {/* SoyMomoSIM */}
+                                                {/* SoyMomoSIM */}
 
-                                                    {/* SoyMomoSIM */}
+                                                {/* SoyMomoSIM */}
 
-                                                </Space>
-                                            </Col>
-                                            {/* Ultima conexion con SoyMomoSIM */}
+                                            </Space>
+                                        </Col>
+                                        {/* Ultima conexion con SoyMomoSIM */}
 
-                                        </Row>
-                                        {/* Datos principales y Ultima conexion con SoyMomoSIM */}
+                                    </Row>
+                                    {/* Datos principales y Ultima conexion con SoyMomoSIM */}
 
-                                        {/* Historial de bateria */}
+                                    {/* Historial de bateria */}
 
-                                        {/* Historial de bateria */}
+                                    {/* Historial de bateria */}
 
-                                    </Space>
+                                </Space>
 
-                                </Col>
+                            </Col>
 
-                                <Col xs={24} sm={12} md={12} lg={8} xl={8}>
+                            <Col xs={24} sm={12} md={12} lg={8} xl={8}>
 
-                                    {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
-                                    <Space direction="vertical" size={24} style={{ display: 'flex' }}>
+                                {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
+                                <Space direction="vertical" size={24} style={{ display: 'flex' }}>
 
-                                        {/* Ultima actualizacion */}
+                                    {/* Ultima actualizacion */}
 
-                                        {/* Ultima actualizacion */}
+                                    {/* Ultima actualizacion */}
 
-                                        {/* Comandos */}
-                                        {/* Comandos */}
+                                    {/* Comandos */}
+                                    {/* Comandos */}
 
 
-                                        {/* Ajustes reloj */}
+                                    {/* Ajustes reloj */}
 
-                                        {/* Ajustes reloj */}
+                                    {/* Ajustes reloj */}
 
-                                    </Space>
+                                </Space>
 
-                                </Col>
+                            </Col>
+                        </Row>
+
+
+
+                        <Space direction="vertical" size={12} style={{ display: 'flex' }}>
+                            <PersonalInfoTablet
+                                personalInfo={personalInfo}
+                                handleRefresh={handleRefreshPersonalInfo}
+                                hid={tablet.hid}
+                                setTablet={setTablet}
+                            />
+                            <TabletBatteryHistory
+                                data={batteryHistory}
+                                handleRefresh={handleBatteryHistoryRefresh}
+                            />
+
+                            <Row>
+                                <TableComponent
+                                    columns={aplicationColumns()}
+                                    data={aplicationsData}
+                                    leftIcon="/images/tableIcons/cs-aplicationsTablet.svg"
+                                    leftIconHeight={29}
+                                    leftIconWidth={38}
+                                    refreshLink="/api/refresh"
+                                    title='Aplicaciones'
+                                    subtitle='Tablet'
+                                    handleRefresh={handleRefreshApps}
+                                />
+                            </Row>
+                            <Row>
+                                <TableComponent
+                                    columns={userColumns}
+                                    data={usersData}
+                                    leftIcon="/images/tableIcons/cs-usersIcon.svg"
+                                    leftIconHeight={29}
+                                    leftIconWidth={38}
+                                    refreshLink="/api/refresh"
+                                    title='Usuarios'
+                                    subtitle='Tablet'
+                                    handleRefresh={handleRefreshTabletUsers}
+                                />
                             </Row>
 
-
-
-                            <Space direction="vertical" size={12} style={{ display: 'flex' }}>
-                                <PersonalInfoTablet
-                                    personalInfo={personalInfo}
-                                    handleRefresh={handleRefreshPersonalInfo}
-                                    hid={tablet.hid}
-                                    setTablet={setTablet}
-                                />
-                                <TabletBatteryHistory
-                                    data={batteryHistory}
-                                    handleRefresh={handleBatteryHistoryRefresh}
-                                />
-
-                                <Row>
-                                    <TableComponent
-                                        columns={aplicationColumns()}
-                                        data={aplicationsData}
-                                        leftIcon="/images/tableIcons/cs-aplicationsTablet.svg"
-                                        leftIconHeight={29}
-                                        leftIconWidth={38}
-                                        refreshLink="/api/refresh"
-                                        title='Aplicaciones'
-                                        subtitle='Tablet'
-                                        handleRefresh={handleRefreshApps}
-                                    />
-                                </Row>
-                                <Row>
-                                    <TableComponent
-                                        columns={userColumns}
-                                        data={usersData}
-                                        leftIcon="/images/tableIcons/cs-usersIcon.svg"
-                                        leftIconHeight={29}
-                                        leftIconWidth={38}
-                                        refreshLink="/api/refresh"
-                                        title='Usuarios'
-                                        subtitle='Tablet'
-                                        handleRefresh={handleRefreshTabletUsers}
-                                    />
-                                </Row>
-
-                                <div style={{ backgroundColor: '#fff', borderRadius: '0.5rem', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', padding: '1rem', marginBottom: '0.625rem', maxWidth: '100%' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '1rem' }}>
-                                                <img src="/images/tableIcons/cs-history.svg" width={23} height={23} alt='SoyMomo Logo' />
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#603BB0', marginLeft: '0.75rem' }}>Historial de Dugs</h1>
-                                                <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>Tablet</p>
-                                            </div>
+                            <div style={{ backgroundColor: '#fff', borderRadius: '0.5rem', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', padding: '1rem', marginBottom: '0.625rem', maxWidth: '100%' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '1rem' }}>
+                                            <img src="/images/tableIcons/cs-history.svg" width={23} height={23} alt='SoyMomo Logo' />
                                         </div>
-                                        <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }} onClick={handleRefreshDugHistory}>
-                                            <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#603BB0', marginLeft: '0.75rem' }}>Historial de Dugs</h1>
+                                            <p style={{ fontSize: '0.875rem', color: '#603BB0', alignSelf: 'flex-start', marginLeft: '0.75rem' }}>Tablet</p>
                                         </div>
                                     </div>
-                                    <div style={{ maxWidth: '100%', marginTop: '0.75rem', display: "flex", flexWrap: 'wrap', overflow: 'auto', scrollbarColor: 'dark', maxHeight: '300px' }}>
-                                        {dugHistory.length > 0 &&
-                                            dugHistory.map((item, index) => {
-                                                return (
-                                                    <DugHistoryCard
-                                                        key={index}
-                                                        image={item.image}
-                                                        date={item.date}
-                                                        category={item.category}
-                                                        app={item.app}
-                                                        time={item.time}
-                                                    />
-                                                )
-                                            })
-                                        }
+                                    <div style={{ backgroundColor: '#603BB0', borderRadius: '0.75rem', padding: '0.5rem 1rem', cursor: 'pointer' }} onClick={handleRefreshDugHistory}>
+                                        <img src="/images/tableIcons/cs-refreshIcon.svg" width={16} height={16} alt='SoyMomo Logo' />
                                     </div>
-                                    <RangePicker onChange={(dates, dateString) => {
-                                        setDugFromDate(dateString[0])
-                                        setDugToDate(dateString[1])
-                                    }
-                                    } />
                                 </div>
+                                <div style={{ maxWidth: '100%', marginTop: '0.75rem', display: "flex", flexWrap: 'wrap', overflow: 'auto', scrollbarColor: 'dark', maxHeight: '300px' }}>
+                                    {dugHistory.length > 0 &&
+                                        dugHistory.map((item, index) => {
+                                            return (
+                                                <DugHistoryCard
+                                                    key={index}
+                                                    image={item.image}
+                                                    date={item.date}
+                                                    category={item.category}
+                                                    app={item.app}
+                                                    time={item.time}
+                                                />
+                                            )
+                                        })
+                                    }
+                                </div>
+                                <RangePicker onChange={(dates, dateString) => {
+                                    setDugFromDate(dateString[0])
+                                    setDugToDate(dateString[1])
+                                }
+                                } />
+                            </div>
 
-                            </Space>
                         </Space>
-                    </div>
-                </>
-            }
-        />
+                    </Space>
+                </div>
+            </>
+        </MainLayout>
     )
 }
 

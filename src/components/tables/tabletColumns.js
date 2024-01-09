@@ -1,4 +1,4 @@
-export const aplicationColumns = (handleAllow) => [
+export const aplicationColumns = () => [
     {
         title: 'Nombre Aplicación',
         dataIndex: 'appName',
