@@ -1,11 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/SimMainCard.module.css';
+import { useNavigate } from 'react-router-dom';
 // import sharedStyles from '../styles/Common.module.css'
 
 
 export default function SimMainCard(props) {
   const simCard = props.simCard || {};
+
+  const navigate = useNavigate();
+
 
   const {
     iccId = 'Null',
@@ -71,6 +75,7 @@ export default function SimMainCard(props) {
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
+                <button onClick={() => navigate(-1)} className={styles.btn}>Volver atras</button>
                 {/* <p className={styles.hardwareDesc}><strong>Estado:</strong>   {state}</p>
                 <p className={styles.hardwareDesc}><strong>Plan:</strong> {planName}</p>
                 <p className={styles.hardwareDesc}><strong>Proveedor:</strong> {providerName}</p> */}

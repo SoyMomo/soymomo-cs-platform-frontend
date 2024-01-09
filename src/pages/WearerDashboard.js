@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 import { Row, Space, Col, Input, message, Button } from 'antd'
 import { friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/wearerColumns';
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
@@ -14,7 +14,7 @@ import WearerMainCard from '../components/WearerMainCard';
 import AppVersionsCard from '../components/AppVersionsCard';
 import WearerLastConnectionCard from '../components/WearerLastConnectionCard';
 import WearerBatteryHistory from '../components/WearerBatteryHistory';
-import SimMainCard from '../components/SimMainCard';
+// import SimMainCard from '../components/SimMainCard';
 import {
   getWearer,
   getContacts,
@@ -26,7 +26,7 @@ import {
   getSimInfo
 } from '../services/wearerService';
 import WearerSIMCard from '../components/WearerSIMCard';
-import SimPlanCard from '../components/SimPlanCard';
+// import SimPlanCard from '../components/SimPlanCard';
 
 const { Search } = Input;
 
@@ -51,7 +51,7 @@ export default function WearerDashboard() {
   const { imei } = state
 
   useEffect(() => {
-    if (!tokens) {
+    if (!tokens || !checkAuth(tokens)) {
       navigate('/login');
     }
   }, [tokens, navigate]);
@@ -458,10 +458,6 @@ export default function WearerDashboard() {
                       handleRefresh={handleWearerInfoRefresh}
                       wearer={wearer}
                     />
-                    <SimPlanCard
-                      simCard={simData}
-                      handleRefresh={handleSIMRefresh}
-                    />
                   </Col>
                   {/* Datos principales */}
 
@@ -488,15 +484,6 @@ export default function WearerDashboard() {
 
                 </Row>
                 {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-                <SimMainCard
-                  simCard={simData}
-                  handleRefresh={handleSIMRefresh}
-                />
-
-                <SimPlanCard
-                  simCard={simData}
-                  handleRefresh={handleSIMRefresh}
-                />
 
                 {/* Historial de bateria */}
                 <WearerBatteryHistory

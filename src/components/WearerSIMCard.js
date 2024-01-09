@@ -22,11 +22,6 @@ export default function WearerSIMCard(props) {
     planName = plan.title
   }
 
-  console.log(planName)
-
-  // TODO: Cambiar variable por prop recibida
-
-
   return (
     <div className={styles.generalContainer}>
         <div className={styles.firstRow}>
@@ -79,6 +74,8 @@ export default function WearerSIMCard(props) {
             </div>
         </div>
         <div className={styles.secondRow}>
+          <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
+{/* 
           <div className={styles.btnsSubset}>
             <button className={styles.btn}><strong>Cancelar Suscripción</strong></button>
             <button className={styles.btn}><strong>Reset Suscripción</strong></button>
@@ -90,7 +87,7 @@ export default function WearerSIMCard(props) {
           <div className={styles.btnsSubset}>
             <button className={styles.btn}><strong>Ver Info</strong></button>
             <button className={styles.btn}><strong>Ver Info</strong></button>
-          </div>
+          </div> */}
             {/* TODO: boton */}
         </div>
     </div>

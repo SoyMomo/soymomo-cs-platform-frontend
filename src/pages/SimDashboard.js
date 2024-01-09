@@ -2,7 +2,7 @@ import MainLayout from '../layouts/layout';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Row, Space, Col, Input, message, Button } from 'antd'
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 import useQuery from '../utils/hooks/UseQuery';
 import AppVersionsCard from '../components/AppVersionsCard';
 import { getSimInfo } from '../services/wearerService';
@@ -27,7 +27,7 @@ export default function SimDashboard() {
 //   const { imei } = state
 
   useEffect(() => {
-    if (!tokens) {
+    if (!tokens || !checkAuth(tokens)) {
       navigate('/login');
     }
   }, [tokens, navigate]);
