@@ -119,7 +119,7 @@ export default function SimDashboard() {
       content: 'Loading...',
     });
 
-    navigate(`/?searchTxt=${value}`);
+    navigate(`/sim?searchTxt=${value}`);
   }
 
   return (

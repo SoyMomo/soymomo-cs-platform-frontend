@@ -6,6 +6,7 @@ import Index from './pages/Index'
 import WearerDashboard from "./pages/WearerDashboard";
 import TabletDashboard from "./pages/TabletDashboard";
 import TabletSearch from "./pages/TabletSearch";
+import SimSearch from "./pages/SimSearch";
 import ChangePassword from "./pages/ChangePassword";
 import NotFound from "./pages/NotFound";
 import './App.css';
@@ -27,7 +28,8 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/" element={<Index/>}/>
           <Route path="/wearer" element={<WearerDashboard/>}/>
-          <Route path="/sim" element={<SimDashboard/>}/>
+          <Route path="/sim/dashboard" element={<SimDashboard/>}/>
+          <Route path="/sim" element={<SimSearch/>}/>
           <Route path="/tablet/dashboard" element={<TabletDashboard/>}/>
           <Route path="/tablet" element={<TabletSearch/>}/>
           <Route path="/change-password" element={<ChangePassword/>}/>

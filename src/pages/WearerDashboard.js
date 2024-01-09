@@ -370,7 +370,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
 
-    navigate(`/sim?imei=${imei}`);
+    navigate(`/sim/dashboard?imei=${imei}`);
   }
 
 

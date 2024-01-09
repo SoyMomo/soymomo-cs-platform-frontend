@@ -38,7 +38,7 @@ export default function Index() {
 
   useEffect(() => {
     // When the component mounts, load the table state from sessionStorage
-    const savedTableState = sessionStorage.getItem('watchTableState');
+    const savedTableState = sessionStorage.getItem('simTableState');
     if (savedTableState) {
       setListItems(JSON.parse(savedTableState));
     }
@@ -47,18 +47,19 @@ export default function Index() {
   useEffect(() => {
     // When the tableData state changes, save it to sessionStorage
     if (listItems.length > 0) {
-      sessionStorage.setItem('watchTableState', JSON.stringify(listItems));
+      sessionStorage.setItem('simTableState', JSON.stringify(listItems));
     }
   }, [listItems]);
 
+  // TODO: Buscar por iccId
   const handleRowClick = (deviceId, imei) => {
 		const routeParam = deviceId ? `?deviceId=${deviceId}` : `?imei=${imei}`;
-        navigate(`/wearer${routeParam}`, {state: { imei }});
+        navigate(`/sim/dashboard${routeParam}`, {state: { imei }});
 	}
 
   const cleanTable = () => {
     setListItems([]);
-    sessionStorage.removeItem('watchTableState');
+    sessionStorage.removeItem('simTableState');
   };
 
   async function onSearch(value) {
@@ -74,6 +75,7 @@ export default function Index() {
     };
 
     try {
+        // TODO: cambiar ruta para fetchear sim en vez de wearer
       const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByString', { 
         params: params, 
         headers: { 
@@ -95,6 +97,7 @@ export default function Index() {
           duration: 2,
         });
 
+        // Verificar los datos y formatearlos para que calcen con la info desplegada
         setListItems(response.data.data)
         console.log(listItems)
         
@@ -116,7 +119,7 @@ export default function Index() {
         <div style={{ padding: 20 }}>
           <div style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
             <Search
-              placeholder="Buscar reloj por imei o deviceId"
+              placeholder="Buscar SIM"
               onSearch={onSearch}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -136,6 +139,7 @@ export default function Index() {
             <div>
               <ListTitle/>
               <div className="list">
+                {/* TODO: Cambiar para que calce con SIM */}
                 {listItems.map((item, index) => 
                   <ListItem
                   key={index}
