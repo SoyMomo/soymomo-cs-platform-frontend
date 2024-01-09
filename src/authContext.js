@@ -33,6 +33,16 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+export const checkAuth = (tokens) => {
+  // Se trabaja con milisegundos, por lo que se tiene que multiplicar el ExpiresIn por 1000
+  const end = tokens.emissionTime + tokens.ExpiresIn*1000;
+
+  if (Date.now() >= end) {
+    return false;
+  }
+  return true;
+}
+
 export const useAuth = () => useContext(AuthContext);
 export default AuthProvider;
 

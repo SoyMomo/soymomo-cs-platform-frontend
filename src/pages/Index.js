@@ -4,7 +4,7 @@ import { ListItem, ListTitle } from "../components/ListItem";
 import { useNavigate } from   "react-router-dom";
 import { Input, message, Button } from 'antd'
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 import axios from 'axios';
 import useQuery from "../utils/hooks/UseQuery";
 
@@ -23,7 +23,7 @@ export default function Index() {
   const [listItems, setListItems] = useState([]);
 
   useEffect(() => {
-    if (!tokens) {
+    if (!tokens || !checkAuth(tokens)) {
       navigate('/login');
     }
   }, [tokens, navigate]);

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Input, message } from 'antd'
 import { getTablet } from '../services/tabletService';
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 
 
 
@@ -20,7 +20,7 @@ export default function TabletSearch() {
     const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
-        if (!tokens) {
+        if (!tokens || !checkAuth(tokens)) {
             navigate('/login');
         }
     }, [tokens, navigate]);

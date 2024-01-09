@@ -9,7 +9,7 @@ import PersonalInfoTablet from '../components/personalInfoTablet';
 import TabletBatteryHistory from '../components/TabletBatteryHistory';
 import { useNavigate } from 'react-router-dom';
 import { getTablet, getInstalledApps, getTabletUsers, getDugHistory, getBatteryHistory } from '../services/tabletService.js';
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 
 const { RangePicker } = DatePicker;
 
@@ -36,7 +36,7 @@ export default function TabletDashboard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!tokens) {
+        if (!tokens || !checkAuth(tokens)) {
             navigate('/login');
         }
     }, [tokens, navigate]);

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 import { Row, Space, Col, Input, message, Button } from 'antd'
 import { friendMessageColumns, friendsColumns, userColumns, contactColumns } from '../components/tables/wearerColumns';
-import { useAuth } from "../authContext";
+import { useAuth, checkAuth } from "../authContext";
 import TableComponent from '../components/tables/table'
 import useQuery from '../utils/hooks/UseQuery';
 import ComandsComponent from '../components/Comands';
@@ -14,6 +14,7 @@ import WearerMainCard from '../components/WearerMainCard';
 import AppVersionsCard from '../components/AppVersionsCard';
 import WearerLastConnectionCard from '../components/WearerLastConnectionCard';
 import WearerBatteryHistory from '../components/WearerBatteryHistory';
+// import SimMainCard from '../components/SimMainCard';
 import {
   getWearer,
   getContacts,
@@ -25,6 +26,7 @@ import {
   getSimInfo
 } from '../services/wearerService';
 import WearerSIMCard from '../components/WearerSIMCard';
+// import SimPlanCard from '../components/SimPlanCard';
 
 const { Search } = Input;
 
@@ -49,7 +51,7 @@ export default function WearerDashboard() {
   const { imei } = state
 
   useEffect(() => {
-    if (!tokens) {
+    if (!tokens || !checkAuth(tokens)) {
       navigate('/login');
     }
   }, [tokens, navigate]);
@@ -92,9 +94,11 @@ export default function WearerDashboard() {
         setSimData({})
       } else {
         console.log(response)
-        const body = response.data.data[0];
+        const body = response.data.data.results[0];
         const simCard = {
-          planName: body.plan.title,
+          iccId: body.sim.iccId,
+          plan: body.plan,
+          remainingTrialDays: response.data.data.remainingTrialDays,
           providerName: body.sim.mnoProvider.name,
           phone: body.msisdn,
           state: body.status,
@@ -359,6 +363,16 @@ export default function WearerDashboard() {
     });
   }
 
+  async function navSimDashboard(imei) {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+
+    navigate(`/sim?imei=${imei}`);
+  }
+
 
 
   async function onSearch(value) {
@@ -442,7 +456,8 @@ export default function WearerDashboard() {
                       leftIconWidth={24}
                       leftIconHeight={29}
                       handleRefresh={handleWearerInfoRefresh}
-                      wearer={wearer} />
+                      wearer={wearer}
+                    />
                   </Col>
                   {/* Datos principales */}
 
@@ -458,6 +473,7 @@ export default function WearerDashboard() {
                       <WearerSIMCard
                         simCard={simData}
                         handleRefresh={handleSIMRefresh}
+                        navSimDashboard={() => navSimDashboard(imei)}
                       />
 
                       {/* SoyMomoSIM */}
