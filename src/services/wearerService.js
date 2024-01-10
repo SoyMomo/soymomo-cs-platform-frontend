@@ -99,11 +99,19 @@ export const getChatUser = async (params, token) => {
     return data
   }
 
-  export const getSimInfo = async (imei, token) => {
+  export const getSimInfo = async (imei, iccId, token) => {
+    let params;
+    if (iccId) {
+      params = { iccId }
+    } else if (imei) {
+      params = { imei }
+    } else {
+      return;
+    }
     const response = await axios.get(
-      process.env.REACT_APP_BACKEND_HOST + '/wearer/getSIMInfo',
+      process.env.REACT_APP_BACKEND_HOST + '/sim/getSimByIccIdorImei',
       {
-        params: { imei },
+        params: params,
         headers: { Authorization: `Bearer ${token}` }
       }
     );

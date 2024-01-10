@@ -1,12 +1,12 @@
 
 import MainLayout from "../layouts/layout";
-import { ListItem, ListTitle } from "../components/ListItem";
 import { useNavigate } from   "react-router-dom";
 import { Input, message, Button } from 'antd'
 import React, { useState, useEffect } from "react";
 import { useAuth, checkAuth } from "../authContext";
 import axios from 'axios';
 import useQuery from "../utils/hooks/UseQuery";
+import { SimListItem, SimListTitle } from "../components/SimListItem";
 
 
 const { Search } = Input;
@@ -52,9 +52,9 @@ export default function Index() {
   }, [listItems]);
 
   // TODO: Buscar por iccId
-  const handleRowClick = (deviceId, imei) => {
-		const routeParam = deviceId ? `?deviceId=${deviceId}` : `?imei=${imei}`;
-        navigate(`/sim/dashboard${routeParam}`, {state: { imei }});
+  const handleRowClick = (iccId, imei) => {
+		const routeParam = iccId ? `?iccId=${iccId}` : `?imei=${imei}`;
+        navigate(`/sim/dashboard${routeParam}`, {state: { iccId, imei }});
 	}
 
   const cleanTable = () => {
@@ -76,13 +76,13 @@ export default function Index() {
 
     try {
         // TODO: cambiar ruta para fetchear sim en vez de wearer
-      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByString', { 
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/sim/searchSims', { 
         params: params, 
         headers: { 
           Authorization: `Bearer ${tokens.AccessToken}` 
         } 
       });
-      if (!response || !response.data || response.data.length === 0) {
+      if (!response || !response.data || (response.data.data.simResults.length === 0 && response.data.data.subResults.length === 0)) {
         messageApi.open({
           key,
           type: 'error',
@@ -97,12 +97,21 @@ export default function Index() {
           duration: 2,
         });
 
+        console.log(response)
+
+        const { simResults } = response.data.data;
+        const { subResults } = response.data.data;
+
         // Verificar los datos y formatearlos para que calcen con la info desplegada
-        setListItems(response.data.data)
+        const results = subResults.concat(simResults)
+        console.log(results)
+
+        setListItems(results)
         console.log(listItems)
         
       }
     } catch(error) {
+      console.log(error)
       messageApi.open({
         key,
         type: 'error',
@@ -137,19 +146,19 @@ export default function Index() {
           </div>
           {listItems.length !== 0 ? 
             <div>
-              <ListTitle/>
+              <SimListTitle/>
               <div className="list">
                 {/* TODO: Cambiar para que calce con SIM */}
                 {listItems.map((item, index) => 
-                  <ListItem
+                  <SimListItem
                   key={index}
+                  iccId={item.iccId}
+                  name={item.subscriber.name}
+                  lastname={item.subscriber.lastname}
+                  phone={item.subscriber.phone}
+                  personalId={item.subscriber.personalId}
                   objectId={item.objectId}
-                  deviceId={item.deviceId}
-                  firstName={item.firstName}
-                  lastName={item.lastName}
-                  imei={item.imei}
-                  phone={item.phone}
-                  handleClick={() => handleRowClick(item.deviceId, item.imei)}
+                  handleClick={() => handleRowClick(item.iccId, item.imei)}
                   />
                 )}
               </div>
