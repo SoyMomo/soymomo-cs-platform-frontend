@@ -1,12 +1,12 @@
 
 import MainLayout from "../layouts/layout";
-import { ListItem, ListTitle } from "../components/ListItem";
 import { useNavigate } from   "react-router-dom";
 import { Input, message, Button } from 'antd'
 import React, { useState, useEffect } from "react";
 import { useAuth, checkAuth } from "../authContext";
 import axios from 'axios';
 import useQuery from "../utils/hooks/UseQuery";
+import { SimListItem, SimListTitle } from "../components/SimListItem";
 
 
 const { Search } = Input;
@@ -38,7 +38,7 @@ export default function Index() {
 
   useEffect(() => {
     // When the component mounts, load the table state from sessionStorage
-    const savedTableState = sessionStorage.getItem('watchTableState');
+    const savedTableState = sessionStorage.getItem('simTableState');
     if (savedTableState) {
       setListItems(JSON.parse(savedTableState));
     }
@@ -47,18 +47,19 @@ export default function Index() {
   useEffect(() => {
     // When the tableData state changes, save it to sessionStorage
     if (listItems.length > 0) {
-      sessionStorage.setItem('watchTableState', JSON.stringify(listItems));
+      sessionStorage.setItem('simTableState', JSON.stringify(listItems));
     }
   }, [listItems]);
 
-  const handleRowClick = (deviceId, imei) => {
-		const routeParam = deviceId ? `?deviceId=${deviceId}` : `?imei=${imei}`;
-        navigate(`/wearer${routeParam}`, {state: { imei }});
+  // TODO: Buscar por iccId
+  const handleRowClick = (iccId, imei) => {
+		const routeParam = iccId ? `?iccId=${iccId}` : `?imei=${imei}`;
+        navigate(`/sim/dashboard${routeParam}`, {state: { iccId, imei }});
 	}
 
   const cleanTable = () => {
     setListItems([]);
-    sessionStorage.removeItem('watchTableState');
+    sessionStorage.removeItem('simTableState');
   };
 
   async function onSearch(value) {
@@ -74,13 +75,14 @@ export default function Index() {
     };
 
     try {
-      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/wearer/getWearerByString', { 
+        // TODO: cambiar ruta para fetchear sim en vez de wearer
+      const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/sim/searchSims', { 
         params: params, 
         headers: { 
           Authorization: `Bearer ${tokens.AccessToken}` 
         } 
       });
-      if (!response || !response.data || response.data.length === 0) {
+      if (!response || !response.data || (response.data.data.simResults.length === 0 && response.data.data.subResults.length === 0)) {
         messageApi.open({
           key,
           type: 'error',
@@ -95,11 +97,21 @@ export default function Index() {
           duration: 2,
         });
 
-        setListItems(response.data.data)
+        console.log(response)
+
+        const { simResults } = response.data.data;
+        const { subResults } = response.data.data;
+
+        // Verificar los datos y formatearlos para que calcen con la info desplegada
+        const results = subResults.concat(simResults)
+        console.log(results)
+
+        setListItems(results)
         console.log(listItems)
         
       }
     } catch(error) {
+      console.log(error)
       messageApi.open({
         key,
         type: 'error',
@@ -116,7 +128,7 @@ export default function Index() {
         <div style={{ padding: 20 }}>
           <div style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
             <Search
-              placeholder="Buscar reloj por imei o deviceId"
+              placeholder="Buscar SIM"
               onSearch={onSearch}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -134,18 +146,19 @@ export default function Index() {
           </div>
           {listItems.length !== 0 ? 
             <div>
-              <ListTitle/>
+              <SimListTitle/>
               <div className="list">
+                {/* TODO: Cambiar para que calce con SIM */}
                 {listItems.map((item, index) => 
-                  <ListItem
+                  <SimListItem
                   key={index}
+                  iccId={item.iccId}
+                  name={item.subscriber.name}
+                  lastname={item.subscriber.lastname}
+                  phone={item.subscriber.phone}
+                  personalId={item.subscriber.personalId}
                   objectId={item.objectId}
-                  deviceId={item.deviceId}
-                  firstName={item.firstName}
-                  lastName={item.lastName}
-                  imei={item.imei}
-                  phone={item.phone}
-                  handleClick={() => handleRowClick(item.deviceId, item.imei)}
+                  handleClick={() => handleRowClick(item.iccId, item.imei)}
                   />
                 )}
               </div>

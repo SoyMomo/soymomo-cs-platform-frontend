@@ -89,7 +89,7 @@ export default function WearerDashboard() {
 
     // console.log(imei)
 
-    getSimInfo(imei, tokens.AccessToken).then((response) => {
+    getSimInfo(imei, null, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
@@ -331,7 +331,7 @@ export default function WearerDashboard() {
       imeiValue = wearer.imei
     } else return;
 
-    getSimInfo(imeiValue, tokens.AccessToken).then((response) => {
+    getSimInfo(imeiValue, null, tokens.AccessToken).then((response) => {
       messageApi.open({
         key,
         type: 'success',
@@ -370,7 +370,7 @@ export default function WearerDashboard() {
       content: 'Loading...',
     });
 
-    navigate(`/sim?imei=${imei}`);
+    navigate(`/sim/dashboard?imei=${imei}`);
   }
 
 

@@ -22,6 +22,7 @@ export default function SimDashboard() {
   const navigate = useNavigate();
 
   let imei;
+  let iccId;
 
 //   const { state } = useLocation()
 //   const { imei } = state
@@ -33,16 +34,16 @@ export default function SimDashboard() {
   }, [tokens, navigate]);
 
   useEffect(() => {
-    const deviceId = query.get('deviceId');
+    iccId = query.get('iccId');
     imei = query.get('imei');
-    if (!deviceId && !imei) {
+    if (!iccId && !imei) {
       navigate('/not-found');
       return;
     }
 
     console.log(imei)
 
-    getSimInfo(imei, tokens.AccessToken).then((response) => {
+    getSimInfo(imei, iccId, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
@@ -73,12 +74,15 @@ export default function SimDashboard() {
       content: 'Loading...',
     });
     let imeiValue;
+    let iccIdValue;
 
-    if (imei) {
+    if (iccId) {
+      iccIdValue = iccId;
+    } else if (imei) {
       imeiValue = imei;
     } else return;
 
-    getSimInfo(imeiValue, tokens.AccessToken).then((response) => {
+    getSimInfo(imeiValue, iccIdValue, tokens.AccessToken).then((response) => {
       messageApi.open({
         key,
         type: 'success',
@@ -119,7 +123,7 @@ export default function SimDashboard() {
       content: 'Loading...',
     });
 
-    navigate(`/?searchTxt=${value}`);
+    navigate(`/sim?searchTxt=${value}`);
   }
 
   return (
@@ -127,7 +131,7 @@ export default function SimDashboard() {
       <div style={{ padding: 20 }}>
         <div style={{ display: "flex", alignItems: "flex-start", marginBottom: 20 }}>
           { contextHolder }
-          <Search placeholder="Buscar reloj por imei o deviceId" onSearch={onSearch} value={inputValue} onChange={(e) => setInputValue(e.target.value)} style={{ width: 500, padding: 5 }} />
+          <Search placeholder="Buscar SIM" onSearch={onSearch} value={inputValue} onChange={(e) => setInputValue(e.target.value)} style={{ width: 500, padding: 5 }} />
           <Button onClick={() => navigate(-1)} style={{ marginLeft: '15px', marginTop: '5px' }}>Go Back</Button>
         </div>
         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
