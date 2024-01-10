@@ -51,7 +51,7 @@ export default function ChangePasswordForm() {
             if (signInResponse.data.error) {
                 setError("Your email or password is incorrect.")
             } else {
-                setTokens(response.data);
+                setTokens(signInResponse.data);
                 navigate('/')
             }
 

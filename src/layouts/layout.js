@@ -4,6 +4,7 @@ import {
   TabletOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
+import { MdOutlineSimCard } from "react-icons/md";
 import { Layout, Menu } from 'antd';
 import { useNavigate } from   "react-router-dom";
 
@@ -23,20 +24,52 @@ export default function MainLayout(props) {
       },
       {
         key: '2',
+        icon: React.createElement(MdOutlineSimCard),
+        label: 'SIM',
+        style: { color: 'white' },
+      },
+      {
+        key: '3',
         icon: React.createElement(TabletOutlined),
         label: 'Tablet',
         style: { color: '#603BB0', backgroundColor: 'white' },
       })
-  } else {
+  } else if (url.includes('sim')){
     items.push(
       {
         key: '1',
         icon: React.createElement(ClockCircleOutlined),
         label: 'Reloj',
-        style: { color: '#603BB0', backgroundColor: 'white' },
+        style: { color: 'white' },
       },
       {
         key: '2',
+        icon: React.createElement(MdOutlineSimCard),
+        label: 'SIM',
+        style: { color: '#603BB0', backgroundColor: 'white' },
+      },
+      {
+        key: '3',
+        icon: React.createElement(TabletOutlined),
+        label: 'Tablet',
+        style: { color: 'white' },
+      })
+  } else{
+    items.push(
+      {
+        key: '1',
+        icon: React.createElement(ClockCircleOutlined),
+        label: 'Reloj',
+        style: { color: '#603BB0', backgroundColor: 'white'},
+      },
+      {
+        key: '2',
+        icon: React.createElement(MdOutlineSimCard),
+        label: 'SIM',
+        style: { color: 'white'},
+      },
+      {
+        key: '3',
         icon: React.createElement(TabletOutlined),
         label: 'Tablet',
         style: { color: 'white' },
@@ -44,7 +77,7 @@ export default function MainLayout(props) {
   }
   items.push(
     {
-      key: '3',
+      key: '4',
       icon: React.createElement(LogoutOutlined),
       label: 'Cerrar Sesión',
       style: { color: 'white' },
@@ -57,8 +90,10 @@ export default function MainLayout(props) {
     if (e.key === '1') {
         navigate('/');
     } else if (e.key === '2') {
+      navigate('/sim');
+    }else if (e.key === '3') {
         navigate('/tablet');
-    } else if (e.key === '3') {
+    } else if (e.key === '4') {
         window.localStorage.removeItem('tokens');
         navigate('/login')
     }
