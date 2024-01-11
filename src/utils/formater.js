@@ -16,3 +16,17 @@ export default function formatISODate(isoDate) {
     const formattedDate = date.toLocaleString('en-GB', options);
     return formattedDate.replace(',', ' -');
 }
+
+export function checkPasswordFormat(password) {
+    const minLength = 8;
+    const lowercase = /[a-z]/;
+    const uppercase = /[A-Z]/;
+    const specialChar = /[\^$*.()[\]{}?!"!@#%&/\\,><':;|_~`+=-]/;
+
+    return (
+        password.length >= minLength &&
+        lowercase.test(password) &&
+        uppercase.test(password) &&
+        specialChar.test(password)
+    );
+}
