@@ -48,7 +48,7 @@ export default function WearerDashboard() {
   const navigate = useNavigate();
 
   const { state } = useLocation()
-  const { imei } = state
+  let { imei } = state
 
   useEffect(() => {
     if (!tokens || !checkAuth(tokens)) {
@@ -58,6 +58,9 @@ export default function WearerDashboard() {
 
   useEffect(() => {
     const deviceId = query.get('deviceId');
+    if (query.get('imei')) {
+      imei = query.get('imei')
+    }
     // const imei = query.get('imei');
     if (!deviceId && !imei) {
       navigate('/not-found');
@@ -363,14 +366,14 @@ export default function WearerDashboard() {
     });
   }
 
-  async function navSimDashboard(imei) {
+  async function navSimDashboard() {
     messageApi.open({
       key,
       type: 'loading',
       content: 'Loading...',
     });
 
-    navigate(`/sim/dashboard?imei=${imei}`);
+    navigate(`/sim/dashboard?imei=${imei}`, {state: { imei }});
   }
 
 
