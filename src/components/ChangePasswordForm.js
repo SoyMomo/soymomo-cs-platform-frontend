@@ -5,6 +5,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { useAuth } from '../authContext';
 import styles from "../styles/ChangePasswordForm.module.css"
+import { checkPasswordFormat } from "../utils/formater";
 
 
 // Solo funciona para cambiar la clave por primera vez
@@ -25,6 +26,12 @@ export default function ChangePasswordForm() {
 
     async function handleSubmit() {
         setLoading(true)
+
+        if (!checkPasswordFormat(newPassword)){
+            setError("La contraseña no cumple con los requisitos pedidos")
+            setLoading(false)
+            return;
+        }
 
         try {
             const response = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/auth/respondToAuthChallenge', {
