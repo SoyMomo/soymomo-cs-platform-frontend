@@ -41,13 +41,25 @@ jobs:
           export FAST_REFRESH=$FAST_REFRESH &&
           ./render-build-cd.sh
       
-      - name: Deploy to GH Pages
+      - name: Deploy to GH Pages Branch
         run: |
           git add . \
           && git commit -m"build: building website" \
           && git push origin pre_deploy \
           && SHA=$(git subtree split --prefix build) \
           && git push origin $SHA:gh-deploy --force
+
+      - name: Push to public repository
+        run: |
+          git clone https://github.com/SoyMomo/customerservice.git public-repo
+          rm -rf public-repo/* # Remove all old files
+          cp -r build/* public-repo/
+          cd public-repo
+          git add .
+          git commit -m "Update public site"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
 
       # - name: Deploy to AWS S3
