@@ -59,7 +59,7 @@ jobs:
           git commit -m "Update public site"
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         
 
       # - name: Deploy to AWS S3
