@@ -8,17 +8,17 @@ export default function WearerSIMCard(props) {
   const simCard = props.simCard || {};
 
   const {
-    iccId = 'Null',
-    plan = 'Null',
-    providerName = 'Null',
-    phone = 'Null',
-    state = 'Null',
-    networkProvider = 'Null',
+    iccId = '',
+    plan = '',
+    providerName = '',
+    phone = '',
+    state = '',
+    networkProvider = '',
   } = simCard;
 
   let planName;
 
-  if (plan != 'Null') {
+  if (plan != '') {
     planName = plan.title
   }
 
@@ -29,31 +29,31 @@ export default function WearerSIMCard(props) {
                 <h1 className={styles.title}>SoyMomo SIM</h1>
                 {/* <span className={styles.verticalSpace}/> */}
                 <p className={styles.hardwareDesc}>
-                  <strong>iccId:</strong>   {simCard.iccId ? iccId : <span className={styles.missingInfo}>Null</span>}
+                  <strong>iccId:</strong>   {iccId ? iccId : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Plan:</strong>   {planName != 'Null' ? planName : <span className={styles.missingInfo}>Null</span>}
+                  <strong>Plan:</strong>   {planName ? planName : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>msisdn:</strong>   {simCard.phone ?
+                  <strong>msisdn:</strong>   {phone ?
                     phone :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Proveedor:</strong>   {simCard.providerName ?
+                  <strong>Proveedor:</strong>   {providerName ?
                     providerName :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Estado:</strong>   {simCard.state ?
+                  <strong>Estado:</strong>   {state ?
                     state :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Compañía telefónica:</strong>   {simCard.networkProvider ?
+                  <strong>Compañía telefónica:</strong>   {networkProvider ?
                     networkProvider :
                     <span className={styles.missingInfo}>Null</span>
                   }
@@ -73,22 +73,25 @@ export default function WearerSIMCard(props) {
               </div>
             </div>
         </div>
-        <div className={styles.secondRow}>
-          <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
-{/* 
-          <div className={styles.btnsSubset}>
-            <button className={styles.btn}><strong>Cancelar Suscripción</strong></button>
-            <button className={styles.btn}><strong>Reset Suscripción</strong></button>
-          </div>
-          <div className={styles.btnsSubset}>
-            <button className={styles.btn}><strong>Pausar Suscripción</strong></button>
+        { iccId ?
+          (<div className={styles.secondRow}>
             <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
-          </div>
-          <div className={styles.btnsSubset}>
-            <button className={styles.btn}><strong>Ver Info</strong></button>
-            <button className={styles.btn}><strong>Ver Info</strong></button>
-          </div> */}
-        </div>
+  {/* 
+            <div className={styles.btnsSubset}>
+              <button className={styles.btn}><strong>Cancelar Suscripción</strong></button>
+              <button className={styles.btn}><strong>Reset Suscripción</strong></button>
+            </div>
+            <div className={styles.btnsSubset}>
+              <button className={styles.btn}><strong>Pausar Suscripción</strong></button>
+              <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
+            </div>
+            <div className={styles.btnsSubset}>
+              <button className={styles.btn}><strong>Ver Info</strong></button>
+              <button className={styles.btn}><strong>Ver Info</strong></button>
+            </div> */}
+          </div>) : 
+          <div></div>
+        }
     </div>
   );
 }

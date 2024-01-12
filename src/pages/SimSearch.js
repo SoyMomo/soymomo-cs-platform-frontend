@@ -97,7 +97,6 @@ export default function Index() {
 
 
         const { simResults, subResults } = response.data.data;
-        // const { subResults } = response.data.data;
 
         // Verificar los datos y formatearlos para que calcen con la info desplegada
         const results = subResults.concat(simResults)

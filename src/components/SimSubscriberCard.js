@@ -23,16 +23,17 @@ export default function SimSubscriberCard(props) {
 
   // Format personalId (rut)
   if (personalId) {
-    rut = personalId.slice(0,-1) + '-' + personalId.slice(-1)
+    if (personalId.slice(-2) !== '-') {
+      rut = personalId.slice(0,-1) + '-' + personalId.slice(-1);
+    } else {
+      rut = personalId;
+    }
   }
-
-
 
   return (
     <div className={sharedStyles.generalCard}>
         <div className={styles.firstRow}>
             <div className={styles.textContainer}>
-                {/* Alinear a la izquierda */}
                 <h1 className={sharedStyles.iconTitle}>Suscriptor</h1>
                 <br/>
                 {/* <span className={styles.verticalSpace}/> */}

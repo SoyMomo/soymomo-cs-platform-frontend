@@ -7,15 +7,28 @@ import sharedStyles from "../styles/Common.module.css"
 import { FaChevronRight } from "react-icons/fa";
 
 
-export default function ComandsComponent(Props) {
+export default function ComandsComponent(props) {
 
     // const [sendLoading, setSendLoading] = useState(false);
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState('')
+    // const [messageApi, contextHolder] = message.useMessage();
+    const [tcpMsg, setTcpMsg] = useState(null);
     const [toggleResetModal, setToggleResetModal] = useState(false);
     const [toggleShutdownModal, setToggleShutdownModal] = useState(false);
     const { tokens } = useAuth();
-
     const { Option } = Select;
+
+    const {
+        openMessageApi,
+        imei,
+        leftIcon,
+        leftIconWidth,
+        leftIconHeight,
+        title,
+        subtitle
+    } = props
+
+    let { deviceId='' } = props
 
     // eslint-disable-next-line no-unused-vars
     const [options, setOptions] = useState([
@@ -56,17 +69,31 @@ export default function ComandsComponent(Props) {
     //     console.log(value)
     // }
 
-    const handleChange = (message) => {
-        setMessage(message)
+    const handleChange = (event) => {
+        setMessage(event.target.value);
     }
 
-    async function onSendMessage(message) {
-        // setSendLoading(true);
-        let deviceId;
-        if (Props.imei) {
-            deviceId = Props.imei.slice(4, 14);
+    const handleSelectChange = (value) => {
+        setTcpMsg(value);
+    }
+
+    async function onSendTCP() {
+        console.log(tcpMsg);
+        const selectedOption = options.find(option => option.label === tcpMsg);
+
+        if (selectedOption) {
+            // TODO: Send TCP Command with selectedOption.value
         } else {
-            deviceId = Props.deviceId;
+            openMessageApi('Comando TCP Inválido', 'error')
+        }
+    }
+
+    async function onSendMessage() {
+        // console.log('success');
+        // return;
+        // setSendLoading(true);
+        if (!deviceId && imei) {
+            deviceId = imei.slice(4, 14);
         }
         if (message !== "") {
             await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/sendMessageToWearer', { message, deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
@@ -75,11 +102,8 @@ export default function ComandsComponent(Props) {
     }
 
     async function apagar() {
-        let deviceId;
-        if (Props.imei) {
-            deviceId = Props.imei.slice(4, 14);
-        } else {
-            deviceId = Props.deviceId;
+        if (!deviceId && imei) {
+            deviceId = imei.slice(4, 14);
         }
         await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/powerOff', { deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
     }
@@ -94,11 +118,11 @@ export default function ComandsComponent(Props) {
             <div className={sharedStyles.cardSubContainer}>
                 <div className={sharedStyles.flexCenter}>
                     <div className={sharedStyles.iconContainer}>
-                        <img src={Props.leftIcon} width={Props.leftIconWidth} height={Props.leftIconHeight} alt='SoyMomo Logo' />
+                        <img src={leftIcon} width={leftIconWidth} height={leftIconHeight} alt='SoyMomo Logo' />
                     </div>
                     <div className={sharedStyles.flexAndCol}>
-                        <h1 className={sharedStyles.iconTitle}>{Props.title}</h1>
-                        <p className={sharedStyles.iconSubTitle}>{Props.subtitle}</p>
+                        <h1 className={sharedStyles.iconTitle}>{title}</h1>
+                        <p className={sharedStyles.iconSubTitle}>{subtitle}</p>
                     </div>
                 </div>
             </div>
@@ -106,7 +130,7 @@ export default function ComandsComponent(Props) {
                 <h3 className={styles.comandTitle2}><strong>Enviar mensaje</strong></h3>
                 <Space.Compact className={styles.inputContainer}>
                     {/* eslint-disable-next-line react/no-unknown-property */}
-                    <input placeholder="Ingrese mensaje a enviar" onChange={handleChange} value={message} onPressEnter={onSendMessage} className={styles.textBox}/>
+                    <input placeholder="Ingrese mensaje a enviar" onChange={handleChange} value={message} onKeyDown={(e) => e.key === 'Enter' && onSendMessage()} className={styles.textBox}/>
                     <div className={styles.space}/>
                     <div  className={styles.sendIcon}><FaChevronRight onClick={onSendMessage}/></div>
                 </Space.Compact>
@@ -116,9 +140,12 @@ export default function ComandsComponent(Props) {
                         showSearch
                         placeholder="Selecciona un comando TCP"
                         optionFilterProp="children"
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
+                        onChange={handleSelectChange}
+                        value={tcpMsg}
+                        filterOption={(input, option) => {
+                            setTcpMsg(input);
+                            return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }}
                         className={styles.selectBox}
                     >
                         {options.map(option => (
@@ -128,7 +155,7 @@ export default function ComandsComponent(Props) {
                         ))}
                     </Select>
                     <div className={styles.space}/>
-                    <div  className={styles.sendIcon}><FaChevronRight onClick={onSendMessage}/></div>
+                    <div  className={styles.sendIcon}><FaChevronRight onClick={onSendTCP}/></div>
                 </Space.Compact>
                 {/* <Search loading={sendLoading} placeholder="Ingrese mensaje a enviar" onSearch={onSendMessage} enterButton="Enviar" className='bg-[#603BB0] hover:bg-[#3CB5C7] rounded-lg'/> */}
                 <button onClick={showShutdownModal} className={styles.shutDownBtn}><strong>Apagar</strong></button>

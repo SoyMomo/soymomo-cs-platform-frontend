@@ -19,7 +19,7 @@
 }
 
 .iconTitle {
-    @apply text-xl font-bold text-[#603BB0]
+    @apply text-xl font-bold text-[#603BB0] text-left;
 }
 
 .iconSubTitle {
