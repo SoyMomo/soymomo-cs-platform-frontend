@@ -5,21 +5,25 @@ import { Row, Space, Col, Input, message, Button } from 'antd'
 import { useAuth, checkAuth } from "../authContext";
 import useQuery from '../utils/hooks/UseQuery';
 import AppVersionsCard from '../components/AppVersionsCard';
-import { getSimInfo } from '../services/wearerService';
+import { getSimInfo, getWearer } from '../services/wearerService';
 import SimMainCard from '../components/SimMainCard';
 import SimPlanCard from '../components/SimPlanCard';
 import SimSubscriberCard from '../components/SimSubscriberCard';
+import SimWearerCard from '../components/SIMWearerCard';
 
 const { Search } = Input;
 
 export default function SimDashboard() {
-  const { tokens } = useAuth();
-  const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
-  const [inputValue, setInputValue] = useState('');
-  let query = useQuery();
-  const [simData, setSimData] = useState({});
+  const { tokens } = useAuth();
   const navigate = useNavigate();
+  let query = useQuery();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [inputValue, setInputValue] = useState('');
+  const [simData, setSimData] = useState({});
+  const [wearer, setWearer] = useState({});
+  const [globalImei, setGlobalImei] = useState('')
+  const [globalDeviceId, setGlobalDeviceId] = useState('')
 
   let imei;
   let iccId;
@@ -41,26 +45,57 @@ export default function SimDashboard() {
       return;
     }
 
-    console.log(imei)
+    let imeiValue;
 
     getSimInfo(imei, iccId, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
         const body = response.data.data.results[0];
-        const simCard = {
-          iccId: body.sim.iccId,
-          plan: body.plan,
-          remainingTrialDays: response.data.data.remainingTrialDays,
-          providerName: body.sim.mnoProvider.name,
-          phone: body.msisdn,
-          state: body.status,
-          networkProvider: body.sim.networkOperator.name,
-          paymentProvider: body.paymentProvider.name,
-          subscriber: body.subscriber,
-        };
+        const { type } = response.data.data;
+        let simCard;
+        if (type === 'Sub') {
+          imeiValue = body.imei;
+          simCard = {
+            iccId: body.sim.iccId,
+            imei: body.imei,
+            plan: body.plan,
+            remainingTrialDays: response.data.data.remainingTrialDays,
+            providerName: body.sim.mnoProvider.name,
+            phone: body.msisdn,
+            state: body.status,
+            networkProvider: body.sim.networkOperator.name,
+            paymentProvider: body.paymentProvider.name,
+            subscriber: body.subscriber,
+          };
+        } else if (type === 'Sim') {
+          simCard = {
+            iccId: body.iccId,
+            remainingTrialDays: response.data.data.remainingTrialDays,
+            providerName: body.mnoProvider.name,
+            networkProvider: body.networkOperator.name,
+          };
+        }
         setSimData(simCard)
+      }
+
+      // Fetch reloj asociado
+      if (imeiValue) {
+        let payload;
+        if (imeiValue.length === 10) {
+          payload = { deviceId: imeiValue }
+          setGlobalDeviceId(imeiValue)
+        } else {
+          payload = { imei: imeiValue }
+          setGlobalImei(imeiValue)
+        }
+        getWearer(payload, tokens.AccessToken).then((response) => {
+          if (!response.data || response.data.data.length === 0) {
+            navigate('/not-found');
+            return;
+          }
+          setWearer(response.data.data[0]);
+        }).catch(console.error);
       }
     }).catch(console.error)
 
@@ -93,16 +128,32 @@ export default function SimDashboard() {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
-        const body = response.data.data[0];
+        const body = response.data.data.results[0];
+        imeiValue = body.imei;
         const simCard = {
-          planName: body.plan.title,
+          iccId: body.sim.iccId,
+          imei: body.imei,
+          plan: body.plan,
+          remainingTrialDays: response.data.data.remainingTrialDays,
           providerName: body.sim.mnoProvider.name,
           phone: body.msisdn,
           state: body.status,
           networkProvider: body.sim.networkOperator.name,
+          paymentProvider: body.paymentProvider.name,
+          subscriber: body.subscriber,
         };
         setSimData(simCard)
+      }
+
+      // Fetch reloj asociado
+      if (imeiValue) {
+        getWearer({ imei: imeiValue }, tokens.AccessToken).then((response) => {
+          if (!response.data || response.data.data.length === 0) {
+            navigate('/not-found');
+            return;
+          }
+          setWearer(response.data.data[0]);
+        }).catch(console.error);
       }
     }).catch(() => {
       messageApi.open({
@@ -124,6 +175,19 @@ export default function SimDashboard() {
     });
 
     navigate(`/sim?searchTxt=${value}`);
+  }
+
+  async function navWearerDashboard() {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Loading...',
+    });
+
+    const routeParam = globalDeviceId ? `?deviceId=${globalDeviceId}` : `?imei=${globalImei}`;
+    navigate(`/wearer${routeParam}`, {state: { imei: globalImei, deviceId: globalDeviceId }});
+
+    // navigate(`/wearer?imei=${globalImei}`, {state: { imei: globalImei }});
   }
 
   return (
@@ -172,6 +236,12 @@ export default function SimDashboard() {
                         <SimSubscriberCard
                             simCard={simData}
                             handleRefresh={handleSIMRefresh}
+                        />
+
+                        <SimWearerCard
+                            wearer={wearer}
+                            handleRefresh={handleSIMRefresh}
+                            navWearerDashboard={() => navWearerDashboard(imei)}
                         />
 
                       {/* SoyMomoSIM */}

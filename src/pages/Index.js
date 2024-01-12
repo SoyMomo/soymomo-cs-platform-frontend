@@ -53,7 +53,7 @@ export default function Index() {
 
   const handleRowClick = (deviceId, imei) => {
 		const routeParam = deviceId ? `?deviceId=${deviceId}` : `?imei=${imei}`;
-        navigate(`/wearer${routeParam}`, {state: { imei }});
+    navigate(`/wearer${routeParam}`, {state: { imei }});
 	}
 
   const cleanTable = () => {
@@ -96,7 +96,6 @@ export default function Index() {
         });
 
         setListItems(response.data.data)
-        console.log(listItems)
         
       }
     } catch(error) {

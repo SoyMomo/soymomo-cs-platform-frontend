@@ -4,60 +4,62 @@ import styles from '../styles/WearerSIMCard.module.css';
 // import sharedStyles from '../styles/Common.module.css'
 
 
-export default function WearerSIMCard(props) {
-  const simCard = props.simCard || {};
+export default function SimWearerCard(props) {
+  const wearer = props.wearer || {};
 
   const {
-    iccId = '',
-    plan = '',
-    providerName = '',
+    firstName = '',
+    lastName = '',
     phone = '',
-    state = '',
-    networkProvider = '',
-  } = simCard;
+    imei = '',
+    deviceId='',
+    hardwareModel = '',
+  } = wearer;
 
-  let planName;
-
-  if (plan != '') {
-    planName = plan.title
+  let identifierPresent;
+  if (imei || deviceId) {
+    identifierPresent = true;
+  } else {
+    identifierPresent = false;
   }
+
 
   return (
     <div className={styles.generalContainer}>
         <div className={styles.firstRow}>
             <div className={styles.textContainer}>
-                <h1 className={styles.title}>SoyMomo SIM</h1>
+                <h1 className={styles.title}>Soy Momo Watch</h1>
                 {/* <span className={styles.verticalSpace}/> */}
                 <p className={styles.hardwareDesc}>
-                  <strong>iccId:</strong>   {iccId ? iccId : <span className={styles.missingInfo}>Null</span>}
+                  <strong>Nombre:</strong>   {firstName ? firstName : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Plan:</strong>   {planName ? planName : <span className={styles.missingInfo}>Null</span>}
+                  <strong>Apellido:</strong>   {lastName ? lastName : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>msisdn:</strong>   {phone ?
+                  <strong>Teléfono:</strong>   {phone ?
                     phone :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Proveedor:</strong>   {providerName ?
-                    providerName :
+                  <strong>imei:</strong>   {imei ?
+                    imei :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Estado:</strong>   {state ?
-                    state :
+                  <strong>Modelo Reloj:</strong>   {hardwareModel ?
+                    hardwareModel :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
-                <p className={styles.hardwareDesc}>
-                  <strong>Compañía telefónica:</strong>   {networkProvider ?
+                {/* <p className={styles.hardwareDesc}>
+                  <strong>Compañía telefónica:</strong>   {simCard.networkProvider ?
                     networkProvider :
                     <span className={styles.missingInfo}>Null</span>
                   }
-                </p>
+                </p> */}
                 {/* <p className={styles.hardwareDesc}><strong>Estado:</strong>   {state}</p>
                 <p className={styles.hardwareDesc}><strong>Plan:</strong> {planName}</p>
                 <p className={styles.hardwareDesc}><strong>Proveedor:</strong> {providerName}</p> */}
@@ -69,34 +71,21 @@ export default function WearerSIMCard(props) {
                 </div>
               </div>
               <div className={styles.imgContainer}>
-                  <img src="/images/cs-simCard.svg" alt="SoyMomo Icon" className={styles.image} />
+                  <img src="/images/cs-defaultWatchModel.svg" alt="SoyMomo Icon" className={styles.image} />
               </div>
             </div>
         </div>
-        { iccId ?
-          (<div className={styles.secondRow}>
-            <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
-  {/* 
-            <div className={styles.btnsSubset}>
-              <button className={styles.btn}><strong>Cancelar Suscripción</strong></button>
-              <button className={styles.btn}><strong>Reset Suscripción</strong></button>
-            </div>
-            <div className={styles.btnsSubset}>
-              <button className={styles.btn}><strong>Pausar Suscripción</strong></button>
-              <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
-            </div>
-            <div className={styles.btnsSubset}>
-              <button className={styles.btn}><strong>Ver Info</strong></button>
-              <button className={styles.btn}><strong>Ver Info</strong></button>
-            </div> */}
-          </div>) : 
-          <div></div>
-        }
+          {identifierPresent?
+            (<div className={styles.secondRow}>
+              <button onClick={props.navWearerDashboard} className={styles.btn}><strong>Ver Info</strong></button>
+            </div>) :
+            <div></div>
+          }
     </div>
   );
 }
 
-WearerSIMCard.propTypes = {
+SimWearerCard.propTypes = {
   simCard: PropTypes.shape({
     planName: PropTypes.string,
     providerName: PropTypes.string,

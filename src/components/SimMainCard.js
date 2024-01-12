@@ -27,12 +27,6 @@ export default function SimMainCard(props) {
     planName = plan.title
   }
   
-  console.log(planName)
-
-
-  // TODO: Cambiar variable por prop recibida
-
-
   return (
     <div className={styles.generalContainer}>
         <div className={styles.firstRow}>
