@@ -50,14 +50,16 @@ export default function ChangePasswordForm() {
             }
             
             // Login again with the new password
-            const signInResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/login', {
+            const signInResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + '/auth/login', {
                 email,
                 password: newPassword,
             });
+
             
             if (signInResponse.data.error) {
                 setError("Your email or password is incorrect.")
             } else {
+                // console.log(signInResponse.data)
                 setTokens(signInResponse.data);
                 navigate('/')
             }
