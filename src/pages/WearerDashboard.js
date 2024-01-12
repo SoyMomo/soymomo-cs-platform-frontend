@@ -90,13 +90,11 @@ export default function WearerDashboard() {
       setUsers(response);
     }).catch(console.error);
 
-    // console.log(imei)
 
     getSimInfo(imei, null, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
         const body = response.data.data.results[0];
         const simCard = {
           iccId: body.sim.iccId,
@@ -345,7 +343,6 @@ export default function WearerDashboard() {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
         const body = response.data.data[0];
         const simCard = {
           planName: body.plan.title,

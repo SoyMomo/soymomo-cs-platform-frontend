@@ -51,7 +51,6 @@ export default function Index() {
     }
   }, [listItems]);
 
-  // TODO: Buscar por iccId
   const handleRowClick = (iccId, imei) => {
 		const routeParam = iccId ? `?iccId=${iccId}` : `?imei=${imei}`;
         navigate(`/sim/dashboard${routeParam}`, {state: { iccId, imei }});
@@ -75,7 +74,6 @@ export default function Index() {
     };
 
     try {
-        // TODO: cambiar ruta para fetchear sim en vez de wearer
       const response = await axios.get(process.env.REACT_APP_BACKEND_HOST + '/sim/searchSims', { 
         params: params, 
         headers: { 
@@ -97,17 +95,14 @@ export default function Index() {
           duration: 2,
         });
 
-        console.log(response)
 
-        const { simResults } = response.data.data;
-        const { subResults } = response.data.data;
+        const { simResults, subResults } = response.data.data;
+        // const { subResults } = response.data.data;
 
         // Verificar los datos y formatearlos para que calcen con la info desplegada
         const results = subResults.concat(simResults)
-        console.log(results)
 
         setListItems(results)
-        console.log(listItems)
         
       }
     } catch(error) {
@@ -148,18 +143,31 @@ export default function Index() {
             <div>
               <SimListTitle/>
               <div className="list">
-                {/* TODO: Cambiar para que calce con SIM */}
                 {listItems.map((item, index) => 
-                  <SimListItem
-                  key={index}
-                  iccId={item.iccId}
-                  name={item.subscriber.name}
-                  lastname={item.subscriber.lastname}
-                  phone={item.subscriber.phone}
-                  personalId={item.subscriber.personalId}
-                  objectId={item.objectId}
-                  handleClick={() => handleRowClick(item.iccId, item.imei)}
-                  />
+                  {if (item.subscriber) {
+                    return(<SimListItem
+                      key={index}
+                      iccId={item.iccId}
+                      name={item.subscriber.name}
+                      lastname={item.subscriber.lastname}
+                      phone={item.subscriber.phone}
+                      personalId={item.subscriber.personalId}
+                      objectId={item.objectId}
+                      handleClick={() => handleRowClick(item.iccId, item.imei)}
+                    />)
+                  } else {
+                    
+                    return (<SimListItem
+                      key={index}
+                      iccId={item.iccId}
+                      // name={item.subscriber.name}
+                      // lastname={item.subscriber.lastname}
+                      // phone={item.subscriber.phone}
+                      // personalId={item.subscriber.personalId}
+                      objectId={item.objectId}
+                      handleClick={() => handleRowClick(item.iccId, item.imei)}
+                    />)
+                  }}
                 )}
               </div>
             </div> :

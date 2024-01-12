@@ -88,7 +88,6 @@ export default function WearerSIMCard(props) {
             <button className={styles.btn}><strong>Ver Info</strong></button>
             <button className={styles.btn}><strong>Ver Info</strong></button>
           </div> */}
-            {/* TODO: boton */}
         </div>
     </div>
   );

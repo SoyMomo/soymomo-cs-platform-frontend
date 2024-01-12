@@ -12,8 +12,17 @@ export default function SimWearerCard(props) {
     lastName = '',
     phone = '',
     imei = '',
+    deviceId='',
     hardwareModel = '',
   } = wearer;
+
+  let identifierPresent;
+  if (imei || deviceId) {
+    identifierPresent = true;
+  } else {
+    identifierPresent = false;
+  }
+
 
   return (
     <div className={styles.generalContainer}>
@@ -66,23 +75,12 @@ export default function SimWearerCard(props) {
               </div>
             </div>
         </div>
-        <div className={styles.secondRow}>
-          <button onClick={props.navWearerDashboard} className={styles.btn}><strong>Ver Info</strong></button>
-{/* 
-          <div className={styles.btnsSubset}>
-            <button className={styles.btn}><strong>Cancelar Suscripción</strong></button>
-            <button className={styles.btn}><strong>Reset Suscripción</strong></button>
-          </div>
-          <div className={styles.btnsSubset}>
-            <button className={styles.btn}><strong>Pausar Suscripción</strong></button>
-            <button onClick={props.navSimDashboard} className={styles.btn}><strong>Ver Info</strong></button>
-          </div>
-          <div className={styles.btnsSubset}>
-            <button className={styles.btn}><strong>Ver Info</strong></button>
-            <button className={styles.btn}><strong>Ver Info</strong></button>
-          </div> */}
-            {/* TODO: boton */}
-        </div>
+          {identifierPresent?
+            (<div className={styles.secondRow}>
+              <button onClick={props.navWearerDashboard} className={styles.btn}><strong>Ver Info</strong></button>
+            </div>) :
+            <div></div>
+          }
     </div>
   );
 }

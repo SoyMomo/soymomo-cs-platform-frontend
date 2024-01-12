@@ -23,6 +23,7 @@ export default function SimDashboard() {
   const [simData, setSimData] = useState({});
   const [wearer, setWearer] = useState({});
   const [globalImei, setGlobalImei] = useState('')
+  const [globalDeviceId, setGlobalDeviceId] = useState('')
 
   let imei;
   let iccId;
@@ -45,34 +46,50 @@ export default function SimDashboard() {
     }
 
     let imeiValue;
-    console.log(imei)
 
     getSimInfo(imei, iccId, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
         const body = response.data.data.results[0];
-        imeiValue = body.imei;
-        const simCard = {
-          iccId: body.sim.iccId,
-          imei: body.imei,
-          plan: body.plan,
-          remainingTrialDays: response.data.data.remainingTrialDays,
-          providerName: body.sim.mnoProvider.name,
-          phone: body.msisdn,
-          state: body.status,
-          networkProvider: body.sim.networkOperator.name,
-          paymentProvider: body.paymentProvider.name,
-          subscriber: body.subscriber,
-        };
+        const { type } = response.data.data;
+        let simCard;
+        if (type === 'Sub') {
+          imeiValue = body.imei;
+          simCard = {
+            iccId: body.sim.iccId,
+            imei: body.imei,
+            plan: body.plan,
+            remainingTrialDays: response.data.data.remainingTrialDays,
+            providerName: body.sim.mnoProvider.name,
+            phone: body.msisdn,
+            state: body.status,
+            networkProvider: body.sim.networkOperator.name,
+            paymentProvider: body.paymentProvider.name,
+            subscriber: body.subscriber,
+          };
+        } else if (type === 'Sim') {
+          simCard = {
+            iccId: body.iccId,
+            remainingTrialDays: response.data.data.remainingTrialDays,
+            providerName: body.mnoProvider.name,
+            networkProvider: body.networkOperator.name,
+          };
+        }
         setSimData(simCard)
       }
 
       // Fetch reloj asociado
       if (imeiValue) {
-        setGlobalImei(imeiValue)
-        getWearer({ imei: imeiValue }, tokens.AccessToken).then((response) => {
+        let payload;
+        if (imeiValue.length === 10) {
+          payload = { deviceId: imeiValue }
+          setGlobalDeviceId(imeiValue)
+        } else {
+          payload = { imei: imeiValue }
+          setGlobalImei(imeiValue)
+        }
+        getWearer(payload, tokens.AccessToken).then((response) => {
           if (!response.data || response.data.data.length === 0) {
             navigate('/not-found');
             return;
@@ -111,7 +128,6 @@ export default function SimDashboard() {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
         const body = response.data.data.results[0];
         imeiValue = body.imei;
         const simCard = {
@@ -162,14 +178,16 @@ export default function SimDashboard() {
   }
 
   async function navWearerDashboard() {
-    console.log(`wat the fuk ${globalImei}`)
     messageApi.open({
       key,
       type: 'loading',
       content: 'Loading...',
     });
 
-    navigate(`/wearer?imei=${globalImei}`, {state: { imei: globalImei }});
+    const routeParam = globalDeviceId ? `?deviceId=${globalDeviceId}` : `?imei=${globalImei}`;
+    navigate(`/wearer${routeParam}`, {state: { imei: globalImei, deviceId: globalDeviceId }});
+
+    // navigate(`/wearer?imei=${globalImei}`, {state: { imei: globalImei }});
   }
 
   return (
