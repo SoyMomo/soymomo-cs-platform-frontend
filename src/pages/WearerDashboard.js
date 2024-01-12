@@ -48,7 +48,7 @@ export default function WearerDashboard() {
   const navigate = useNavigate();
 
   const { state } = useLocation()
-  const { imei } = state
+  let { imei } = state
 
   useEffect(() => {
     if (!tokens || !checkAuth(tokens)) {
@@ -58,6 +58,9 @@ export default function WearerDashboard() {
 
   useEffect(() => {
     const deviceId = query.get('deviceId');
+    if (query.get('imei')) {
+      imei = query.get('imei')
+    }
     // const imei = query.get('imei');
     if (!deviceId && !imei) {
       navigate('/not-found');
@@ -87,13 +90,11 @@ export default function WearerDashboard() {
       setUsers(response);
     }).catch(console.error);
 
-    // console.log(imei)
 
     getSimInfo(imei, null, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
         const body = response.data.data.results[0];
         const simCard = {
           iccId: body.sim.iccId,
@@ -125,77 +126,47 @@ export default function WearerDashboard() {
   }, [query, wearer, tokens])
 
   const handleContactRefresh = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
     getContacts(params, tokens.AccessToken).then((response) => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
+      openMessageApi('Loaded!', 'success');
+      
       setContacts(response);
     }).catch(() => {
-      messageApi.open({
-        key,
-        type: 'error',
-        content: 'Error fetching data!',
-        duration: 2,
-      });
+      openMessageApi('Error fetching data!', 'error');
+      
     });
   }
 
   const handleWatchUserRefresh = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
     getWatchUsers(params, tokens.AccessToken).then((response) => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
+      openMessageApi('Loaded!', 'success');
+      
       setUsers(response);
     }).catch(() => {
-      messageApi.open({
-        key,
-        type: 'error',
-        content: 'Error fetching data!',
-        duration: 2,
-      });
+      openMessageApi('Error fetching data!', 'error');
+      
     });
   }
 
   const handleFriendsRefresh = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
     getFriends(params, params.deviceId, params.imei, tokens.AccessToken).then((response) => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
+      openMessageApi('Loaded!', 'success');
+      
       setFriendData(response);
     }).catch(() => {
-      messageApi.open({
-        key,
-        type: 'error',
-        content: 'Error fetching data!',
-        duration: 2,
-      });
+      openMessageApi('Error fetching data!', 'error');
+      
     });
   }
 
@@ -240,89 +211,56 @@ export default function WearerDashboard() {
   }, [query, wearer, tokens])
 
   const handleChatUserRefresh = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
     getChatUser(params, tokens.AccessToken).then((response) => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
+      openMessageApi('Loaded!', 'success');
+      
       setUserMessageData(response);
     }).catch(() => {
-      messageApi.open({
-        key,
-        type: 'error',
-        content: 'Error fetching data!',
-        duration: 2,
-      });
+      openMessageApi('Error fetching data!', 'error');
+      
     });
   }
 
   const handleChatWearerRefresh = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
     getChatWearer(params, tokens.AccessToken).then((response) => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
+      openMessageApi('Loaded!', 'success');
+      
       setFriendMessageData(response);
     }).catch(() => {
-      messageApi.open({
-        key,
-        type: 'error',
-        content: 'Error fetching data!',
-        duration: 2,
-      });
+      openMessageApi('Error fetching data!', 'error');
+      
     });
   }
 
   const handleBatteryHistoryRefresh = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
     if (wearer) {
       if (wearer.deviceId) {
         getBatteryHistory(wearer.deviceId, tokens.AccessToken).then((response) => {
-          messageApi.open({
-            key,
-            type: 'success',
-            content: 'Loaded!',
-            duration: 2,
-          });
+          openMessageApi('Loaded!', 'success');
+          
           setBatteryHistory(response);
         }).catch(() => {
-          messageApi.open({
-            key,
-            type: 'error',
-            content: 'Error fetching data!',
-            duration: 2,
-          });
+          openMessageApi('Error fetching data!', 'error');
         });
       }
     }
   }
 
   const handleSIMRefresh = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
     let imeiValue;
 
     if (imei) {
@@ -332,17 +270,12 @@ export default function WearerDashboard() {
     } else return;
 
     getSimInfo(imeiValue, null, tokens.AccessToken).then((response) => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
+      openMessageApi('Loaded!', 'success');
+      
 
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
-        console.log(response)
         const body = response.data.data[0];
         const simCard = {
           planName: body.plan.title,
@@ -354,33 +287,24 @@ export default function WearerDashboard() {
         setSimData(simCard)
       }
     }).catch(() => {
-      messageApi.open({
-        key,
-        type: 'error',
-        content: 'Error fetching data!',
-        duration: 2,
-      });
+      openMessageApi('Error fetching data!', 'error');
+      
     });
   }
 
-  async function navSimDashboard(imei) {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+  async function navSimDashboard() {
+    openMessageApi('Loading...', 'loading');
+    
 
-    navigate(`/sim/dashboard?imei=${imei}`);
+    navigate(`/sim/dashboard?imei=${imei}`, {state: { imei }});
   }
 
 
 
   async function onSearch(value) {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+
+    
 
     navigate(`/?searchTxt=${value}`);
   }
@@ -390,38 +314,39 @@ export default function WearerDashboard() {
       deviceId: wearer.deviceId,
       imei: wearer.imei,
     }
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
+    openMessageApi('Loading...', 'loading');
+    
 
     getWearer(params, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.data.length === 0) {
-        messageApi.open({
-          key,
-          type: 'error',
-          content: 'Error fetching data!',
-          duration: 2,
-        });
+        openMessageApi('Error fetching data!', 'error');
         return;
       }
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
+      openMessageApi('Loaded!', 'success');
+      
       setWearer(response.data.data[0]);
       setWatchSettings(response.data.includes[0].settings);
     }).catch(() => {
+      openMessageApi('Error fetching data!', 'error');
+      
+    });
+  }
+
+  const openMessageApi = (message, type) => {
+    if (type === 'loading') {
       messageApi.open({
         key,
-        type: 'error',
-        content: 'Error fetching data!',
+        type,
+        content: message,
+      });
+    } else {
+      messageApi.open({
+        key,
+        type,
+        content: message,
         duration: 2,
       });
-    });
+    }
   }
 
 
@@ -514,6 +439,7 @@ export default function WearerDashboard() {
                   leftIconHeight={24}
                   imei={wearer.imei}
                   deviceId={wearer.deviceId}
+                  openMessageApi={openMessageApi}
                 />
                 {/* Comandos */}
 

@@ -7,10 +7,10 @@ export function SimListItem(props) {
 
     const { objectId,
             iccId,
-            name,
-            lastname,
-            phone,
-            personalId,
+            name='',
+            lastname='',
+            phone='',
+            personalId='',
 			handleClick
     } = props
 
