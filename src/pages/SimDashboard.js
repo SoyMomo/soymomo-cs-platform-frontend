@@ -10,6 +10,7 @@ import SimMainCard from '../components/SimMainCard';
 import SimPlanCard from '../components/SimPlanCard';
 import SimSubscriberCard from '../components/SimSubscriberCard';
 import SimWearerCard from '../components/SIMWearerCard';
+import SimActionsCard from '../components/SimActionsCard';
 
 const { Search } = Input;
 
@@ -102,6 +103,7 @@ export default function SimDashboard() {
   }, [query, navigate, tokens])
 
 
+  // FIXME: Mensaje de success no aparece al hacer refresh en las tarjetas
   const handleSIMRefresh = () => {
     messageApi.open({
       key,
@@ -190,6 +192,23 @@ export default function SimDashboard() {
     // navigate(`/wearer?imei=${globalImei}`, {state: { imei: globalImei }});
   }
 
+  const openMessageApi = (message, type) => {
+    if (type === 'loading') {
+      messageApi.open({
+        key,
+        type,
+        content: message,
+      });
+    } else {
+      messageApi.open({
+        key,
+        type,
+        content: message,
+        duration: 2,
+      });
+    }
+  }
+
   return (
     <MainLayout>
       <div style={{ padding: 20 }}>
@@ -270,6 +289,17 @@ export default function SimDashboard() {
                 {/* Ultima actualizacion */}
 
                 {/* Comandos */}
+                {/* TODO: Hacer un condicional, si no hay subscriptionId entonces deshabilitar boton */}
+                <SimActionsCard
+                  leftIcon='/images/cs-comands.svg'
+                  leftIconWidth={24}
+                  leftIconHeight={24}
+                  iccId={simData.iccId}
+                  // TODO: Actualizar simData para que traiga el id de suscripción (Back y Front)
+                  subscriptionId={simData.subscriptionId}
+                  deviceId={wearer.deviceId}
+                  openMessageApi={openMessageApi}
+                />
                 {/* Comandos */}
 
 
