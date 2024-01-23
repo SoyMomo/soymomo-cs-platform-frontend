@@ -10,6 +10,7 @@ import SimMainCard from '../components/SimMainCard';
 import SimPlanCard from '../components/SimPlanCard';
 import SimSubscriberCard from '../components/SimSubscriberCard';
 import SimWearerCard from '../components/SIMWearerCard';
+import SimActionsCard from '../components/SimActionsCard';
 
 const { Search } = Input;
 
@@ -23,6 +24,7 @@ export default function SimDashboard() {
   const [simData, setSimData] = useState({});
   const [wearer, setWearer] = useState({});
   const [globalImei, setGlobalImei] = useState('')
+  const [globalIccId, setGlobalIccId] = useState('')
   const [globalDeviceId, setGlobalDeviceId] = useState('')
 
   let imei;
@@ -40,6 +42,13 @@ export default function SimDashboard() {
   useEffect(() => {
     iccId = query.get('iccId');
     imei = query.get('imei');
+
+    if (iccId) {
+      setGlobalIccId(iccId);
+    }
+    if (imei) {
+      setGlobalImei(imei);
+    }
     if (!iccId && !imei) {
       navigate('/not-found');
       return;
@@ -60,6 +69,7 @@ export default function SimDashboard() {
             iccId: body.sim.iccId,
             imei: body.imei,
             plan: body.plan,
+            subscriptionId: body.alaiSubscriptionId,
             remainingTrialDays: response.data.data.remainingTrialDays,
             providerName: body.sim.mnoProvider.name,
             phone: body.msisdn,
@@ -102,6 +112,7 @@ export default function SimDashboard() {
   }, [query, navigate, tokens])
 
 
+  // FIXME: Mensaje de success no aparece al hacer refresh en las tarjetas
   const handleSIMRefresh = () => {
     messageApi.open({
       key,
@@ -111,10 +122,10 @@ export default function SimDashboard() {
     let imeiValue;
     let iccIdValue;
 
-    if (iccId) {
-      iccIdValue = iccId;
-    } else if (imei) {
-      imeiValue = imei;
+    if (globalIccId) {
+      iccIdValue = globalIccId;
+    } else if (globalImei) {
+      imeiValue = globalImei;
     } else return;
 
     getSimInfo(imeiValue, iccIdValue, tokens.AccessToken).then((response) => {
@@ -134,6 +145,7 @@ export default function SimDashboard() {
           iccId: body.sim.iccId,
           imei: body.imei,
           plan: body.plan,
+          subscriptionId: body.alaiSubscriptionId,
           remainingTrialDays: response.data.data.remainingTrialDays,
           providerName: body.sim.mnoProvider.name,
           phone: body.msisdn,
@@ -188,6 +200,23 @@ export default function SimDashboard() {
     navigate(`/wearer${routeParam}`, {state: { imei: globalImei, deviceId: globalDeviceId }});
 
     // navigate(`/wearer?imei=${globalImei}`, {state: { imei: globalImei }});
+  }
+
+  const openMessageApi = (message, type) => {
+    if (type === 'loading') {
+      messageApi.open({
+        key,
+        type,
+        content: message,
+      });
+    } else {
+      messageApi.open({
+        key,
+        type,
+        content: message,
+        duration: 2,
+      });
+    }
   }
 
   return (
@@ -270,6 +299,19 @@ export default function SimDashboard() {
                 {/* Ultima actualizacion */}
 
                 {/* Comandos */}
+                {/* TODO: Hacer un condicional, si no hay subscriptionId entonces deshabilitar boton */}
+                <SimActionsCard
+                  leftIcon='/images/cs-comands.svg'
+                  leftIconWidth={24}
+                  leftIconHeight={24}
+                  iccId={simData.iccId}
+                  subscriptionId={simData.subscriptionId}
+                  deviceId={wearer.deviceId}
+                  state={simData.state}
+                  // Se entrega simData para forzar un re-render cuando cambie el estado
+                  simData={simData}
+                  openMessageApi={openMessageApi}
+                />
                 {/* Comandos */}
 
 
