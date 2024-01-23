@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Modal } from 'antd';
 import { useAuth } from "../authContext";
 import styles from "../styles/SimActionsCard.module.css"
 import sharedStyles from "../styles/Common.module.css"
-// import { FaChevronRight } from "react-icons/fa";
+
 
 export default function SimActionsCard(props) {
-    const [terminateActive, setTerminateActive] = useState(false);
+    const [subTerminated, setSubTerminated] = useState(false);
     const [subPaused, setSubPaused] = useState(false);
     const [toggleTerminateModal, setToggleTerminateModal] = useState(false);
     const [togglePauseModal, setTogglePauseModal] = useState(false);
@@ -18,6 +18,7 @@ export default function SimActionsCard(props) {
     const {
         iccId,
         subscriptionId='',
+        state='',
         openMessageApi,
         leftIcon,
         leftIconWidth,
@@ -25,9 +26,13 @@ export default function SimActionsCard(props) {
     } = props
     // const subscriptionId = alaiSubscriptionId
 
-    if (subscriptionId) {
-        setTerminateActive(true);
-    }
+    useEffect(() => {
+        if (subscriptionId && state === 'TERMINATED') {
+            setSubTerminated(true);
+        } else if (subscriptionId && state === 'SUSPENDED') {
+            setSubPaused(true);
+        }
+    })
 
     // --------- Terminate Functions ---------
     // #region
@@ -47,36 +52,37 @@ export default function SimActionsCard(props) {
 
     
     async function handleTerminateSub() {
-        if (!subscriptionId && !iccId) {
-            openMessageApi('Id suscripción e iccId inexistentes', 'error')
-        } else {
-            const terminatePayload = { subscriptionId, iccId }
-            const response = await axios.post(
-                // TODO: Implementar endpoint en backend
-                process.env.REACT_APP_BACKEND_HOST + '/subscription/stop',
-                terminatePayload,
-                {
-                    headers:
-                        { Authorization: `Bearer ${tokens.AccessToken}` }
-                }
-            );
-            if (response.status === 201) {
-                setTerminateActive(false)
+        try {
+            if (!subscriptionId && !iccId) {
+                openMessageApi('Id suscripción e iccId inexistentes', 'error')
             } else {
-                // TODO: Revisar si se devuelve un message en error. (desde watch cloud)
-                // TODO: Implementar manejo de error en backend
-                openMessageApi(`Error: ${response.message}`, 'error')
+                const terminatePayload = { subscriptionId, iccId }
+                const response = await axios.put(
+                    process.env.REACT_APP_BACKEND_HOST + '/subscription/stop',
+                    terminatePayload,
+                    {
+                        headers:
+                            { Authorization: `Bearer ${tokens.AccessToken}` }
+                    }
+                );
+                if (response.status === 201) {
+                    setSubTerminated(true)
+                } else {
+                    openMessageApi(`${response.message}`, 'error')
+                }
             }
+        } catch (error) {
+            openMessageApi(`${error.message}`, 'error')
         }
     }
     // #endregion
     // --------- End Terminate Functions ---------
 
-    // --------- Pause Functions ---------s
+    // --------- Pause Functions ---------
     // #region
-    const showPauseModal = () => {
-        setTogglePauseModal(true)
-    }
+    // const showPauseModal = () => {
+    //     setTogglePauseModal(true)
+    // }
 
     const handlePauseOk = () => {
         handlePauseSub()
@@ -90,26 +96,35 @@ export default function SimActionsCard(props) {
 
     
     async function handlePauseSub() {
-        if (!subscriptionId && !iccId) {
-            openMessageApi('Id suscripción e iccId inexistentes', 'error')
-        } else {
-            const pausePayload = { subscriptionId, iccId }
-            const response = await axios.post(
-                // TODO: Implementar endpoint en backend
-                process.env.REACT_APP_BACKEND_HOST + '/subscription/pause',
-                pausePayload,
-                {
-                    headers:
-                        { Authorization: `Bearer ${tokens.AccessToken}` }
-                }
-            );
-            if (response.status === 201) {
-                setSubPaused(!subPaused)
+        try {
+            if (!subscriptionId && !iccId) {
+                openMessageApi('Id suscripción e iccId inexistentes', 'error')
             } else {
-                // TODO: Revisar si se devuelve un message en error. (desde watch cloud)
-                // TODO: Implementar manejo de error en backend
-                openMessageApi(`Error: ${response.message}`, 'error')
+                let path;
+                if (subPaused) {
+                    path = '/subscription/unpause';
+                } else {
+                    path = '/subscription/pause';
+                }
+                const pausePayload = { subscriptionId, iccId }
+                const response = await axios.put(
+                    // TODO: Implementar endpoint en backend
+                    process.env.REACT_APP_BACKEND_HOST + path,
+                    pausePayload,
+                    {
+                        headers:
+                            { Authorization: `Bearer ${tokens.AccessToken}` }
+                    }
+                );
+                if (response.status === 201) {
+                    setSubPaused(!subPaused)
+                } else {
+                    openMessageApi(`${response.message}`, 'error')
+                }
             }
+        } catch (error) {
+            // console.log(error);
+            openMessageApi(`${error.message}`, 'error')
         }
     }
     // #endregion
@@ -130,9 +145,11 @@ export default function SimActionsCard(props) {
                     </div>
                 </div>
                 <div className={sharedStyles.metaData}>
-                    <button disabled={!terminateActive} onClick={showTerminateModal} className={styles.shutDownBtn}><strong>Cancelar Suscripción</strong></button>
-                    {/* TODO: hacer condición para que sea un toggle dependiendo de si la suscripción está pausada o no */}
-                    <button disabled={!terminateActive} onClick={showPauseModal} className={styles.shutDownBtn}><strong>Pausar Suscripción</strong></button>
+                    <button disabled={subTerminated} onClick={showTerminateModal} className={styles.shutDownBtn}><strong>Cancelar Suscripción</strong></button>
+                    {/* {subPaused ? 
+                        <button disabled={subTerminated} onClick={showPauseModal} className={styles.pausedBtn}><strong> Reanudar Suscripción</strong></button> : 
+                        <button disabled={subTerminated} onClick={showPauseModal} className={styles.shutDownBtn}><strong>Pausar Suscripción</strong></button>
+                    } */}
                     <Modal
                         title="Cancelar Suscripción"
                         open={toggleTerminateModal}

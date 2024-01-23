@@ -24,6 +24,7 @@ export default function SimDashboard() {
   const [simData, setSimData] = useState({});
   const [wearer, setWearer] = useState({});
   const [globalImei, setGlobalImei] = useState('')
+  const [globalIccId, setGlobalIccId] = useState('')
   const [globalDeviceId, setGlobalDeviceId] = useState('')
 
   let imei;
@@ -41,6 +42,13 @@ export default function SimDashboard() {
   useEffect(() => {
     iccId = query.get('iccId');
     imei = query.get('imei');
+
+    if (iccId) {
+      setGlobalIccId(iccId);
+    }
+    if (imei) {
+      setGlobalImei(imei);
+    }
     if (!iccId && !imei) {
       navigate('/not-found');
       return;
@@ -61,6 +69,7 @@ export default function SimDashboard() {
             iccId: body.sim.iccId,
             imei: body.imei,
             plan: body.plan,
+            subscriptionId: body.alaiSubscriptionId,
             remainingTrialDays: response.data.data.remainingTrialDays,
             providerName: body.sim.mnoProvider.name,
             phone: body.msisdn,
@@ -113,10 +122,10 @@ export default function SimDashboard() {
     let imeiValue;
     let iccIdValue;
 
-    if (iccId) {
-      iccIdValue = iccId;
-    } else if (imei) {
-      imeiValue = imei;
+    if (globalIccId) {
+      iccIdValue = globalIccId;
+    } else if (globalImei) {
+      imeiValue = globalImei;
     } else return;
 
     getSimInfo(imeiValue, iccIdValue, tokens.AccessToken).then((response) => {
@@ -136,6 +145,7 @@ export default function SimDashboard() {
           iccId: body.sim.iccId,
           imei: body.imei,
           plan: body.plan,
+          subscriptionId: body.alaiSubscriptionId,
           remainingTrialDays: response.data.data.remainingTrialDays,
           providerName: body.sim.mnoProvider.name,
           phone: body.msisdn,
@@ -295,9 +305,11 @@ export default function SimDashboard() {
                   leftIconWidth={24}
                   leftIconHeight={24}
                   iccId={simData.iccId}
-                  // TODO: Actualizar simData para que traiga el id de suscripción (Back y Front)
                   subscriptionId={simData.subscriptionId}
                   deviceId={wearer.deviceId}
+                  state={simData.state}
+                  // Se entrega simData para forzar un re-render cuando cambie el estado
+                  simData={simData}
                   openMessageApi={openMessageApi}
                 />
                 {/* Comandos */}
