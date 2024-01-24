@@ -28,6 +28,8 @@ import {
 import WearerSIMCard from '../components/WearerSIMCard';
 // import SimPlanCard from '../components/SimPlanCard';
 
+import axios from 'axios';
+
 const { Search } = Input;
 
 export default function WearerDashboard() {
@@ -332,6 +334,52 @@ export default function WearerDashboard() {
     });
   }
 
+  async function updateWearer(deviceId, imei) {
+    let payload;
+    try {
+      if (deviceId) {
+        payload = { deviceId }
+      } else if (imei) {
+        payload = { imei: imei }
+      }
+      getWearer(payload, tokens.AccessToken).then((response) => {
+        if (!response.data || response.data.data.length === 0) {
+          navigate('/not-found');
+          return;
+        }
+        setWearer(response.data.data[0]);
+      }).catch(console.error);
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
+  async function resetWatch(deviceId, imei) {
+    try {
+        openMessageApi('Loading...', 'loading')
+        if (!deviceId && imei) {
+            deviceId = imei.slice(4, 14);
+        } else if (!deviceId && !imei) {
+          throw new Error('Error, no deviceId or imei provided.');
+        }
+        const response = await axios.post(
+            process.env.REACT_APP_BACKEND_HOST +'/wearer/resetWatch',
+            { deviceId },
+            { 
+                headers: { Authorization: `Bearer ${tokens.AccessToken}` }
+            }
+        );
+        if (response.status === 201) {
+            openMessageApi('Success!', 'success')
+            updateWearer(deviceId, imei)
+        } else {
+            openMessageApi(`Error ${response.status}: ${response.error}`, 'error')
+        }
+    } catch (error) {
+        openMessageApi(`Error: ${error.message}`, 'error')
+    }
+  }
+
   const openMessageApi = (message, type) => {
     if (type === 'loading') {
       messageApi.open({
@@ -439,6 +487,7 @@ export default function WearerDashboard() {
                   leftIconHeight={24}
                   imei={wearer.imei}
                   deviceId={wearer.deviceId}
+                  resetWatch={resetWatch}
                   openMessageApi={openMessageApi}
                 />
                 {/* Comandos */}

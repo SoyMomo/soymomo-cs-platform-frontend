@@ -11,6 +11,7 @@ export function SimListItem(props) {
             lastname='',
             phone='',
             personalId='',
+            status='',
 			handleClick
     } = props
 
@@ -64,6 +65,14 @@ export function SimListItem(props) {
                     <p className={styles.undefined}>No definido</p>
                 </div>
             }
+            {status ?
+                <div className={styles.itemInfo}>
+                    <p className={styles.infoTxt}>{status}</p>
+                </div> :
+                <div className={styles.undefinedContainer}>
+                    <p className={styles.undefined}>No definido</p>
+                </div>
+            }
         </div>
     )
 }
@@ -89,6 +98,9 @@ export function SimListTitle() {
             </div>
             <div className={styles.titleContainer}>
                 <p className={styles.titleTxt}>N° Telefono</p>
+            </div>
+            <div className={styles.titleContainer}>
+                <p className={styles.titleTxt}>Estado</p>
             </div>
 
         </div>

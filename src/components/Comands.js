@@ -25,7 +25,8 @@ export default function ComandsComponent(props) {
         leftIconWidth,
         leftIconHeight,
         title,
-        subtitle
+        subtitle,
+        resetWatch
     } = props
 
     let { deviceId='' } = props
@@ -42,7 +43,7 @@ export default function ComandsComponent(props) {
     }
 
     const handleResetOk = () => {
-        resetWatch()
+        resetWatch(deviceId, imei);
         setToggleResetModal(false)
         // TODO: Sería bueno tener un feedback de si el reset tuvo éxito
     }
@@ -108,10 +109,6 @@ export default function ComandsComponent(props) {
         await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/powerOff', { deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
     }
 
-    async function resetWatch() {
-        // TODO: RESET WATCH FUNCTION
-    }
-
     return (
 
         <div className={sharedStyles.generalCard}>
@@ -172,7 +169,7 @@ export default function ComandsComponent(props) {
                     // You can also add a className and define your styles in a CSS file
                     className="my-custom-modal-class"
                 >
-                    Estás seguro/a que quieres resetear el reloj?
+                    Estás seguro/a que quieres resetear el reloj a sus configuraciones de fábrica?
                 </Modal>
                 <Modal
                     title="Apagar Reloj"

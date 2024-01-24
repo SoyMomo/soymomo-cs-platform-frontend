@@ -177,7 +177,7 @@ export default function SimDashboard() {
     });
   }
 
-
+  
 
   async function onSearch(value) {
     messageApi.open({
@@ -322,71 +322,6 @@ export default function SimDashboard() {
 
             </Col>
           </Row>
-
-          {/* <Space direction="vertical" size={12} style={{ display: 'flex' }}>
-            <Row gutter={[24, 32]}>
-              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                <TableComponent
-                  columns={friendMessageColumns}
-                  data={friendMessageData}
-                  leftIcon="/images/tableIcons/cs-friendMessagesIcon.svg"
-                  leftIconHeight={29}
-                  leftIconWidth={24}
-                  handleRefresh={handleChatWearerRefresh}
-                  title='Mensajes de amigos'
-                  subtitle='Externos'
-                />
-              </Col>
-              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                <TableComponent
-                  columns={friendMessageColumns}
-                  data={userMessageData}
-                  leftIcon="/images/tableIcons/cs-userMessagesIcon.svg"
-                  leftIconHeight={29}
-                  leftIconWidth={24}
-                  handleRefresh={handleChatUserRefresh}
-                  title='Mensajes de usuarios'
-                  subtitle='Familiares'
-                />
-              </Col>
-            </Row>
-            <Row>
-              <TableComponent
-                columns={friendsColumns}
-                data={friendData}
-                leftIcon="/images/tableIcons/cs-friendsHeart.svg"
-                leftIconHeight={27}
-                leftIconWidth={31}
-                handleRefresh={handleFriendsRefresh}
-                title='Amigos'
-                subtitle='Aprobación'
-              />
-            </Row>
-            <Row>
-              <TableComponent
-                columns={userColumns}
-                data={users}
-                leftIcon="/images/tableIcons/cs-usersIcon.svg"
-                leftIconHeight={29}
-                leftIconWidth={38}
-                handleRefresh={handleWatchUserRefresh}
-                title='Usuarios'
-                subtitle='Familiares'
-              />
-            </Row>
-            <Row>
-              <TableComponent
-                columns={contactColumns}
-                data={contacts}
-                leftIcon="/images/tableIcons/cs-contactIcon.svg"
-                leftIconHeight={29}
-                leftIconWidth={38}
-                handleRefresh={handleContactRefresh}
-                title='Contactos'
-                subtitle='Reloj'
-              />
-            </Row>
-          </Space> */} 
         </Space>
       </div>
     </MainLayout>
