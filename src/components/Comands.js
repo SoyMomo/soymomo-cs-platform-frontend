@@ -11,10 +11,13 @@ export default function ComandsComponent(props) {
 
     // const [sendLoading, setSendLoading] = useState(false);
     const [message, setMessage] = useState('')
+
     // const [messageApi, contextHolder] = message.useMessage();
     const [tcpMsg, setTcpMsg] = useState(null);
     const [toggleResetModal, setToggleResetModal] = useState(false);
     const [toggleShutdownModal, setToggleShutdownModal] = useState(false);
+    const [tcpParamValues, setTcpParamValues] = useState(['', '']);
+    const [tcpRequiredParams, setTcpRequiredParams] = useState([]);
     const { tokens } = useAuth();
     const { Option } = Select;
 
@@ -62,24 +65,78 @@ export default function ComandsComponent(props) {
         setToggleShutdownModal(false)
     }
 
-    // function onSearchCambiarReloj(value) {
-    //     console.log(value)
-    // }
-
     const handleChange = (event) => {
         setMessage(event.target.value);
     }
 
     const handleSelectChange = (value) => {
         setTcpMsg(value);
+        let selectedOption = options.find(option => option.value.toLowerCase() === value.toLowerCase());
+        if (!selectedOption) {
+            selectedOption = options.find(option => option.label.toLowerCase() === value.toLowerCase());
+        }
+        if (selectedOption) {
+            setTcpRequiredParams(selectedOption.params)
+        }
+    }
+
+    const handleChangeParam1 = (value) => {
+        const start = [value]
+        const rest = tcpParamValues.slice(1)
+        const temp = start.push(...rest)
+        setTcpParamValues(temp)
+    }
+
+    const handleChangeParam2 = (value) => {
+        const start = tcpParamValues.slice(0,1)
+        const rest = tcpParamValues.slice(2)
+        let temp = start.push(value)
+        temp = start.push(...rest)
+        setTcpParamValues(temp)
     }
 
     async function onSendTCP() {
-        console.log(tcpMsg);
-        const selectedOption = options.find(option => option.label === tcpMsg);
+        openMessageApi('Loading...', 'loading')
+        if (!deviceId && imei) {
+            deviceId = imei.slice(4, 14);
+        }
+        // Verificamos que existe el comando
+        let selectedOption = options.find(option => option.value.toLowerCase() === tcpMsg.toLowerCase());
+
+        // Si no encontramos por valor, buscamos por label
+        if (!selectedOption) {
+            selectedOption = options.find(option => option.label.toLowerCase() === tcpMsg.toLowerCase());
+        }
 
         if (selectedOption) {
-            // TODO: Send TCP Command with selectedOption.value
+
+            if (selectedOption.value === 'wPowerOff') {
+                showShutdownModal()
+                return;
+            }
+            const body = { command: selectedOption.value, deviceId };
+            const optionParams = selectedOption.params;
+
+            // Construimos el body del request dependiendo del número de parametros necesitados por el comando
+            for (let i=0; i<optionParams.length; i++) {
+                body[optionParams[i]] = tcpParamValues[i]
+            }
+
+            const response = await axios.post(
+                process.env.REACT_APP_BACKEND_HOST +'/wearer/executeTcpCommand',
+                body,
+                { 
+                    headers: { Authorization: `Bearer ${tokens.AccessToken}` }
+                }
+            );
+
+            if (response.status === 200) {
+                openMessageApi('Success!', 'success')
+            } else {
+                openMessageApi(`Error ${response.status}: ${response.data.message}`, 'error')
+            }
+
+            console.log(selectedOption)
         } else {
             openMessageApi('Comando TCP Inválido', 'error')
         }
@@ -106,6 +163,7 @@ export default function ComandsComponent(props) {
             }
             const response = await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/powerOff', { deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
 
+            console.log(response);
             if (response.status === 200) {
                 openMessageApi('Success!', 'success')
             } else {
@@ -138,6 +196,7 @@ export default function ComandsComponent(props) {
                     <div className={styles.space}/>
                     <div  className={styles.sendIcon}><FaChevronRight onClick={onSendMessage}/></div>
                 </Space.Compact>
+                
                 <h3 className={styles.comandTitle2}><strong>Ejecutar Comando</strong></h3>
                 <Space.Compact className={styles.inputContainer}>
                     <Select
@@ -161,6 +220,30 @@ export default function ComandsComponent(props) {
                     <div className={styles.space}/>
                     <div  className={styles.sendIcon}><FaChevronRight onClick={onSendTCP}/></div>
                 </Space.Compact>
+                {/* TODO: Queda hardcoded con 2 atributos extra, no se necesitan más por ahora */}
+                {tcpRequiredParams.length === 2 ?
+                    <div>
+                        {/* TODO: Arreglar estilos de inputs */}
+                        <Space.Compact className={styles.inputContainer}>
+                            {/* eslint-disable-next-line react/no-unknown-property */}
+                            <input placeholder={tcpRequiredParams[0]} onChange={handleChangeParam1} value={tcpParamValues[0]} className={styles.textBox}/>
+                            <div className={styles.space}/>
+                        </Space.Compact>
+                        <Space.Compact className={styles.inputContainer}>
+                            {/* eslint-disable-next-line react/no-unknown-property */}
+                            <input placeholder={tcpRequiredParams[1]} onChange={handleChangeParam2} value={tcpParamValues[1]} className={styles.textBox}/>
+                            <div className={styles.space}/>
+                        </Space.Compact>
+                    </div>
+                    : tcpRequiredParams.length === 1 ? 
+                        <Space.Compact className={styles.inputContainer}>
+                            {/* eslint-disable-next-line react/no-unknown-property */}
+                            <input placeholder={tcpRequiredParams[0]} onChange={handleChangeParam1} value={tcpParamValues[0]} className={styles.textBox}/>
+                            <div className={styles.space}/>
+                        </Space.Compact>
+                    : null
+
+                }
                 {/* <Search loading={sendLoading} placeholder="Ingrese mensaje a enviar" onSearch={onSendMessage} enterButton="Enviar" className='bg-[#603BB0] hover:bg-[#3CB5C7] rounded-lg'/> */}
                 <button onClick={showShutdownModal} className={styles.shutDownBtn}><strong>Apagar</strong></button>
                 <button onClick={showResetModal} className={styles.shutDownBtn}><strong>Resetear Reloj</strong></button>

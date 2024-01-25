@@ -179,11 +179,9 @@ export default function WearerDashboard() {
 
   // Fetch TCP Options
   useEffect(() => {
-    console.log('watduhek');
     getTcpOptions(tokens.AccessToken).then((response) => {
-      // console.log(response.data);
       const arr = response.data.data.reduce((acc, item) => {
-        return acc.concat([{ value: item[0], label: item[1] }])
+        return acc.concat([{ value: item[0], label: item[1], params: item[2] }])
       }, [])
       setOptions(arr)
     }).catch(console.error)
