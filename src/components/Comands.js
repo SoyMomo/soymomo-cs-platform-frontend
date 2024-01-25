@@ -26,17 +26,13 @@ export default function ComandsComponent(props) {
         leftIconHeight,
         title,
         subtitle,
-        resetWatch
+        resetWatch,
+        tcpOptions,
     } = props
 
     let { deviceId='' } = props
 
-    // eslint-disable-next-line no-unused-vars
-    const [options, setOptions] = useState([
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        // ... more options
-    ]);
+    const options = tcpOptions;
 
     const showResetModal = () => {
         setToggleResetModal(true)
@@ -57,7 +53,7 @@ export default function ComandsComponent(props) {
     }
 
     const handleShutdownOk = () => {
-        apagar()
+        shutDown()
         setToggleShutdownModal(false)
         // TODO: Sería bueno tener un feedback de si el shutdown tuvo éxito
     }
@@ -102,11 +98,22 @@ export default function ComandsComponent(props) {
         // setSendLoading(false);
     }
 
-    async function apagar() {
-        if (!deviceId && imei) {
-            deviceId = imei.slice(4, 14);
+    async function shutDown() {
+        openMessageApi('Loading...', 'loading')
+        try {
+            if (!deviceId && imei) {
+                deviceId = imei.slice(4, 14);
+            }
+            const response = await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/powerOff', { deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
+
+            if (response.status === 200) {
+                openMessageApi('Success!', 'success')
+            } else {
+                openMessageApi(`Error ${response.status}: ${response.data.message}`, 'error')
+            }
+        } catch (error) {
+            openMessageApi(`Error: ${error.message}`, 'error')
         }
-        await axios.post(process.env.REACT_APP_BACKEND_HOST +'/wearer/powerOff', { deviceId }, { headers: { Authorization: `Bearer ${tokens.AccessToken}` } });
     }
 
     return (

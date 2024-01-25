@@ -23,7 +23,8 @@ import {
   getChatUser,
   getChatWearer,
   getBatteryHistory,
-  getSimInfo
+  getSimInfo,
+  getTcpOptions
 } from '../services/wearerService';
 import WearerSIMCard from '../components/WearerSIMCard';
 // import SimPlanCard from '../components/SimPlanCard';
@@ -47,17 +48,24 @@ export default function WearerDashboard() {
   const [wearer, setWearer] = useState({});
   const [watchSettings, setWatchSettings] = useState({});
   const [simData, setSimData] = useState({});
+  const [options, setOptions] = useState([
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    // ... more options
+  ]);
   const navigate = useNavigate();
 
   const { state } = useLocation()
   let { imei } = state
 
+  // Autenticación
   useEffect(() => {
     if (!tokens || !checkAuth(tokens)) {
       navigate('/login');
     }
   }, [tokens, navigate]);
 
+  // Fetch Wearer Info
   useEffect(() => {
     const deviceId = query.get('deviceId');
     if (query.get('imei')) {
@@ -113,6 +121,7 @@ export default function WearerDashboard() {
 
   }, [query, navigate, tokens])
 
+  // Fetch Wearer Friends
   useEffect(() => {
     const deviceId = query.get('deviceId');
     const imei = query.get('imei');
@@ -127,52 +136,7 @@ export default function WearerDashboard() {
     });
   }, [query, wearer, tokens])
 
-  const handleContactRefresh = () => {
-    openMessageApi('Loading...', 'loading');
-
-    
-    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getContacts(params, tokens.AccessToken).then((response) => {
-      openMessageApi('Loaded!', 'success');
-      
-      setContacts(response);
-    }).catch(() => {
-      openMessageApi('Error fetching data!', 'error');
-      
-    });
-  }
-
-  const handleWatchUserRefresh = () => {
-    openMessageApi('Loading...', 'loading');
-
-    
-    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getWatchUsers(params, tokens.AccessToken).then((response) => {
-      openMessageApi('Loaded!', 'success');
-      
-      setUsers(response);
-    }).catch(() => {
-      openMessageApi('Error fetching data!', 'error');
-      
-    });
-  }
-
-  const handleFriendsRefresh = () => {
-    openMessageApi('Loading...', 'loading');
-
-    
-    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
-    getFriends(params, params.deviceId, params.imei, tokens.AccessToken).then((response) => {
-      openMessageApi('Loaded!', 'success');
-      
-      setFriendData(response);
-    }).catch(() => {
-      openMessageApi('Error fetching data!', 'error');
-      
-    });
-  }
-
-
+  // Fetch Chat Users
   useEffect(() => {
     const deviceId = query.get('deviceId');
     const imei = query.get('imei');
@@ -185,9 +149,9 @@ export default function WearerDashboard() {
     getChatUser(params, tokens.AccessToken).then((response) => {
       setUserMessageData(response);
     }).catch(console.error);
-  
   }, [query, wearer, tokens])
 
+  // Fetch Chat Wearer
   useEffect(() => {
     const deviceId = query.get('deviceId');
     const imei = query.get('imei');
@@ -202,6 +166,7 @@ export default function WearerDashboard() {
     }).catch(console.error);
   }, [query, wearer, tokens])
 
+  // Fetch Battery History
   useEffect(() => {
     if (wearer) {
       if (wearer.deviceId) {
@@ -212,40 +177,76 @@ export default function WearerDashboard() {
     }
   }, [query, wearer, tokens])
 
+  // Fetch TCP Options
+  useEffect(() => {
+    console.log('watduhek');
+    getTcpOptions(tokens.AccessToken).then((response) => {
+      // console.log(response.data);
+      const arr = response.data.data.reduce((acc, item) => {
+        return acc.concat([{ value: item[0], label: item[1] }])
+      }, [])
+      setOptions(arr)
+    }).catch(console.error)
+  },[])
+
+ // #region Handle Refreshes
+  const handleContactRefresh = () => {
+    openMessageApi('Loading...', 'loading');
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getContacts(params, tokens.AccessToken).then((response) => {
+      openMessageApi('Loaded!', 'success');
+      setContacts(response);
+    }).catch(() => {
+      openMessageApi('Error fetching data!', 'error');
+    });
+  }
+
+  const handleWatchUserRefresh = () => {
+    openMessageApi('Loading...', 'loading');
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getWatchUsers(params, tokens.AccessToken).then((response) => {
+      openMessageApi('Loaded!', 'success');
+      setUsers(response);
+    }).catch(() => {
+      openMessageApi('Error fetching data!', 'error');
+    });
+  }
+
+  const handleFriendsRefresh = () => {
+    openMessageApi('Loading...', 'loading');
+    const params = { deviceId: wearer.deviceId, imei: wearer.imei };
+    getFriends(params, params.deviceId, params.imei, tokens.AccessToken).then((response) => {
+      openMessageApi('Loaded!', 'success');
+      setFriendData(response);
+    }).catch(() => {
+      openMessageApi('Error fetching data!', 'error');
+    });
+  }
+
   const handleChatUserRefresh = () => {
     openMessageApi('Loading...', 'loading');
-
-    
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
     getChatUser(params, tokens.AccessToken).then((response) => {
       openMessageApi('Loaded!', 'success');
-      
       setUserMessageData(response);
     }).catch(() => {
       openMessageApi('Error fetching data!', 'error');
-      
     });
   }
 
   const handleChatWearerRefresh = () => {
     openMessageApi('Loading...', 'loading');
-
-    
     const params = { deviceId: wearer.deviceId, imei: wearer.imei };
     getChatWearer(params, tokens.AccessToken).then((response) => {
       openMessageApi('Loaded!', 'success');
-      
       setFriendMessageData(response);
     }).catch(() => {
       openMessageApi('Error fetching data!', 'error');
-      
     });
   }
 
   const handleBatteryHistoryRefresh = () => {
     openMessageApi('Loading...', 'loading');
-
-    
     if (wearer) {
       if (wearer.deviceId) {
         getBatteryHistory(wearer.deviceId, tokens.AccessToken).then((response) => {
@@ -262,7 +263,6 @@ export default function WearerDashboard() {
   const handleSIMRefresh = () => {
     openMessageApi('Loading...', 'loading');
 
-    
     let imeiValue;
 
     if (imei) {
@@ -274,7 +274,6 @@ export default function WearerDashboard() {
     getSimInfo(imeiValue, null, tokens.AccessToken).then((response) => {
       openMessageApi('Loaded!', 'success');
       
-
       if (!response.data || response.data.length === 0) {
         setSimData({})
       } else {
@@ -290,25 +289,7 @@ export default function WearerDashboard() {
       }
     }).catch(() => {
       openMessageApi('Error fetching data!', 'error');
-      
     });
-  }
-
-  async function navSimDashboard() {
-    openMessageApi('Loading...', 'loading');
-    
-
-    navigate(`/sim/dashboard?imei=${imei}`, {state: { imei }});
-  }
-
-
-
-  async function onSearch(value) {
-    openMessageApi('Loading...', 'loading');
-
-    
-
-    navigate(`/?searchTxt=${value}`);
   }
 
   const handleWearerInfoRefresh = () => {
@@ -318,7 +299,6 @@ export default function WearerDashboard() {
     }
     openMessageApi('Loading...', 'loading');
     
-
     getWearer(params, tokens.AccessToken).then((response) => {
       if (!response.data || response.data.data.length === 0) {
         openMessageApi('Error fetching data!', 'error');
@@ -332,6 +312,17 @@ export default function WearerDashboard() {
       openMessageApi('Error fetching data!', 'error');
       
     });
+  }
+  // #endregion
+
+  async function navSimDashboard() {
+    openMessageApi('Loading...', 'loading');
+    navigate(`/sim/dashboard?imei=${imei}`, {state: { imei }});
+  }
+
+  async function onSearch(value) {
+    openMessageApi('Loading...', 'loading');
+    navigate(`/?searchTxt=${value}`);
   }
 
   async function updateWearer(deviceId, imei) {
@@ -373,7 +364,7 @@ export default function WearerDashboard() {
             openMessageApi('Success!', 'success')
             updateWearer(deviceId, imei)
         } else {
-            openMessageApi(`Error ${response.status}: ${response.error}`, 'error')
+            openMessageApi(`Error ${response.status}: ${response.data.error}`, 'error')
         }
     } catch (error) {
         openMessageApi(`Error: ${error.message}`, 'error')
@@ -489,6 +480,7 @@ export default function WearerDashboard() {
                   deviceId={wearer.deviceId}
                   resetWatch={resetWatch}
                   openMessageApi={openMessageApi}
+                  tcpOptions={options}
                 />
                 {/* Comandos */}
 
