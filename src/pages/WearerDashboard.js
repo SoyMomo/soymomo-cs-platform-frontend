@@ -369,7 +369,7 @@ export default function WearerDashboard() {
     }
   }
 
-  const openMessageApi = (message, type) => {
+  const openMessageApi = (message, type, duration=2) => {
     if (type === 'loading') {
       messageApi.open({
         key,
@@ -381,7 +381,7 @@ export default function WearerDashboard() {
         key,
         type,
         content: message,
-        duration: 2,
+        duration,
       });
     }
   }

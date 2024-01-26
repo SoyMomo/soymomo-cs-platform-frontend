@@ -16,10 +16,14 @@ export default function ComandsComponent(props) {
     const [tcpMsg, setTcpMsg] = useState(null);
     const [toggleResetModal, setToggleResetModal] = useState(false);
     const [toggleShutdownModal, setToggleShutdownModal] = useState(false);
-    const [tcpParamValues, setTcpParamValues] = useState(['', '']);
+    // const [tcpParamValues, setTcpParamValues] = useState(['', '']);
+    const [tcpParam1, setTcpParam1] = useState('');
+    const [tcpParam2, setTcpParam2] = useState('');
     const [tcpRequiredParams, setTcpRequiredParams] = useState([]);
     const { tokens } = useAuth();
     const { Option } = Select;
+
+    const tcpParamValues = [tcpParam1, tcpParam2];
 
     const {
         openMessageApi,
@@ -78,24 +82,22 @@ export default function ComandsComponent(props) {
         if (selectedOption) {
             setTcpRequiredParams(selectedOption.params)
         }
+
+        setTcpParam1('');
+        setTcpParam2('');
     }
 
-    const handleChangeParam1 = (value) => {
-        const start = [value]
-        const rest = tcpParamValues.slice(1)
-        const temp = start.push(...rest)
-        setTcpParamValues(temp)
+    const handleChangeParam1 = (event) => {
+        setTcpParam1(event.target.value);
     }
 
-    const handleChangeParam2 = (value) => {
-        const start = tcpParamValues.slice(0,1)
-        const rest = tcpParamValues.slice(2)
-        let temp = start.push(value)
-        temp = start.push(...rest)
-        setTcpParamValues(temp)
+    const handleChangeParam2 = (event) => {
+        setTcpParam2(event.target.value);
     }
 
     async function onSendTCP() {
+        console.log(tcpParamValues);
+        
         openMessageApi('Loading...', 'loading')
         if (!deviceId && imei) {
             deviceId = imei.slice(4, 14);
@@ -110,33 +112,45 @@ export default function ComandsComponent(props) {
 
         if (selectedOption) {
 
-            if (selectedOption.value === 'wPowerOff') {
-                showShutdownModal()
-                return;
-            }
-            const body = { command: selectedOption.value, deviceId };
-            const optionParams = selectedOption.params;
+            try {
 
-            // Construimos el body del request dependiendo del número de parametros necesitados por el comando
-            for (let i=0; i<optionParams.length; i++) {
-                body[optionParams[i]] = tcpParamValues[i]
-            }
-
-            const response = await axios.post(
-                process.env.REACT_APP_BACKEND_HOST +'/wearer/executeTcpCommand',
-                body,
-                { 
-                    headers: { Authorization: `Bearer ${tokens.AccessToken}` }
+                if (selectedOption.value === 'wPowerOff') {
+                    showShutdownModal()
+                    return;
                 }
-            );
+                const body = { tcpCommand: selectedOption.value, deviceId };
+                const optionParams = selectedOption.params;
 
-            if (response.status === 200) {
-                openMessageApi('Success!', 'success')
-            } else {
-                openMessageApi(`Error ${response.status}: ${response.data.message}`, 'error')
+                // Construimos el body del request dependiendo del número de parametros necesitados por el comando
+                for (let i=0; i<optionParams.length; i++) {
+                    body[optionParams[i]] = tcpParamValues[i]
+                }
+
+                console.log(body);
+
+                const response = await axios.post(
+                    process.env.REACT_APP_BACKEND_HOST +'/wearer/executeTcpCommand',
+                    body,
+                    { 
+                        headers: { Authorization: `Bearer ${tokens.AccessToken}` }
+                    }
+                );
+
+                if (response.status === 200) {
+                    openMessageApi('Success!', 'success')
+                } else {
+                    openMessageApi(`Error ${response.status}: ${response.data.message}`, 'error', 8)
+                }
+
+                console.log(selectedOption)
+            } catch (error) {
+                let message = 'Error Intentando enviar comando'
+                if (error.isAxiosError && error.response?.data?.message) {
+                    message = error.response.data.message
+                }
+                openMessageApi(message, 'error', 5)
+                console.error(error);
             }
-
-            console.log(selectedOption)
         } else {
             openMessageApi('Comando TCP Inválido', 'error')
         }
@@ -226,20 +240,20 @@ export default function ComandsComponent(props) {
                         {/* TODO: Arreglar estilos de inputs */}
                         <Space.Compact className={styles.inputContainer}>
                             {/* eslint-disable-next-line react/no-unknown-property */}
-                            <input placeholder={tcpRequiredParams[0]} onChange={handleChangeParam1} value={tcpParamValues[0]} className={styles.textBox}/>
-                            <div className={styles.space}/>
+                            <input placeholder={tcpRequiredParams[0]} onChange={handleChangeParam1} value={tcpParam1} className={styles.parameterBox}/>
+                            <div className={styles.parameterSpace}/>
                         </Space.Compact>
                         <Space.Compact className={styles.inputContainer}>
                             {/* eslint-disable-next-line react/no-unknown-property */}
-                            <input placeholder={tcpRequiredParams[1]} onChange={handleChangeParam2} value={tcpParamValues[1]} className={styles.textBox}/>
-                            <div className={styles.space}/>
+                            <input placeholder={tcpRequiredParams[1]} onChange={handleChangeParam2} value={tcpParam2} className={styles.parameterBox}/>
+                            <div className={styles.parameterSpace}/>
                         </Space.Compact>
                     </div>
                     : tcpRequiredParams.length === 1 ? 
                         <Space.Compact className={styles.inputContainer}>
                             {/* eslint-disable-next-line react/no-unknown-property */}
-                            <input placeholder={tcpRequiredParams[0]} onChange={handleChangeParam1} value={tcpParamValues[0]} className={styles.textBox}/>
-                            <div className={styles.space}/>
+                            <input placeholder={tcpRequiredParams[0]} onChange={handleChangeParam1} value={tcpParam1} className={styles.parameterBox}/>
+                            <div className={styles.parameterSpace}/>
                         </Space.Compact>
                     : null
 
