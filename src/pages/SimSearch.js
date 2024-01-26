@@ -152,6 +152,7 @@ export default function Index() {
                       phone={item.subscriber.phone}
                       personalId={item.subscriber.personalId}
                       objectId={item.objectId}
+                      status={item.status}
                       handleClick={() => handleRowClick(item.iccId, item.imei)}
                     />)
                   } else {
