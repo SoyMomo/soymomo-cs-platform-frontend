@@ -36,7 +36,7 @@ export default function SimActionsCard(props) {
             setSubPaused(true);
         } else if (!subscriptionId) {
             // TODO: Descomentar
-            // setSubTerminated(true)
+            setSubTerminated(true)
         }
     })
 
