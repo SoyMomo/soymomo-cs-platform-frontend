@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Modal } from 'antd';
+import { Modal, Input } from 'antd';
 import { useAuth } from "../authContext";
 import styles from "../styles/SimActionsCard.module.css"
 import sharedStyles from "../styles/Common.module.css"
@@ -11,7 +11,10 @@ export default function SimActionsCard(props) {
     const [subPaused, setSubPaused] = useState(false);
     const [toggleTerminateModal, setToggleTerminateModal] = useState(false);
     const [togglePauseModal, setTogglePauseModal] = useState(false);
+    const [cancelSubExpl, setCancelSubExpl] = useState('');
     const { tokens } = useAuth();
+
+    const { TextArea } = Input;
 
     // TODO: Se necesita lógica extra para determinar si una suscripción está pausada
     // Tal vez con el estado de la sub baste
@@ -22,17 +25,23 @@ export default function SimActionsCard(props) {
         openMessageApi,
         leftIcon,
         leftIconWidth,
-        leftIconHeight
+        leftIconHeight,
+        simCard
     } = props
-    // const subscriptionId = alaiSubscriptionId
 
     useEffect(() => {
-        if (subscriptionId && state === 'TERMINATED') {
+        if (simCard.providerName !== 'ALAI') {
+            setSubTerminated(true);
+        } else if (subscriptionId && state === 'TERMINATED') {
             setSubTerminated(true);
         } else if (subscriptionId && state === 'SUSPENDED') {
             setSubPaused(true);
+        } else if (!subscriptionId) {
+            setSubTerminated(true)
+        } else {
+            setSubTerminated(false);
         }
-    })
+    }, [subscriptionId, state, simCard])
 
     // --------- Terminate Functions ---------
     // #region
@@ -53,10 +62,11 @@ export default function SimActionsCard(props) {
     
     async function handleTerminateSub() {
         try {
+            openMessageApi('Loading...', 'loading');
             if (!subscriptionId && !iccId) {
                 openMessageApi('Id suscripción e iccId inexistentes', 'error')
             } else {
-                const terminatePayload = { subscriptionId, iccId }
+                const terminatePayload = { subscriptionId, iccId, reason: cancelSubExpl }
                 const response = await axios.put(
                     process.env.REACT_APP_BACKEND_HOST + '/subscription/stop',
                     terminatePayload,
@@ -67,6 +77,7 @@ export default function SimActionsCard(props) {
                 );
                 if (response.status === 201) {
                     setSubTerminated(true)
+                    openMessageApi('Success!', 'success');
                 } else {
                     openMessageApi(`${response.message}`, 'error')
                 }
@@ -130,6 +141,10 @@ export default function SimActionsCard(props) {
     // #endregion
     // --------- End Pause Functions ---------
 
+    const handleChangeCancelExpl = (e) => {
+        setCancelSubExpl(e.target.value)
+    }
+
     return (
         <div className={styles.generalContainer}>
             <div className={sharedStyles.generalCard}>
@@ -155,11 +170,23 @@ export default function SimActionsCard(props) {
                         open={toggleTerminateModal}
                         onOk={handleTerminateOk}
                         onCancel={handleTerminateCancel}
-                        okButtonProps={{ className: styles.okBtn }}
+                        okButtonProps={{
+                            className: styles.okBtn,
+                            disabled: !cancelSubExpl
+                        }}
                         cancelButtonProps={{ className: styles.cancelBtn }}
                         className="my-custom-modal-class"
                     >
                         Estás seguro/a que quieres cancelar la suscripción? Esta acción no se puede deshacer.
+                        <br/>
+                        Escribe una justificación de la cancelación:
+                        <TextArea
+                            rows={4}
+                            placeholder="Justificación de la cancelación"
+                            onChange={handleChangeCancelExpl}
+                            value={cancelSubExpl}
+                            className={styles.textArea}
+                        />
                     </Modal>
                     <Modal
                         title="Pausar Suscripción"

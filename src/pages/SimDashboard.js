@@ -63,13 +63,19 @@ export default function SimDashboard() {
         const body = response.data.data.results[0];
         const { type } = response.data.data;
         let simCard;
+        let subId;
         if (type === 'Sub') {
           imeiValue = body.imei;
+          if (body.alaiSubscriptionId) {
+            subId = body.alaiSubscriptionId;
+          } else if (body.gigsSubscriptionId) {
+            subId = body.gigsSubscriptionId;
+          }
           simCard = {
             iccId: body.sim.iccId,
             imei: body.imei,
             plan: body.plan,
-            subscriptionId: body.alaiSubscriptionId,
+            subscriptionId: subId,
             remainingTrialDays: response.data.data.remainingTrialDays,
             providerName: body.sim.mnoProvider.name,
             phone: body.msisdn,
@@ -112,7 +118,6 @@ export default function SimDashboard() {
   }, [query, navigate, tokens])
 
 
-  // FIXME: Mensaje de success no aparece al hacer refresh en las tarjetas
   const handleSIMRefresh = () => {
     messageApi.open({
       key,
@@ -141,11 +146,19 @@ export default function SimDashboard() {
       } else {
         const body = response.data.data.results[0];
         imeiValue = body.imei;
+        let subId;
+
+        if (body.alaiSubscriptionId) {
+          subId = body.alaiSubscriptionId;
+        } else if (body.gigsSubscriptionId) {
+          subId = body.gigsSubscriptionId;
+        }
+
         const simCard = {
           iccId: body.sim.iccId,
           imei: body.imei,
           plan: body.plan,
-          subscriptionId: body.alaiSubscriptionId,
+          subscriptionId: subId,
           remainingTrialDays: response.data.data.remainingTrialDays,
           providerName: body.sim.mnoProvider.name,
           phone: body.msisdn,
@@ -176,8 +189,6 @@ export default function SimDashboard() {
       });
     });
   }
-
-  
 
   async function onSearch(value) {
     messageApi.open({
@@ -230,21 +241,13 @@ export default function SimDashboard() {
         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
           <Row gutter={[24, 32]}>
             <Col xs={24} sm={24} md={24} lg={16} xl={16}>
-
               {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
               <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
-                {/* Nombre, numero, imei: card principal */}
                 <SimMainCard
                   simCard={simData}
                   handleRefresh={handleSIMRefresh}
                 />
-                {/* <WearerMainCard wearer={wearer} /> */}
-                {/* Nombre, numero, imei: card principal */}
-
-                {/* Datos principales y Ultima conexion con SoyMomoSIM */}
                 <Row gutter={[24, 32]}>
-
                   {/* Datos principales */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <SimPlanCard
@@ -252,54 +255,29 @@ export default function SimDashboard() {
                         handleRefresh={handleSIMRefresh}
                     />
                   </Col>
-                  {/* Datos principales */}
-
                   {/* Ultima conexion con SoyMomoSIM */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
-                      {/* Ultima conexion */}
-                      {/* Ultima conexion */}
-
-                      {/* SoyMomoSIM */}
                         <SimSubscriberCard
                             simCard={simData}
                             handleRefresh={handleSIMRefresh}
                         />
-
                         <SimWearerCard
                             wearer={wearer}
                             handleRefresh={handleSIMRefresh}
                             navWearerDashboard={() => navWearerDashboard(imei)}
                         />
-
-                      {/* SoyMomoSIM */}
-
                     </Space>
                   </Col>
-                  {/* Ultima conexion con SoyMomoSIM */}
-
                 </Row>
-                {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-
-                {/* Historial de bateria */}
-                {/* Historial de bateria */}
-
               </Space>
-
             </Col>
-
             <Col xs={24} sm={12} md={12} lg={8} xl={8}>
-
               {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
               <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
                 {/* Ultima actualizacion */}
                 <AppVersionsCard versionAndroid="5.2.6" versionApple="5.2.6" />
-                {/* Ultima actualizacion */}
-
                 {/* Comandos */}
-                {/* TODO: Hacer un condicional, si no hay subscriptionId entonces deshabilitar boton */}
                 <SimActionsCard
                   leftIcon='/images/cs-comands.svg'
                   leftIconWidth={24}
@@ -308,18 +286,10 @@ export default function SimDashboard() {
                   subscriptionId={simData.subscriptionId}
                   deviceId={wearer.deviceId}
                   state={simData.state}
-                  // Se entrega simData para forzar un re-render cuando cambie el estado
-                  simData={simData}
+                  simCard={simData}
                   openMessageApi={openMessageApi}
                 />
-                {/* Comandos */}
-
-
-                {/* Ajustes reloj */}
-                {/* Ajustes reloj */}
-
               </Space>
-
             </Col>
           </Row>
         </Space>
