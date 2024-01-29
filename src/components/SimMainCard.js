@@ -61,8 +61,11 @@ export default function SimMainCard(props) {
                 </p>
                 <p className={styles.hardwareDesc}>
                   <strong>Estado:</strong>   {state ?
-                    state :
-                    <span className={styles.missingInfo}>Null</span>
+                    (state === 'TERMINATED' ?
+                      <span className={styles.terminated}>TERMINATED</span> :
+                      state
+                    ):
+                    (<span className={styles.missingInfo}>Null</span>)
                   }
                 </p>
                 <p className={styles.hardwareDesc}>

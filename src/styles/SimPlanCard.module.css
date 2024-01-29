@@ -66,3 +66,11 @@
 .missingInfo {
     @apply text-[#9b73ff]
 }
+
+.subtitle {
+    @apply text-left text-[#ff4d88];
+}
+
+.titlesCont {
+    @apply mb-3;
+}
