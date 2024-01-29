@@ -25,20 +25,23 @@ export default function SimActionsCard(props) {
         openMessageApi,
         leftIcon,
         leftIconWidth,
-        leftIconHeight
+        leftIconHeight,
+        simCard
     } = props
-    // const subscriptionId = alaiSubscriptionId
 
     useEffect(() => {
-        if (subscriptionId && state === 'TERMINATED') {
+        if (simCard.providerName !== 'ALAI') {
+            setSubTerminated(true);
+        } else if (subscriptionId && state === 'TERMINATED') {
             setSubTerminated(true);
         } else if (subscriptionId && state === 'SUSPENDED') {
             setSubPaused(true);
         } else if (!subscriptionId) {
-            // TODO: Descomentar
             setSubTerminated(true)
+        } else {
+            setSubTerminated(false);
         }
-    })
+    }, [subscriptionId, state, simCard])
 
     // --------- Terminate Functions ---------
     // #region
