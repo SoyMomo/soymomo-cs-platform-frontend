@@ -68,7 +68,7 @@ export default function SimActionsCard(props) {
             } else {
                 const terminatePayload = { subscriptionId, iccId, reason: cancelSubExpl }
                 const response = await axios.put(
-                    process.env.REACT_APP_BACKEND_HOST + '/subscription/stop',
+                    process.env.REACT_APP_BACKEND_HOST + '/subscription/terminate',
                     terminatePayload,
                     {
                         headers:
