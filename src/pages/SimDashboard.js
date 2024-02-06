@@ -11,6 +11,7 @@ import SimPlanCard from '../components/SimPlanCard';
 import SimSubscriberCard from '../components/SimSubscriberCard';
 import SimWearerCard from '../components/SIMWearerCard';
 import SimActionsCard from '../components/SimActionsCard';
+import SimTextCard from '../components/SimTextCard';
 
 const { Search } = Input;
 
@@ -83,6 +84,7 @@ export default function SimDashboard() {
             networkProvider: body.sim.networkOperator.name,
             paymentProvider: body.paymentProvider.name,
             subscriber: body.subscriber,
+            cancellationExplanation: body.cancellationExplanation
           };
         } else if (type === 'Sim') {
           simCard = {
@@ -166,6 +168,7 @@ export default function SimDashboard() {
           networkProvider: body.sim.networkOperator.name,
           paymentProvider: body.paymentProvider.name,
           subscriber: body.subscriber,
+          cancellationExplanation: body.cancellationExplanation
         };
         setSimData(simCard)
       }
@@ -254,6 +257,14 @@ export default function SimDashboard() {
                         simCard={simData}
                         handleRefresh={handleSIMRefresh}
                     />
+                    {
+                      simData.state === 'TERMINATED' ? 
+                      <SimTextCard
+                        simCard={simData}
+                        handleRefresh={handleSIMRefresh}
+                      /> :
+                      null
+                    }
                   </Col>
                   {/* Ultima conexion con SoyMomoSIM */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
