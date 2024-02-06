@@ -16,8 +16,6 @@ export default function SimActionsCard(props) {
 
     const { TextArea } = Input;
 
-    // TODO: Se necesita lógica extra para determinar si una suscripción está pausada
-    // Tal vez con el estado de la sub baste
     const {
         iccId,
         subscriptionId='',
@@ -30,7 +28,7 @@ export default function SimActionsCard(props) {
     } = props
 
     useEffect(() => {
-        if (simCard.providerName !== 'ALAI') {
+        if (simCard.providerName !== 'ALAI' && simCard.providerName !== 'GIGS') {
             setSubTerminated(true);
         } else if (subscriptionId && state === 'TERMINATED') {
             setSubTerminated(true);
@@ -52,7 +50,6 @@ export default function SimActionsCard(props) {
     const handleTerminateOk = () => {
         handleTerminateSub()
         setToggleTerminateModal(false)
-        // TODO: Sería bueno tener un feedback de si el terminate tuvo éxito
     }
 
     const handleTerminateCancel = () => {
@@ -66,7 +63,7 @@ export default function SimActionsCard(props) {
             if (!subscriptionId && !iccId) {
                 openMessageApi('Id suscripción e iccId inexistentes', 'error')
             } else {
-                const terminatePayload = { subscriptionId, iccId, reason: cancelSubExpl }
+                const terminatePayload = { iccId, reason: cancelSubExpl }
                 const response = await axios.put(
                     process.env.REACT_APP_BACKEND_HOST + '/subscription/terminate',
                     terminatePayload,
@@ -91,14 +88,13 @@ export default function SimActionsCard(props) {
 
     // --------- Pause Functions ---------
     // #region
-    // const showPauseModal = () => {
-    //     setTogglePauseModal(true)
-    // }
+    const showPauseModal = () => {
+        setTogglePauseModal(true)
+    }
 
-    const handlePauseOk = () => {
-        handlePauseSub()
+    async function handlePauseOk() {
+        await handlePauseSub()
         setTogglePauseModal(false)
-        // TODO: Sería bueno tener un feedback de si el pause tuvo éxito
     }
 
     const handlePauseCancel = () => {
@@ -108,18 +104,18 @@ export default function SimActionsCard(props) {
     
     async function handlePauseSub() {
         try {
+            openMessageApi('Loading...', 'loading');
             if (!subscriptionId && !iccId) {
                 openMessageApi('Id suscripción e iccId inexistentes', 'error')
             } else {
                 let path;
                 if (subPaused) {
-                    path = '/subscription/unpause';
+                    path = '/subscription/resume';
                 } else {
                     path = '/subscription/pause';
                 }
-                const pausePayload = { subscriptionId, iccId }
+                const pausePayload = { iccId }
                 const response = await axios.put(
-                    // TODO: Implementar endpoint en backend
                     process.env.REACT_APP_BACKEND_HOST + path,
                     pausePayload,
                     {
@@ -129,12 +125,12 @@ export default function SimActionsCard(props) {
                 );
                 if (response.status === 201) {
                     setSubPaused(!subPaused)
+                    openMessageApi('Success!', 'success');
                 } else {
                     openMessageApi(`${response.message}`, 'error')
                 }
             }
         } catch (error) {
-            // console.log(error);
             openMessageApi(`${error.message}`, 'error')
         }
     }
@@ -161,10 +157,10 @@ export default function SimActionsCard(props) {
                 </div>
                 <div className={sharedStyles.metaData}>
                     <button disabled={subTerminated} onClick={showTerminateModal} className={styles.shutDownBtn}><strong>Cancelar Suscripción</strong></button>
-                    {/* {subPaused ? 
+                    {subPaused ? 
                         <button disabled={subTerminated} onClick={showPauseModal} className={styles.pausedBtn}><strong> Reanudar Suscripción</strong></button> : 
                         <button disabled={subTerminated} onClick={showPauseModal} className={styles.shutDownBtn}><strong>Pausar Suscripción</strong></button>
-                    } */}
+                    }
                     <Modal
                         title="Cancelar Suscripción"
                         open={toggleTerminateModal}
