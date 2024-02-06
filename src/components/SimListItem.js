@@ -5,21 +5,23 @@ import styles from '../styles/ListItem.module.css'
 
 export function SimListItem(props) {
 
-    const { objectId,
-            iccId,
-            name='',
-            lastname='',
-            phone='',
-            personalId='',
-            status='',
-			handleClick
+    const { 
+        // objectId,
+        msisdn='',
+        iccId,
+        name='',
+        lastname='',
+        phone='',
+        personalId='',
+        status='',
+        handleClick
     } = props
 
     return (
         <div className={styles.row} onClick={handleClick}>
-            {objectId ?
+            {msisdn ?
                 <div className={styles.itemInfo}>
-                    <p className={styles.infoTxt}>{objectId}</p>
+                    <p className={styles.infoTxt}>{msisdn}</p>
                 </div> :
                 <div className={styles.undefinedContainer}>
                     <p className={styles.undefined}>No definido</p>
@@ -82,7 +84,7 @@ export function SimListTitle() {
     return (
         <div className={styles.titleRow}>
             <div className={styles.titleContainer}>
-                <p className={styles.titleTxt}>Object ID</p>
+                <p className={styles.titleTxt}>msisdn</p>
             </div>
             <div className={styles.titleContainer}>
                 <p className={styles.titleTxt}>iccId</p>
@@ -97,7 +99,7 @@ export function SimListTitle() {
                 <p className={styles.titleTxt}>personalId</p>
             </div>
             <div className={styles.titleContainer}>
-                <p className={styles.titleTxt}>N° Telefono</p>
+                <p className={styles.titleTxt}>N° Telefono Usuario</p>
             </div>
             <div className={styles.titleContainer}>
                 <p className={styles.titleTxt}>Estado</p>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/SimPlanCard.module.css';
 import sharedStyles from '../styles/Common.module.css'
@@ -7,6 +8,7 @@ import sharedStyles from '../styles/Common.module.css'
 
 export default function SimSubscriberCard(props) {
   const simCard = props.simCard || {};
+  const [rut, setRut] = useState('')
 
   const { subscriber = {} } = simCard
 
@@ -19,16 +21,16 @@ export default function SimSubscriberCard(props) {
     personalId = null,
   } = subscriber;
 
-  let rut;
-
-  // Format personalId (rut)
-  if (personalId) {
-    if (personalId.slice(-2) !== '-') {
-      rut = personalId.slice(0,-1) + '-' + personalId.slice(-1);
-    } else {
-      rut = personalId;
+  useEffect(() => {
+    // Format personalId (rut)
+    if (personalId) {
+      if (personalId.slice(-2,-1) !== '-') {
+        setRut(personalId.slice(0,-1) + '-' + personalId.slice(-1));
+      } else {
+        setRut(personalId);
+      }
     }
-  }
+  }, [personalId])
 
   return (
     <div className={sharedStyles.generalCard}>

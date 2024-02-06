@@ -66,3 +66,7 @@
 .missingInfo {
     @apply text-[#d8c8ff]
 }
+
+.terminated {
+    @apply text-[#ff8eb4]
+}
