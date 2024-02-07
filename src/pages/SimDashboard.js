@@ -11,6 +11,7 @@ import SimPlanCard from '../components/SimPlanCard';
 import SimSubscriberCard from '../components/SimSubscriberCard';
 import SimWearerCard from '../components/SIMWearerCard';
 import SimActionsCard from '../components/SimActionsCard';
+import SimTextCard from '../components/SimTextCard';
 
 const { Search } = Input;
 
@@ -26,6 +27,7 @@ export default function SimDashboard() {
   const [globalImei, setGlobalImei] = useState('')
   const [globalIccId, setGlobalIccId] = useState('')
   const [globalDeviceId, setGlobalDeviceId] = useState('')
+  const [wearerPresent, setWearerPresent] = useState(true);
 
   let imei;
   let iccId;
@@ -42,6 +44,9 @@ export default function SimDashboard() {
   useEffect(() => {
     iccId = query.get('iccId');
     imei = query.get('imei');
+
+    console.log(query.get('iccId'))
+    console.log(iccId)
 
     if (iccId) {
       setGlobalIccId(iccId);
@@ -83,6 +88,7 @@ export default function SimDashboard() {
             networkProvider: body.sim.networkOperator.name,
             paymentProvider: body.paymentProvider.name,
             subscriber: body.subscriber,
+            cancellationExplanation: body.cancellationExplanation
           };
         } else if (type === 'Sim') {
           simCard = {
@@ -107,9 +113,11 @@ export default function SimDashboard() {
         }
         getWearer(payload, tokens.AccessToken).then((response) => {
           if (!response.data || response.data.data.length === 0) {
-            navigate('/not-found');
+            // navigate('/not-found');
+            setWearerPresent(false);
             return;
           }
+          setWearerPresent(true);
           setWearer(response.data.data[0]);
         }).catch(console.error);
       }
@@ -166,6 +174,7 @@ export default function SimDashboard() {
           networkProvider: body.sim.networkOperator.name,
           paymentProvider: body.paymentProvider.name,
           subscriber: body.subscriber,
+          cancellationExplanation: body.cancellationExplanation
         };
         setSimData(simCard)
       }
@@ -174,9 +183,11 @@ export default function SimDashboard() {
       if (imeiValue) {
         getWearer({ imei: imeiValue }, tokens.AccessToken).then((response) => {
           if (!response.data || response.data.data.length === 0) {
-            navigate('/not-found');
+            // navigate('/not-found');
+            setWearerPresent(false);
             return;
           }
+          setWearerPresent(true);
           setWearer(response.data.data[0]);
         }).catch(console.error);
       }
@@ -254,6 +265,14 @@ export default function SimDashboard() {
                         simCard={simData}
                         handleRefresh={handleSIMRefresh}
                     />
+                    {
+                      simData.state === 'TERMINATED' ? 
+                      <SimTextCard
+                        simCard={simData}
+                        handleRefresh={handleSIMRefresh}
+                      /> :
+                      null
+                    }
                   </Col>
                   {/* Ultima conexion con SoyMomoSIM */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
@@ -264,6 +283,7 @@ export default function SimDashboard() {
                         />
                         <SimWearerCard
                             wearer={wearer}
+                            wearerPresent={wearerPresent}
                             handleRefresh={handleSIMRefresh}
                             navWearerDashboard={() => navWearerDashboard(imei)}
                         />
@@ -279,13 +299,6 @@ export default function SimDashboard() {
                 <AppVersionsCard versionAndroid="5.2.6" versionApple="5.2.6" />
                 {/* Comandos */}
                 <SimActionsCard
-                  leftIcon='/images/cs-comands.svg'
-                  leftIconWidth={24}
-                  leftIconHeight={24}
-                  iccId={simData.iccId}
-                  subscriptionId={simData.subscriptionId}
-                  deviceId={wearer.deviceId}
-                  state={simData.state}
                   simCard={simData}
                   openMessageApi={openMessageApi}
                 />

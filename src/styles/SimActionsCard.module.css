@@ -30,7 +30,7 @@
     @apply bg-[#f199b6]
 }
 
-.pauseBtn {
+.pausedBtn {
     @apply bg-[#32B8C0] text-white p-1 rounded-full w-full mt-2 mb-2
 }
 
