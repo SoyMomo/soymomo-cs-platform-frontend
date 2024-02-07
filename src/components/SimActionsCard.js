@@ -17,25 +17,31 @@ export default function SimActionsCard(props) {
     const { TextArea } = Input;
 
     const {
+        openMessageApi,
+        simCard,
+    } = props
+
+    const {
         iccId,
         subscriptionId='',
         state='',
-        openMessageApi,
-        leftIcon,
-        leftIconWidth,
-        leftIconHeight,
-        simCard
-    } = props
+        providerName=''
+    } = simCard
+
+    const leftIcon = '/images/cs-comands.svg';
+    const leftIconHeight = 24;
+    const leftIconWidth = 24;
 
     useEffect(() => {
-        if (simCard.providerName !== 'ALAI' && simCard.providerName !== 'GIGS') {
+        if (providerName !== 'ALAI' && providerName !== 'GIGS') {
             setSubTerminated(true);
         } else if (subscriptionId && state === 'TERMINATED') {
             setSubTerminated(true);
         } else if (subscriptionId && state === 'SUSPENDED') {
+            setSubTerminated(false);
             setSubPaused(true);
         } else if (!subscriptionId) {
-            setSubTerminated(true)
+            setSubTerminated(true);
         } else {
             setSubTerminated(false);
         }
@@ -156,7 +162,7 @@ export default function SimActionsCard(props) {
                     </div>
                 </div>
                 <div className={sharedStyles.metaData}>
-                    <button disabled={subTerminated} onClick={showTerminateModal} className={styles.shutDownBtn}><strong>Cancelar Suscripción</strong></button>
+                    <button disabled={subTerminated || subPaused} onClick={showTerminateModal} className={styles.shutDownBtn}><strong>Cancelar Suscripción</strong></button>
                     {subPaused ? 
                         <button disabled={subTerminated} onClick={showPauseModal} className={styles.pausedBtn}><strong> Reanudar Suscripción</strong></button> : 
                         <button disabled={subTerminated} onClick={showPauseModal} className={styles.shutDownBtn}><strong>Pausar Suscripción</strong></button>

@@ -37,7 +37,7 @@ jobs:
     
       - name: Build static website
         run: |
-          export REACT_APP_BACKEND_HOST=${{secrets.REACT_APP_BACKEND_HOST}} &&
+          export REACT_APP_BACKEND_HOST=${{secrets.PROD_REACT_APP_BACKEND_HOST}} &&
           export FAST_REFRESH=$FAST_REFRESH &&
           ./render-build-cd.sh
       
@@ -54,7 +54,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git config --global credential.helper store
-          echo 'https://nicoguz:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com' > ~/.git-credentials
+          echo 'https://nicoguz:${{ secrets.PROD_PERSONAL_ACCESS_TOKEN }}@github.com' > ~/.git-credentials
           git clone https://github.com/SoyMomo/customerservice.git public-repo
           rm -rf public-repo/* # Remove all old files
           cp -r build/* public-repo/
@@ -63,7 +63,7 @@ jobs:
           git commit -m "Update public site"
           git push origin main
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PROD_PERSONAL_ACCESS_TOKEN }}
         
 
       # - name: Deploy to AWS S3

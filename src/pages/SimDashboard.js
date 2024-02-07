@@ -299,13 +299,6 @@ export default function SimDashboard() {
                 <AppVersionsCard versionAndroid="5.2.6" versionApple="5.2.6" />
                 {/* Comandos */}
                 <SimActionsCard
-                  leftIcon='/images/cs-comands.svg'
-                  leftIconWidth={24}
-                  leftIconHeight={24}
-                  iccId={simData.iccId}
-                  subscriptionId={simData.subscriptionId}
-                  deviceId={wearer.deviceId}
-                  state={simData.state}
                   simCard={simData}
                   openMessageApi={openMessageApi}
                 />
