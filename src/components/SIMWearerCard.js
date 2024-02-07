@@ -6,6 +6,7 @@ import styles from '../styles/WearerSIMCard.module.css';
 
 export default function SimWearerCard(props) {
   const wearer = props.wearer || {};
+  const present = props.wearerPresent;
 
   const {
     firstName = '',
@@ -17,7 +18,9 @@ export default function SimWearerCard(props) {
   } = wearer;
 
   let identifierPresent;
-  if (imei || deviceId) {
+  if (!present) {
+    identifierPresent = false;
+  } else if (imei || deviceId) {
     identifierPresent = true;
   } else {
     identifierPresent = false;
@@ -30,39 +33,39 @@ export default function SimWearerCard(props) {
             <div className={styles.textContainer}>
                 <h1 className={styles.title}>Soy Momo Watch</h1>
                 {/* <span className={styles.verticalSpace}/> */}
-                <p className={styles.hardwareDesc}>
-                  <strong>Nombre:</strong>   {firstName ? firstName : <span className={styles.missingInfo}>Null</span>}
-                </p>
-                <p className={styles.hardwareDesc}>
-                  <strong>Apellido:</strong>   {lastName ? lastName : <span className={styles.missingInfo}>Null</span>}
-                </p>
-                <p className={styles.hardwareDesc}>
-                  <strong>Teléfono:</strong>   {phone ?
-                    phone :
-                    <span className={styles.missingInfo}>Null</span>
-                  }
-                </p>
-                <p className={styles.hardwareDesc}>
-                  <strong>imei:</strong>   {imei ?
-                    imei :
-                    <span className={styles.missingInfo}>Null</span>
-                  }
-                </p>
-                <p className={styles.hardwareDesc}>
-                  <strong>Modelo Reloj:</strong>   {hardwareModel ?
-                    hardwareModel :
-                    <span className={styles.missingInfo}>Null</span>
-                  }
-                </p>
-                {/* <p className={styles.hardwareDesc}>
-                  <strong>Compañía telefónica:</strong>   {simCard.networkProvider ?
-                    networkProvider :
-                    <span className={styles.missingInfo}>Null</span>
-                  }
-                </p> */}
-                {/* <p className={styles.hardwareDesc}><strong>Estado:</strong>   {state}</p>
-                <p className={styles.hardwareDesc}><strong>Plan:</strong> {planName}</p>
-                <p className={styles.hardwareDesc}><strong>Proveedor:</strong> {providerName}</p> */}
+                { present ? 
+                  <div>
+                    <p className={styles.hardwareDesc}>
+                      <strong>Nombre:</strong>   {firstName ? firstName : <span className={styles.missingInfo}>Null</span>}
+                    </p>
+                    <p className={styles.hardwareDesc}>
+                      <strong>Apellido:</strong>   {lastName ? lastName : <span className={styles.missingInfo}>Null</span>}
+                    </p>
+                    <p className={styles.hardwareDesc}>
+                      <strong>Teléfono:</strong>   {phone ?
+                        phone :
+                        <span className={styles.missingInfo}>Null</span>
+                      }
+                    </p>
+                    <p className={styles.hardwareDesc}>
+                      <strong>imei:</strong>   {imei ?
+                        imei :
+                        <span className={styles.missingInfo}>Null</span>
+                      }
+                    </p>
+                    <p className={styles.hardwareDesc}>
+                      <strong>Modelo Reloj:</strong>   {hardwareModel ?
+                        hardwareModel :
+                        <span className={styles.missingInfo}>Null</span>
+                      }
+                    </p> 
+                  </div>
+                  :
+                  <div className={styles.leftText}>
+                    <p className={styles.missingInfo}>Reloj no encontrado para este imei...</p>
+                  </div>
+
+                }
             </div>
             <div className={styles.rightCol}>
               <div className={styles.refreshSuperContainer}>

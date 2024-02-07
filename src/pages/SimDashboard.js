@@ -27,6 +27,7 @@ export default function SimDashboard() {
   const [globalImei, setGlobalImei] = useState('')
   const [globalIccId, setGlobalIccId] = useState('')
   const [globalDeviceId, setGlobalDeviceId] = useState('')
+  const [wearerPresent, setWearerPresent] = useState(true);
 
   let imei;
   let iccId;
@@ -43,6 +44,9 @@ export default function SimDashboard() {
   useEffect(() => {
     iccId = query.get('iccId');
     imei = query.get('imei');
+
+    console.log(query.get('iccId'))
+    console.log(iccId)
 
     if (iccId) {
       setGlobalIccId(iccId);
@@ -109,9 +113,11 @@ export default function SimDashboard() {
         }
         getWearer(payload, tokens.AccessToken).then((response) => {
           if (!response.data || response.data.data.length === 0) {
-            navigate('/not-found');
+            // navigate('/not-found');
+            setWearerPresent(false);
             return;
           }
+          setWearerPresent(true);
           setWearer(response.data.data[0]);
         }).catch(console.error);
       }
@@ -177,9 +183,11 @@ export default function SimDashboard() {
       if (imeiValue) {
         getWearer({ imei: imeiValue }, tokens.AccessToken).then((response) => {
           if (!response.data || response.data.data.length === 0) {
-            navigate('/not-found');
+            // navigate('/not-found');
+            setWearerPresent(false);
             return;
           }
+          setWearerPresent(true);
           setWearer(response.data.data[0]);
         }).catch(console.error);
       }
@@ -275,6 +283,7 @@ export default function SimDashboard() {
                         />
                         <SimWearerCard
                             wearer={wearer}
+                            wearerPresent={wearerPresent}
                             handleRefresh={handleSIMRefresh}
                             navWearerDashboard={() => navWearerDashboard(imei)}
                         />
