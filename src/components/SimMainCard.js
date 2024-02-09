@@ -12,18 +12,19 @@ export default function SimMainCard(props) {
 
 
   const {
-    iccId = 'Null',
-    plan = 'Null',
-    providerName = 'Null',
-    phone = 'Null',
-    state = 'Null',
-    networkProvider = 'Null',
-    paymentProvider = 'Null',
+    iccId = '',
+    plan = '',
+    providerName = '',
+    phone = '',
+    state = '',
+    networkProvider = '',
+    paymentProvider = '',
+    subscriptionId = ''
   } = simCard;
   
   let planName;
 
-  if (plan != 'Null') {
+  if (plan) {
     planName = plan.title
   }
   
@@ -34,37 +35,47 @@ export default function SimMainCard(props) {
                 <h1 className={styles.title}>SoyMomo SIM</h1>
                 {/* <span className={styles.verticalSpace}/> */}
                 <p className={styles.hardwareDesc}>
-                  <strong>iccId:</strong>   {simCard.iccId ? iccId : <span className={styles.missingInfo}>Null</span>}
+                  <strong>iccId:</strong>   {iccId ? iccId : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Plan:</strong>   {plan != 'Null' ? planName : <span className={styles.missingInfo}>Null</span>}
+                  <strong>Plan:</strong>   {plan ? planName : <span className={styles.missingInfo}>Null</span>}
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>msisdn:</strong>   {simCard.phone ?
+                  <strong>msisdn:</strong>   {phone ?
                     phone :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Proveedor:</strong>   {simCard.providerName ?
+                  <strong>Proveedor:</strong>   {providerName ?
                     providerName :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
+                {/* TODO: Agregar lógica para gigs */}
                 <p className={styles.hardwareDesc}>
-                  <strong>Estado:</strong>   {simCard.state ?
-                    state :
+                  <strong>ID suscripción:</strong>   {subscriptionId ?
+                    subscriptionId :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Compañía telefónica:</strong>   {simCard.networkProvider ?
+                  <strong>Estado:</strong>   {state ?
+                    (state === 'TERMINATED' ?
+                      <span className={styles.terminated}>TERMINATED</span> :
+                      state
+                    ):
+                    (<span className={styles.missingInfo}>Null</span>)
+                  }
+                </p>
+                <p className={styles.hardwareDesc}>
+                  <strong>Compañía telefónica:</strong>   {networkProvider ?
                     networkProvider :
                     <span className={styles.missingInfo}>Null</span>
                   }
                 </p>
                 <p className={styles.hardwareDesc}>
-                  <strong>Compañía de Pagos:</strong>   {simCard.paymentProvider ?
+                  <strong>Compañía de Pagos:</strong>   {paymentProvider ?
                     paymentProvider :
                     <span className={styles.missingInfo}>Null</span>
                   }

@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# Soy Momo Customer Service Platform Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Manual de Uso
 
-## Available Scripts
+### Funciones
 
-In the project directory, you can run:
+- Commandos TCP
+- Display de información para:
+  - Watch
+  - Tablet
+  - Tarjeta Sim (suscripción y plan incluidos)
+- Cancelación de suscripción
+- Pausar una suscripción
+- Reanudar una suscripción
+- Apagar un reloj
+- Resetear un reloj (a valores de fábrica)
 
-### `yarn start`
+### Buscador de Sim
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Se puede buscar por:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Datos suscriptor:
+  - Nombre
+  - Apellido
+  - N° Teléfono
+  - Rut
+- iccId
+- msisdn (N° teléfono de sim)
 
-### `yarn test`
+### Buscador de relojes
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Se puede buscar por:
 
-### `yarn build`
+- deviceId
+- imei
+- objectId (Identificador base de datos)
+- N° telefono
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Developer Docs
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Instalación y ejecución
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```npm i && npm start```
 
-### `yarn eject`
+### Deploy
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Existe un pipeline automático que sube los cambios a un ambiente de development en AWS S3 y a github pages en producción.  
+Para el funcionamiento del pipeline y del servidor de producción no se deben modificar las ramas `gh-deploy` ni `pre_deploy`. El deploy queda alojado en la rama `gh-deploy` luego de ser compilado por webpack. La rama `pre_deploy` es un bypass para poder tener un pipeline desde una rama a otra sin tener infinitas actions recursivas.  
+Cada vez que se hace un push a development se activa el pipeline de development y lo mismo para main (producción).  
+Cuando se acutalice main (**Producción**) se debe volver a ingresar el nombre de dominio en la configuración del repo (en el apartado github pages).  
+El dominio de producción es [customerservice.soymomo.io](https://customerservice.soymomo.io)  
+El dominio de development es [customerservice-dev.soymomo.io](https://customerservice-dev.soymomo.io)

@@ -148,10 +148,12 @@ export default function Index() {
                       key={index}
                       iccId={item.iccId}
                       name={item.subscriber.name}
+                      msisdn={item.msisdn}
                       lastname={item.subscriber.lastname}
                       phone={item.subscriber.phone}
                       personalId={item.subscriber.personalId}
                       objectId={item.objectId}
+                      status={item.status}
                       handleClick={() => handleRowClick(item.iccId, item.imei)}
                     />)
                   } else {

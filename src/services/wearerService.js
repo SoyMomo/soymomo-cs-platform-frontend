@@ -117,3 +117,13 @@ export const getChatUser = async (params, token) => {
     );
     return response
   }
+
+  export const getTcpOptions = async (token) => {
+    const response = await axios.get(
+      process.env.REACT_APP_BACKEND_HOST + '/wearer/getTcpCommands',
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+    return response
+  }

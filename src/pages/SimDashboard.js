@@ -10,6 +10,8 @@ import SimMainCard from '../components/SimMainCard';
 import SimPlanCard from '../components/SimPlanCard';
 import SimSubscriberCard from '../components/SimSubscriberCard';
 import SimWearerCard from '../components/SIMWearerCard';
+import SimActionsCard from '../components/SimActionsCard';
+import SimTextCard from '../components/SimTextCard';
 
 const { Search } = Input;
 
@@ -23,7 +25,9 @@ export default function SimDashboard() {
   const [simData, setSimData] = useState({});
   const [wearer, setWearer] = useState({});
   const [globalImei, setGlobalImei] = useState('')
+  const [globalIccId, setGlobalIccId] = useState('')
   const [globalDeviceId, setGlobalDeviceId] = useState('')
+  const [wearerPresent, setWearerPresent] = useState(true);
 
   let imei;
   let iccId;
@@ -40,6 +44,16 @@ export default function SimDashboard() {
   useEffect(() => {
     iccId = query.get('iccId');
     imei = query.get('imei');
+
+    console.log(query.get('iccId'))
+    console.log(iccId)
+
+    if (iccId) {
+      setGlobalIccId(iccId);
+    }
+    if (imei) {
+      setGlobalImei(imei);
+    }
     if (!iccId && !imei) {
       navigate('/not-found');
       return;
@@ -54,12 +68,19 @@ export default function SimDashboard() {
         const body = response.data.data.results[0];
         const { type } = response.data.data;
         let simCard;
+        let subId;
         if (type === 'Sub') {
           imeiValue = body.imei;
+          if (body.alaiSubscriptionId) {
+            subId = body.alaiSubscriptionId;
+          } else if (body.gigsSubscriptionId) {
+            subId = body.gigsSubscriptionId;
+          }
           simCard = {
             iccId: body.sim.iccId,
             imei: body.imei,
             plan: body.plan,
+            subscriptionId: subId,
             remainingTrialDays: response.data.data.remainingTrialDays,
             providerName: body.sim.mnoProvider.name,
             phone: body.msisdn,
@@ -67,6 +88,7 @@ export default function SimDashboard() {
             networkProvider: body.sim.networkOperator.name,
             paymentProvider: body.paymentProvider.name,
             subscriber: body.subscriber,
+            cancellationExplanation: body.cancellationExplanation
           };
         } else if (type === 'Sim') {
           simCard = {
@@ -91,9 +113,11 @@ export default function SimDashboard() {
         }
         getWearer(payload, tokens.AccessToken).then((response) => {
           if (!response.data || response.data.data.length === 0) {
-            navigate('/not-found');
+            // navigate('/not-found');
+            setWearerPresent(false);
             return;
           }
+          setWearerPresent(true);
           setWearer(response.data.data[0]);
         }).catch(console.error);
       }
@@ -111,10 +135,10 @@ export default function SimDashboard() {
     let imeiValue;
     let iccIdValue;
 
-    if (iccId) {
-      iccIdValue = iccId;
-    } else if (imei) {
-      imeiValue = imei;
+    if (globalIccId) {
+      iccIdValue = globalIccId;
+    } else if (globalImei) {
+      imeiValue = globalImei;
     } else return;
 
     getSimInfo(imeiValue, iccIdValue, tokens.AccessToken).then((response) => {
@@ -130,10 +154,19 @@ export default function SimDashboard() {
       } else {
         const body = response.data.data.results[0];
         imeiValue = body.imei;
+        let subId;
+
+        if (body.alaiSubscriptionId) {
+          subId = body.alaiSubscriptionId;
+        } else if (body.gigsSubscriptionId) {
+          subId = body.gigsSubscriptionId;
+        }
+
         const simCard = {
           iccId: body.sim.iccId,
           imei: body.imei,
           plan: body.plan,
+          subscriptionId: subId,
           remainingTrialDays: response.data.data.remainingTrialDays,
           providerName: body.sim.mnoProvider.name,
           phone: body.msisdn,
@@ -141,6 +174,7 @@ export default function SimDashboard() {
           networkProvider: body.sim.networkOperator.name,
           paymentProvider: body.paymentProvider.name,
           subscriber: body.subscriber,
+          cancellationExplanation: body.cancellationExplanation
         };
         setSimData(simCard)
       }
@@ -149,9 +183,11 @@ export default function SimDashboard() {
       if (imeiValue) {
         getWearer({ imei: imeiValue }, tokens.AccessToken).then((response) => {
           if (!response.data || response.data.data.length === 0) {
-            navigate('/not-found');
+            // navigate('/not-found');
+            setWearerPresent(false);
             return;
           }
+          setWearerPresent(true);
           setWearer(response.data.data[0]);
         }).catch(console.error);
       }
@@ -164,8 +200,6 @@ export default function SimDashboard() {
       });
     });
   }
-
-
 
   async function onSearch(value) {
     messageApi.open({
@@ -190,6 +224,23 @@ export default function SimDashboard() {
     // navigate(`/wearer?imei=${globalImei}`, {state: { imei: globalImei }});
   }
 
+  const openMessageApi = (message, type) => {
+    if (type === 'loading') {
+      messageApi.open({
+        key,
+        type,
+        content: message,
+      });
+    } else {
+      messageApi.open({
+        key,
+        type,
+        content: message,
+        duration: 2,
+      });
+    }
+  }
+
   return (
     <MainLayout>
       <div style={{ padding: 20 }}>
@@ -201,150 +252,59 @@ export default function SimDashboard() {
         <Space direction="vertical" size={24} style={{ display: 'flex' }}>
           <Row gutter={[24, 32]}>
             <Col xs={24} sm={24} md={24} lg={16} xl={16}>
-
               {/* Dimensiones 240 + 24 + 424 + 24 + 256 = 968 */}
               <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
-                {/* Nombre, numero, imei: card principal */}
                 <SimMainCard
                   simCard={simData}
                   handleRefresh={handleSIMRefresh}
                 />
-                {/* <WearerMainCard wearer={wearer} /> */}
-                {/* Nombre, numero, imei: card principal */}
-
-                {/* Datos principales y Ultima conexion con SoyMomoSIM */}
                 <Row gutter={[24, 32]}>
-
                   {/* Datos principales */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <SimPlanCard
                         simCard={simData}
                         handleRefresh={handleSIMRefresh}
                     />
+                    {
+                      simData.state === 'TERMINATED' ? 
+                      <SimTextCard
+                        simCard={simData}
+                        handleRefresh={handleSIMRefresh}
+                      /> :
+                      null
+                    }
                   </Col>
-                  {/* Datos principales */}
-
                   {/* Ultima conexion con SoyMomoSIM */}
                   <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                     <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
-                      {/* Ultima conexion */}
-                      {/* Ultima conexion */}
-
-                      {/* SoyMomoSIM */}
                         <SimSubscriberCard
                             simCard={simData}
                             handleRefresh={handleSIMRefresh}
                         />
-
                         <SimWearerCard
                             wearer={wearer}
+                            wearerPresent={wearerPresent}
                             handleRefresh={handleSIMRefresh}
                             navWearerDashboard={() => navWearerDashboard(imei)}
                         />
-
-                      {/* SoyMomoSIM */}
-
                     </Space>
                   </Col>
-                  {/* Ultima conexion con SoyMomoSIM */}
-
                 </Row>
-                {/* Datos principales y Ultima conexion con SoyMomoSIM */}
-
-                {/* Historial de bateria */}
-                {/* Historial de bateria */}
-
               </Space>
-
             </Col>
-
             <Col xs={24} sm={12} md={12} lg={8} xl={8}>
-
               {/* Dimensiones 120 + 24 + 400 + 24 + 400 = 968 */}
               <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-
                 {/* Ultima actualizacion */}
                 <AppVersionsCard versionAndroid="5.2.6" versionApple="5.2.6" />
-                {/* Ultima actualizacion */}
-
                 {/* Comandos */}
-                {/* Comandos */}
-
-
-                {/* Ajustes reloj */}
-                {/* Ajustes reloj */}
-
+                <SimActionsCard
+                  simCard={simData}
+                  openMessageApi={openMessageApi}
+                />
               </Space>
-
             </Col>
           </Row>
-
-          {/* <Space direction="vertical" size={12} style={{ display: 'flex' }}>
-            <Row gutter={[24, 32]}>
-              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                <TableComponent
-                  columns={friendMessageColumns}
-                  data={friendMessageData}
-                  leftIcon="/images/tableIcons/cs-friendMessagesIcon.svg"
-                  leftIconHeight={29}
-                  leftIconWidth={24}
-                  handleRefresh={handleChatWearerRefresh}
-                  title='Mensajes de amigos'
-                  subtitle='Externos'
-                />
-              </Col>
-              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                <TableComponent
-                  columns={friendMessageColumns}
-                  data={userMessageData}
-                  leftIcon="/images/tableIcons/cs-userMessagesIcon.svg"
-                  leftIconHeight={29}
-                  leftIconWidth={24}
-                  handleRefresh={handleChatUserRefresh}
-                  title='Mensajes de usuarios'
-                  subtitle='Familiares'
-                />
-              </Col>
-            </Row>
-            <Row>
-              <TableComponent
-                columns={friendsColumns}
-                data={friendData}
-                leftIcon="/images/tableIcons/cs-friendsHeart.svg"
-                leftIconHeight={27}
-                leftIconWidth={31}
-                handleRefresh={handleFriendsRefresh}
-                title='Amigos'
-                subtitle='Aprobación'
-              />
-            </Row>
-            <Row>
-              <TableComponent
-                columns={userColumns}
-                data={users}
-                leftIcon="/images/tableIcons/cs-usersIcon.svg"
-                leftIconHeight={29}
-                leftIconWidth={38}
-                handleRefresh={handleWatchUserRefresh}
-                title='Usuarios'
-                subtitle='Familiares'
-              />
-            </Row>
-            <Row>
-              <TableComponent
-                columns={contactColumns}
-                data={contacts}
-                leftIcon="/images/tableIcons/cs-contactIcon.svg"
-                leftIconHeight={29}
-                leftIconWidth={38}
-                handleRefresh={handleContactRefresh}
-                title='Contactos'
-                subtitle='Reloj'
-              />
-            </Row>
-          </Space> */} 
         </Space>
       </div>
     </MainLayout>
