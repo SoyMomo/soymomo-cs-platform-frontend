@@ -33,14 +33,15 @@ export default function SimActionsCard(props) {
     const leftIconWidth = 24;
 
     useEffect(() => {
-        if (providerName !== 'ALAI' && providerName !== 'GIGS') {
+        console.log(props)
+        if (providerName !== 'ALAI' && providerName !== 'GIGS' && providerName !== "ENTEL") {
             setSubTerminated(true);
-        } else if (subscriptionId && state === 'TERMINATED') {
+        } else if ((subscriptionId || providerName == "ENTEL") && state === 'TERMINATED') {
             setSubTerminated(true);
-        } else if (subscriptionId && state === 'SUSPENDED') {
+        } else if ((subscriptionId || providerName == "ENTEL") && state === 'SUSPENDED') {
             setSubTerminated(false);
             setSubPaused(true);
-        } else if (!subscriptionId) {
+        } else if (!subscriptionId && providerName !== "ENTEL") {
             setSubTerminated(true);
         } else {
             setSubTerminated(false);
@@ -115,7 +116,7 @@ export default function SimActionsCard(props) {
                 openMessageApi('Id suscripción e iccId inexistentes', 'error')
             } else {
                 let path;
-                if (subPaused) {
+                if (subPaused || subTerminated) {
                     path = '/subscription/resume';
                 } else {
                     path = '/subscription/pause';
@@ -130,7 +131,8 @@ export default function SimActionsCard(props) {
                     }
                 );
                 if (response.status === 201) {
-                    setSubPaused(!subPaused)
+                    setSubPaused(false)
+                    setSubTerminated(false)
                     openMessageApi('Success!', 'success');
                 } else {
                     openMessageApi(`${response.message}`, 'error')
@@ -162,10 +164,18 @@ export default function SimActionsCard(props) {
                     </div>
                 </div>
                 <div className={sharedStyles.metaData}>
-                    <button disabled={subTerminated || subPaused} onClick={showTerminateModal} className={styles.shutDownBtn}><strong>Cancelar Suscripción</strong></button>
-                    {subPaused ? 
-                        <button disabled={subTerminated} onClick={showPauseModal} className={styles.pausedBtn}><strong> Reanudar Suscripción</strong></button> : 
-                        <button disabled={subTerminated} onClick={showPauseModal} className={styles.shutDownBtn}><strong>Pausar Suscripción</strong></button>
+                    {
+                        !subTerminated ?
+                        <button disabled={subTerminated || subPaused} onClick={showTerminateModal} className={styles.shutDownBtn}><strong>Cancelar Suscripción</strong></button>
+                        : null
+                    }
+                    {
+                    subTerminated && providerName === "ENTEL" ? 
+                        <button disabled={subTerminated && providerName !== "ENTEL"} onClick={showPauseModal} className={styles.pausedBtn}><strong> Reanudar Suscripción</strong></button> : null
+                    }
+                    {
+                        !subPaused && providerName !== "ENTEL" ? 
+                        <button disabled={subTerminated} onClick={showPauseModal} className={styles.shutDownBtn}><strong>Pausar Suscripción</strong></button> : null
                     }
                     <Modal
                         title="Cancelar Suscripción"
@@ -199,7 +209,9 @@ export default function SimActionsCard(props) {
                         cancelButtonProps={{ className: styles.cancelBtn }}
                         className="my-custom-modal-class"
                     >
-                        Estás seguro/a que quieres pausar la suscripción?
+                        {
+                            subPaused || subTerminated ? 'Estás seguro/a que quieres reanudar la suscripción?' : 'Estás seguro/a que quieres pausar la suscripción?'
+                        }
                     </Modal>
                 </div>
             </div>
